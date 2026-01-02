@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Booking System Flow - Document View</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Calibri', 'Arial', sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #34495e;
+        }
+
+        .page-container {
+            max-width: 8.5in;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .page {
+            width: 8.5in;
+            min-height: 11in;
+            padding: 0.75in;
+            background: white;
+            margin-bottom: 20px;
+            position: relative;
+            page-break-after: always;
+        }
+
+        .page-number {
+            position: absolute;
+            bottom: 0.5in;
+            right: 0.75in;
+            font-size: 10pt;
+            color: #666;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            font-size: 20pt;
+            margin-bottom: 10pt;
+            border-bottom: 3pt solid #3498db;
+            padding-bottom: 8pt;
+        }
+
+        h2 {
+            color: #2c3e50;
+            font-size: 16pt;
+            margin-top: 16pt;
+            margin-bottom: 10pt;
+            background: #ecf0f1;
+            padding: 8pt;
+            border-left: 4pt solid #3498db;
+        }
+
+        h3 {
+            color: #34495e;
+            font-size: 13pt;
+            margin-top: 12pt;
+            margin-bottom: 8pt;
+            font-weight: bold;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 11pt;
+            margin-top: 10pt;
+            margin-bottom: 6pt;
+            font-weight: bold;
+        }
+
+        p, li {
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #333;
+            margin-bottom: 6pt;
+        }
+
+        ul, ol {
+            margin-left: 20pt;
+            margin-bottom: 10pt;
+        }
+
+        li {
+            margin-bottom: 4pt;
+        }
+
+        .flow-box {
+            border: 2pt solid #3498db;
+            border-radius: 5pt;
+            padding: 10pt;
+            margin: 10pt 0;
+            background: #f8f9fa;
+        }
+
+        .step-header {
+            background: #3498db;
+            color: white;
+            padding: 6pt 10pt;
+            border-radius: 3pt;
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 8pt;
+        }
+
+        .decision-box {
+            background: #fff3cd;
+            border: 2pt solid #ffc107;
+            padding: 10pt;
+            margin: 10pt 0;
+            border-radius: 5pt;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11pt;
+        }
+
+        .branch-container {
+            display: flex;
+            gap: 15pt;
+            margin: 10pt 0;
+        }
+
+        .branch {
+            flex: 1;
+            border: 2pt dashed #666;
+            padding: 10pt;
+            border-radius: 5pt;
+        }
+
+        .branch-title {
+            background: #2ecc71;
+            color: white;
+            padding: 6pt;
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 8pt;
+            border-radius: 3pt;
+            font-size: 11pt;
+        }
+
+        .branch.negotiation .branch-title {
+            background: #e74c3c;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2pt 8pt;
+            border-radius: 3pt;
+            font-size: 9pt;
+            font-weight: bold;
+            margin-right: 5pt;
+        }
+
+        .status-confirmed { background: #2ecc71; color: white; }
+        .status-pending { background: #f39c12; color: white; }
+        .status-abandoned { background: #e74c3c; color: white; }
+
+        .table-container {
+            display: flex;
+            gap: 10pt;
+            margin: 10pt 0;
+        }
+
+        .master-table {
+            flex: 1;
+            border: 1pt solid #bdc3c7;
+            border-radius: 3pt;
+            overflow: hidden;
+        }
+
+        .table-header {
+            background: #34495e;
+            color: white;
+            padding: 6pt;
+            font-weight: bold;
+            font-size: 10pt;
+            text-align: center;
+        }
+
+        .table-body {
+            padding: 8pt;
+            font-size: 9pt;
+            line-height: 1.3;
+        }
+
+        .arrow-down {
+            text-align: center;
+            font-size: 16pt;
+            color: #3498db;
+            margin: 5pt 0;
+        }
+
+        .highlight {
+            background: #ffeb3b;
+            padding: 0 3pt;
+            font-weight: bold;
+        }
+
+        .note {
+            background: #e8f4f8;
+            border-left: 3pt solid #3498db;
+            padding: 8pt;
+            margin: 8pt 0;
+            font-size: 10pt;
+            font-style: italic;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .controls {
+                display: none;
+            }
+            .page-container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            .page {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- <div class="controls">
+        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
+        <button onclick="downloadDoc()">📄 Download as Document</button>
+    </div> -->
+
+    <div class="page-container">
+        <!-- PAGE 1 -->
+        <div class="page">
+            <h1>🚗 TRIP BOOKING SYSTEM - COMPLETE FLOW</h1>
+            
+            <h2>1. CUSTOMER JOURNEY (END USER FLOW)</h2>
+
+            <div class="flow-box">
+                <div class="step-header">STEP 1: Customer Visits Website/App</div>
+                <ul>
+                    <li>Customer opens the trip booking platform</li>
+                    <li>Clicks <span class="highlight">"Book a Trip"</span></li>
+                </ul>
+            </div>
+
+            <div class="arrow-down">⬇️</div>
+
+            <div class="flow-box">
+                <div class="step-header">STEP 2: Customer Enters Trip Details</div>
+                <p><strong>Customer fills in:</strong></p>
+                <ul>
+                    <li>Name & Mobile Number</li>
+                    <li>Pickup Location</li>
+                    <li>Drop Location</li>
+                    <li>Trip Type: <em>One-way / Round Trip / Per-day rental</em></li>
+                    <li>Number of days / Estimated distance</li>
+                    <li>Required vehicle type: <em>Sedan / SUV / Traveller</em></li>
+                </ul>
+                <div class="note">
+                    ✅ These details are <strong>saved immediately</strong> in the system (even if customer leaves later)
+                </div>
+            </div>
+
+            <div class="arrow-down">⬇️</div>
+
+            <div class="flow-box">
+                <div class="step-header">STEP 3: System Calculates Price Automatically</div>
+                <p><strong>Based on:</strong></p>
+                <ul>
+                    <li>Selected vehicle type</li>
+                    <li>Distance / number of days</li>
+                    <li>Fare rules (per km / per day / night charges)</li>
+                </ul>
+                <p><strong>The system:</strong></p>
+                <ul>
+                    <li>Fetches prices from <strong>Fare Master</strong></li>
+                    <li>Filters available vehicles from <strong>Vehicle Master</strong></li>
+                    <li>Shows: Available vehicles, Seating capacity, Final price (transparent breakup)</li>
+                </ul>
+            </div>
+
+            <div class="arrow-down">⬇️</div>
+
+            <div class="decision-box">
+                🔀 STEP 4: CUSTOMER DECISION POINT<br>
+                Two Possible Flows Start Here
+            </div>
+
+            <div class="arrow-down">⬇️</div>
+
+            <div class="branch-container">
+                <div class="branch">
+                    <div class="branch-title">✅ FLOW 1.1: Direct Booking</div>
+                    
+                    <h4>Step 5A: Customer Proceeds to Payment</h4>
+                    <ul>
+                        <li>Clicks "Confirm & Pay"</li>
+                        <li>Secure payment link generated</li>
+                        <li>Customer completes payment</li>
+                    </ul>
+
+                    <h4>Step 6A: Booking Confirmation</h4>
+                    <p>After successful payment:</p>
+                    <ul>
+                        <li>Trip ID is generated</li>
+                        <li>Vehicle and driver are locked</li>
+                        <li>Notifications sent to: Customer, Admin, Assigned Driver</li>
+                    </ul>
+                    <p><span class="status-badge status-confirmed">✓ CONFIRMED</span></p>
+
+                    <h4>Step 7A: Trip Execution</h4>
+                    <ul>
+                        <li>Driver receives trip details</li>
+                        <li>Trip starts on scheduled date</li>
+                        <li>Trip completes</li>
+                        <li>Trip marked as COMPLETED</li>
+                    </ul>
+                </div>
+
+                <div class="branch negotiation">
+                    <div class="branch-title">🔄 FLOW 1.2: Negotiation Path</div>
+                    
+                    <h4>Step 5B: Customer Leaves Without Payment</h4>
+                    <ul>
+                        <li>Customer exits the site</li>
+                        <li>Booking marked as "Incomplete/Abandoned"</li>
+                        <li><strong>Customer details NOT lost</strong></li>
+                    </ul>
+                    <p><span class="status-badge status-abandoned">ABANDONED</span></p>
+
+                    <h4>Step 6B: Sales Team Follow-Up</h4>
+                    <p>Team gets list with:</p>
+                    <ul>
+                        <li>Name & Mobile number</li>
+                        <li>Pickup location</li>
+                        <li>Required vehicle type</li>
+                        <li>Initial quoted price</li>
+                    </ul>
+
+                    <h4>Step 7B: Call & Negotiation</h4>
+                    <p>Each call tracked with status:</p>
+                    <ul>
+                        <li>New → Ringing → Busy</li>
+                        <li>Rejected / Deal Closed</li>
+                    </ul>
+                    <p>Retry where possible, stop on rejected leads</p>
+
+                    <h4>Step 8B: Deal Closure</h4>
+                    <p>If customer agrees on negotiated price:</p>
+                    <ul>
+                        <li>New payment link generated</li>
+                        <li>Customer completes payment</li>
+                    </ul>
+
+                    <h4>Step 9B: Booking Confirmation</h4>
+                    <ul>
+                        <li>Trip ID generated</li>
+                        <li>Driver & vehicle assigned</li>
+                        <li>Notifications sent</li>
+                    </ul>
+                    <div class="note">→ Flow merges with Flow 1.1 (Trip Execution)</div>
+                </div>
+            </div>
+
+            <div class="page-number">Page 1 of 2</div>
+        </div>
+
+        <!-- PAGE 2 -->
+        <div class="page">
+            <h1>🚗 TRIP BOOKING SYSTEM - COMPLETE FLOW</h1>
+
+            <h2>2. ADMIN & OPERATIONS FLOW</h2>
+
+            <h3>Admin Capabilities</h3>
+            <div class="flow-box">
+                <ul>
+                    <li><strong>View all bookings</strong> (confirmed & abandoned)</li>
+                    <li><strong>Manage:</strong>
+                        <ul>
+                            <li>Vehicles (add, edit, remove)</li>
+                            <li>Drivers (assign, manage documents)</li>
+                            <li>Fare rules (pricing updates)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Track:</strong>
+                        <ul>
+                            <li>Conversion rates</li>
+                            <li>Negotiation success rates</li>
+                            <li>Revenue and profit margins</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <h3>Driver Flow</h3>
+            <div class="flow-box">
+                <ol>
+                    <li>Driver receives trip details via SMS/App notification</li>
+                    <li>Accepts assignment</li>
+                    <li>Prepares vehicle and reports ready</li>
+                    <li>Completes trip</li>
+                    <li>Status updated automatically in system</li>
+                </ol>
+            </div>
+
+            <h2>3. MASTER DATA USAGE (BACKEND TABLES)</h2>
+            
+            <p><em>These tables power the entire system and work behind the scenes:</em></p>
+
+            <div class="table-container">
+                <div class="master-table">
+                    <div class="table-header">🚙 VEHICLE MASTER</div>
+                    <div class="table-body">
+                        <strong>Stores:</strong><br>
+                        • Vehicle registration details<br>
+                        • Vehicle type & model<br>
+                        • Seat capacity<br>
+                        • Certifications & insurance<br>
+                        • Current availability status<br>
+                        • Maintenance records<br>
+                        • Fuel type & mileage<br><br>
+                        <strong>Used For:</strong><br>
+                        Filtering available vehicles based on customer requirements
+                    </div>
+                </div>
+
+                <div class="master-table">
+                    <div class="table-header">👨‍✈️ DRIVER MASTER</div>
+                    <div class="table-body">
+                        <strong>Stores:</strong><br>
+                        • Driver profile & contact<br>
+                        • License & documents<br>
+                        • Years of experience<br>
+                        • Assigned vehicle ID<br>
+                        • Current availability<br>
+                        • Performance ratings<br>
+                        • Languages spoken<br><br>
+                        <strong>Used For:</strong><br>
+                        Assigning qualified drivers to confirmed trips
+                    </div>
+                </div>
+
+                <div class="master-table">
+                    <div class="table-header">💰 FARE MASTER</div>
+                    <div class="table-body">
+                        <strong>Stores:</strong><br>
+                        • Base fare per vehicle type<br>
+                        • Per km charges<br>
+                        • Per day charges<br>
+                        • Night charges (surcharge)<br>
+                        • Driver allowance/charges<br>
+                        • Seasonal pricing rules<br>
+                        • Discount codes<br><br>
+                        <strong>Used For:</strong><br>
+                        Auto-calculating trip prices instantly
+                    </div>
+                </div>
+            </div>
+
+            <h2>4. KEY SYSTEM FEATURES</h2>
+
+            <div class="flow-box">
+                <h3>Data Retention & Lead Recovery</h3>
+                <ul>
+                    <li>Every customer inquiry is saved, even if they abandon</li>
+                    <li>Sales team can recover lost leads through follow-up</li>
+                    <li>Negotiation tracking ensures no opportunity is missed</li>
+                </ul>
+            </div>
+
+            <div class="flow-box">
+                <h3>Automated Pricing & Transparency</h3>
+                <ul>
+                    <li>Real-time price calculation based on multiple factors</li>
+                    <li>Transparent breakup shown to customers</li>
+                    <li>Dynamic pricing based on demand and availability</li>
+                </ul>
+            </div>
+
+            <div class="flow-box">
+                <h3>Notification System</h3>
+                <ul>
+                    <li>Multi-channel: SMS, WhatsApp, Email</li>
+                    <li>Sent to all stakeholders: Customer, Admin, Driver</li>
+                    <li>Real-time status updates throughout trip lifecycle</li>
+                </ul>
+            </div>
+
+            <div class="flow-box">
+                <h3>Status Tracking</h3>
+                <p><strong>Customer statuses:</strong> New Inquiry → Quoted → Paid → Confirmed → In Progress → Completed</p>
+                <p><strong>Abandoned lead statuses:</strong> New → Contacted → Ringing → Busy → Rejected → Deal Closed</p>
+            </div>
+
+            <h2>5. WORKFLOW SUMMARY</h2>
+            
+            <div class="note">
+                <strong>Success Flow:</strong> Customer inquiry → Price quote → Payment → Confirmation → Driver assignment → Trip execution → Completion
+            </div>
+
+            <div class="note" style="background: #fff3e0; border-left-color: #ff9800;">
+                <strong>Recovery Flow:</strong> Customer inquiry → Price quote → Abandonment → Sales follow-up → Negotiation → Deal closure → Payment → Back to Success Flow
+            </div>
+
+            <div class="page-number">Page 2 of 2</div>
+        </div>
+    </div>
+
+    <script>
+        function downloadDoc() {
+            alert('To save as Word document:\n\n1. Click "Print / Save as PDF" button\n2. In print dialog, choose "Save as PDF"\n3. Open the PDF in Microsoft Word\n4. Word will convert it to editable document\n\nAlternatively, you can copy all content and paste into Word directly.');
+        }
+    </script>
+</body>
+</html>
