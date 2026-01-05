@@ -253,24 +253,50 @@
             color: #212529;
         }
 
-        .next-button {
-            background: #495057;
-            color: white;
-            border: none;
-            padding: 12px 32px;
-            border-radius: 6px;
-            font-size: 1em;
-            cursor: pointer;
-            margin: 20px auto;
-            display: block;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
+       .nav-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin: 30px 0;
+}
 
-        .next-button:hover {
-            background: #6c757d;
-            transform: scale(1.02);
-        }
+/* Next Button (Primary Action) */
+.next-button {
+    background: #495057;
+    color: #ffffff;
+    border: none;
+    padding: 12px 36px;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 600;
+}
+
+.next-button:hover {
+    background: #343a40;
+    transform: translateY(-1px);
+}
+
+/* Back Button (Secondary Action) */
+.back-button {
+    background: #ffffff;
+    color: #212529;
+    border: 1px solid #6c757d;
+    padding: 12px 36px;
+    border-radius: 6px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.back-button:hover {
+    background: #f8f9fa;
+    border-color: #495057;
+    transform: translateY(-1px);
+}
+
 
         .emoji {
             font-size: 1.2em;
@@ -393,7 +419,10 @@
                         </ul>
                     </div>
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
+                <div class="nav-buttons">
+                    <!-- <button class="back-button" onclick="prevSection()">⬅ Back</button> -->
+                    <button class="next-button" onclick="nextSection()">Next ➡</button>
+                </div>
             </div>
 
             <!-- Section 2: Customer & Sales Flow -->
@@ -465,7 +494,11 @@
                         These statuses <strong>must be finalized before development</strong>
                     </div> -->
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
+             <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+    <button class="next-button" onclick="nextSection()">Next ➡</button>
+</div>
+
             </div>
 
             <!-- Section 3: Payment System -->
@@ -547,7 +580,10 @@
                         <span style="color: #dc3545;">Full payment before trip is NOT recommended</span>
                     </div>
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
+                    <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+    <button class="next-button" onclick="nextSection()">Next ➡</button>
+</div>
             </div>
 
             <!-- Section 4: WhatsApp Integration -->
@@ -638,7 +674,10 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
+                    <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+    <button class="next-button" onclick="nextSection()">Next ➡</button>
+</div>
             </div>
 
             <!-- Section 5: Call Masking -->
@@ -731,7 +770,10 @@
                         </tr>
                     </table>
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
+                    <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+    <button class="next-button" onclick="nextSection()">Next ➡</button>
+</div>
             </div>
 
             <!-- Section 6: Live Location -->
@@ -780,52 +822,231 @@
                         </tbody>
                     </table>
                 </div>
-                <button class="next-button" onclick="startPresentation()">Reset</button>
+                    <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+    <button class="next-button" onclick="nextSection()">Next ➡</button>
+</div>
             </div>
 
-            <!-- Section 7: Master Data -->
-            <!-- <div class="section" data-section="7">
+          <div class="section" data-section="8">
                 <div class="section-header">
-                    <span class="emoji">📋</span>
-                    <span>7. MASTER DATA</span>
+                    <span class="emoji">🔌</span>
+                    <span>7. REQUIRED EXTERNAL APIs & INTEGRATIONS</span>
                 </div>
                 <div class="section-content">
-                    <h3>Essential Master Data Entities:</h3>
-                    <ul>
-                        <li><strong>Vehicles:</strong> Types, models, capacities, rates per km/hour</li>
-                        <li><strong>Drivers:</strong> Profiles, licenses, ratings, availability</li>
-                        <li><strong>Locations:</strong> Cities, airports, landmarks for pickups/dropoffs</li>
-                        <li><strong>Pricing Rules:</strong> Base fares, surcharges, discounts</li>
-                        <li><strong>Users:</strong> Sales team roles, permissions</li>
-                    </ul>
-                    <div class="highlight-box">
-                        <strong>Recommendation:</strong> Start with 50-100 vehicle/driver entries. Use CSV import for bulk upload.
+                    <h3>Overview:</h3>
+                    <p>The system relies on several external APIs for core functionalities. Below is a summary of each, including usage context and approximate costs per trip.</p>
+
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://developers.google.com/maps/images/branding-guidelines/logo-blue.svg" alt="Google Maps" class="provider-logo" onerror="this.style.display='none';">
+                            <div style="display:none; width:100px; height:50px; background:#4285f4; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Google Maps</div>
+                            <div>
+                                <div class="provider-name">
+                                    Google Maps API (Distance Matrix / Directions)
+                                    <span class="badge badge-recommended">RECOMMENDED</span>
+                                </div>
+                            </div>
+                        </div>
+                        <h3>Usage:</h3>
+                        <ul>
+                            <li>Calculate distance (km) and estimated travel time between pickup and drop locations during lead creation.</li>
+                            <li>Assist sales team in quoting accurate prices based on route estimates.</li>
+                            <!-- <li>Optional: Provide directions to drivers during trip execution.</li> -->
+                        </ul>
+                        <h3>Pricing (Legacy APIs):</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tier</th>
+                                    <th>Cost per 1,000 Requests (USD)</th>
+                                    <th>Approx. Cost per 1,000 Requests (₹)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Free Tier (Monthly)</td>
+                                    <td>10,000 requests</td>
+                                    <td>₹0</td>
+                                </tr>
+                                <tr>
+                                    <td>0-100,000 requests</td>
+                                    <td>$5.00</td>
+                                    <td>₹415</td>
+                                </tr>
+                                <tr>
+                                    <td>100,001+ requests</td>
+                                    <td>$4.00</td>
+                                    <td>₹332</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="success-box">
+                            <strong>Per Trip Cost:</strong> ~₹0.40 (assuming 1 request per trip, post-free tier). Negligible for low volumes.
+                        </div>
                     </div>
-                    <h3>Cost Estimate for Data Setup:</h3>
+
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="provider-logo" onerror="this.style.display='none';">
+                            <div style="display:none; width:100px; height:50px; background:#3395ff; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Razorpay</div>
+                            <div>
+                                <div class="provider-name">Razorpay API</div>
+                            </div>
+                        </div>
+                        <h3>Usage:</h3>
+                        <ul>
+                            <li>Generate payment links for advance and balance payments.</li>
+                            <li>Handle UPI, cards, netbanking, and refunds.</li>
+                            <li>Integrate with WhatsApp for link sharing.</li>
+                        </ul>
+                        <h3>Pricing:</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fee Type</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Setup / Monthly</td>
+                                    <td>₹0</td>
+                                </tr>
+                                <tr>
+                                    <td>Transaction Fee</td>
+                                    <td>~2% per transaction</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="warning-box">
+                            <strong>Per Trip Cost:</strong> ~2% of trip value (e.g., ₹20 for ₹1,000 trip). Variable based on payment amount.
+                        </div>
+                    </div>
+
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:64px; height:64px;">
+                            <div>
+                                <div class="provider-name">WhatsApp Business API (via Gupshup)</div>
+                            </div>
+                        </div>
+                        <h3>Usage:</h3>
+                        <ul>
+                            <li>Send automated  confirmations and reminders to customers and drivers.</li>
+                            <li>Share payment links and driver details.</li>
+                            <li>Receive manual live location shares from drivers.</li>
+                        </ul>
+                        <h3>Pricing:</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Cost per Conversation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Utility</td>
+                                    <td>₹0.35 – ₹0.55</td>
+                                </tr>
+                                 <tr>
+                                <td>Marketing (Promotions)</td>
+                                <td>₹0.80 – ₹0.95</td>
+                            </tr>
+                                <tr>
+                                    <td>Gupshup Margin</td>
+                                    <td>₹0.05 – ₹0.10</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="success-box">
+                            <strong>Per Trip Cost:</strong> ₹2.00 – ₹2.50 (2 conversations each for customer and driver).
+                        </div>
+                    </div>
+
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://www.exotel.com/wp-content/themes/exotel/images/exotel-logo.svg" alt="Exotel" class="provider-logo" onerror="this.style.display='none';">
+                            <div>
+                                <div class="provider-name">Exotel API (Call Masking)</div>
+                            </div>
+                        </div>
+                        <h3>Usage:</h3>
+                        <ul>
+                            <li>Mask phone numbers during sales calls and trip coordination between customers and drivers.</li>
+                            <li>Enable call recording for quality assurance.</li>
+                        </ul>
+                        <h3>Pricing:</h3>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Cost</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Virtual Number (Monthly)</td>
+                                    <td>₹100 – ₹200</td>
+                                </tr>
+                                <tr>
+                                    <td>Per Minute Call</td>
+                                    <td>₹0.40 – ₹0.60</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="warning-box">
+                            <strong>Per Trip Cost:</strong> ₹3 – ₹4 (assuming 2 calls × 3 minutes).
+                        </div>
+                    </div>
+
+                    <h3>Summary of Per-Trip External Costs (Approximate):</h3>
                     <table>
                         <thead>
                             <tr>
-                                <th>Task</th>
-                                <th>Effort (Hours)</th>
-                                <th>Cost (₹)</th>
+                                <th>API</th>
+                                <th>Per-Trip Cost (₹)</th>
+                                <th>Notes</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Initial Data Entry</td>
-                                <td>20-30</td>
-                                <td>10,000 - 15,000</td>
+                                <td>Google Maps</td>
+                                <td>0.40</td>
+                                <td>1 request; free up to 10k/month</td>
                             </tr>
                             <tr>
-                                <td>Ongoing Maintenance</td>
-                                <td>5/month</td>
-                                <td>2,500/month</td>
+                                <td>Razorpay</td>
+                                <td>Variable (2% of trip value)</td>
+                                <td>E.g., ₹20 for ₹1,000 trip</td>
+                            </tr>
+                            <tr>
+                                <td>WhatsApp</td>
+                                <td>2.00 – 2.50</td>
+                                <td>4 conversations</td>
+                            </tr>
+                            <tr>
+                                <td>Exotel</td>
+                                <td>3 – 4</td>
+                                <td>6 minutes of calls</td>
+                            </tr>
+                            <tr style="background: #d1ecf1; font-weight: bold;">
+                                <td><strong>TOTAL (Fixed)</strong></td>
+                                <td><strong>₹5.40 – 6.90</strong></td>
+                                <td>Excluding payment %</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <!-- <div class="highlight-box">
+                        <strong>Recommendation:</strong> All integrations are essential for a scalable, professional system. Start with free tiers where possible to minimize initial costs.
+                    </div> -->
                 </div>
-                <button class="next-button" onclick="nextSection()">Next Section →</button>
-            </div> -->
+                    <div class="nav-buttons">
+    <button class="back-button" onclick="prevSection()">⬅ Back</button>
+                <button class="next-button" onclick="startPresentation()">Restart</button>
+            </div>
         </div>
     </div>
 
@@ -851,6 +1072,15 @@
                 alert('End of presentation! Use "Reset" to start over.');
             }
         }
+        function prevSection() {
+    if (currentSection > 0) {
+        currentSection--;
+        updateVisibility();
+    } else {
+        alert('You are already at the beginning of the presentation.');
+    }
+}
+
 
         function startPresentation() {
             currentSection = 0;
