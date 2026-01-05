@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Booking System - Feasibility & Requirements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            background: #f8f9fa;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+            border-radius: 8px;
+            max-width: 1200px;
+            margin: 0 auto 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        button {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 0.95em;
+            cursor: pointer;
+            margin: 4px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #6c757d;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+            display: none;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-size: 1.4em;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-content {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            line-height: 1.7;
+        }
+
+        .section-content h3 {
+            color: #495057;
+            margin: 20px 0 10px 0;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .section-content ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .section-content li {
+            margin-bottom: 6px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        table th {
+            background: #495057;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        table tr:last-child td {
+            border-bottom: none;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+            font-weight: 500;
+        }
+
+        .success-box {
+            background: #d1ecf1;
+            border-left: 4px solid #17a2b8;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 16px 0;
+        }
+
+        .provider-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            transition: all 0.3s;
+            border: 1px solid #e9ecef;
+        }
+
+        .provider-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .provider-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .provider-logo {
+            width: 100px;
+            height: 50px;
+            object-fit: contain;
+            background: #f8f9fa;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .provider-name {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 0.8em;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .badge-recommended {
+            background: #28a745;
+            color: white;
+        }
+
+        .badge-alternative {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .next-button {
+            background: #495057;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 6px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 20px auto;
+            display: block;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .next-button:hover {
+            background: #6c757d;
+            transform: scale(1.02);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        .flow-model {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 24px;
+            background: white;
+            border-radius: 8px;
+            margin: 16px 0;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+        }
+
+        .flow-step {
+            text-align: center;
+            padding: 16px;
+            flex: 1;
+        }
+
+        .flow-icon {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .flow-arrow {
+            font-size: 1.8em;
+            color: #6c757d;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .controls, .next-button {
+                display: none;
+            }
+            .section {
+                display: block !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            .container {
+                box-shadow: none;
+                border-radius: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .flow-model {
+                flex-direction: column;
+            }
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button onclick="startPresentation()">▶️ Start Presentation</button>
+        <!-- <button onclick="showAll()">👁️ Show All</button>
+        <button onclick="resetPresentation()">🔄 Reset</button> -->
+        <button onclick="window.print()">🖨️ Print / Download PDF</button>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>Trip Booking System</h1>
+            <p>Feasibility, Requirements & Cost Analysis</p>
+            <!-- <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Document for Clients, Founders & Stakeholders</p> -->
+        </div>
+
+        <div class="content">
+            <!-- Section 1: System Overview -->
+            <div class="section" data-section="1">
+                <div class="section-header">
+                    <span class="emoji">📊</span>
+                    <span>1. SYSTEM OVERVIEW (CLIENT MODEL)</span>
+                </div>
+                <div class="section-content">
+                    <div class="flow-model">
+                        <div class="flow-step">
+                            <div class="flow-icon">📝</div>
+                            <h3>LEAD</h3>
+                            <p>Customer Enquiry</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">🤝</div>
+                            <h3>DEAL</h3>
+                            <p>Sales Negotiation</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">🚗</div>
+                            <h3>TRIP</h3>
+                            <p>Execution</p>
+                        </div>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h3>Key Features:</h3>
+                        <ul>
+                            <li>No instant booking</li>
+                            <li>Every request handled by <strong>Sales Team</strong></li>
+                            <li>Price negotiated manually</li>
+                            <li>Payment after deal confirmation only</li>
+                            <li>Operations via <strong>WhatsApp + Calls</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div>
+
+            <!-- Section 2: Customer & Sales Flow -->
+            <div class="section" data-section="2">
+                <div class="section-header">
+                    <span class="emoji">👥</span>
+                    <span>2. CUSTOMER & SALES FLOW</span>
+                </div>
+                <div class="section-content">
+                    <h3>Customer Actions:</h3>
+                    <ul>
+                        <li>Enters personal details</li>
+                        <li>Enters trip details</li>
+                        <li>Submits enquiry</li>
+                    </ul>
+                    <div class="success-box">
+                        Data is saved immediately (even if customer leaves)
+                    </div>
+
+                    <h3>Sales Team Actions:</h3>
+                    <ul>
+                        <li>Receives lead in dashboard</li>
+                        <li>Calls customer</li>
+                        <li>Negotiates price & vehicle</li>
+                        <li>Updates lead status</li>
+                    </ul>
+
+                    <h3>Lead Statuses (Recommended - Final):</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Meaning</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>New</strong></td>
+                                <td>Lead created</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Calling</strong></td>
+                                <td>Call in progress</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Busy</strong></td>
+                                <td>Retry later</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Follow-up</strong></td>
+                                <td>Interested, not confirmed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Deal Closed</strong></td>
+                                <td>Price agreed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cancelled</strong></td>
+                                <td>Not interested</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Invalid</strong></td>
+                                <td>Fake / wrong number</td>
+                            </tr>
+                        </tbody>
+                    </table>
+<!-- 
+                    <div class="warning-box">
+                        These statuses <strong>must be finalized before development</strong>
+                    </div> -->
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div>
+
+            <!-- Section 3: Payment System -->
+            <div class="section" data-section="3">
+                <div class="section-header">
+                    <span class="emoji">💳</span>
+                    <span>3. PAYMENT SYSTEM (INDIA)</span>
+                </div>
+                <div class="section-content">
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="provider-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <div style="display:none; width:100px; height:50px; background:#3395ff; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Razorpay</div>
+                            <div>
+                                <div class="provider-name">
+                                    Razorpay
+                                    <span class="badge badge-recommended">RECOMMENDED</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table>
+                            <tr>
+                                <td><strong>Setup Fee</strong></td>
+                                <td>₹0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Monthly Fee</strong></td>
+                                <td>₹0</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Transaction Fee</strong></td>
+                                <td>~2%</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Features</strong></td>
+                                <td>Payment links, Partial payment, UPI, Cards, Netbanking</td>
+                            </tr>
+                        </table>
+
+                        <div class="success-box">
+                            <strong>Why Razorpay:</strong>
+                            <ul>
+                                <li>Most trusted in India</li>
+                                <li>Easy WhatsApp payment link sharing</li>
+                                <li>Best dashboard & webhook support</li>
+                                <li>Instant settlements available</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- <h3>Alternative Options:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Provider</th>
+                                <th>Logo</th>
+                                <th>When to Use</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Cashfree</strong></td>
+                                <td><img src="https://www.cashfree.com/assets/cashfree-logo.svg" style="height:24px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2224%22%3E%3Ctext x=%228%22 y=%2216%22 font-family=%22Arial%22 fill=%22%23FF6B35%22%3ECashfree%3C/text%3E%3C/svg%3E';"></td>
+                                <td>Backup option</td>
+                            </tr>
+                            <tr>
+                                <td><strong>PhonePe Gateway</strong></td>
+                                <td><img src="https://www.phonepe.com/webstatic/6.4.2/static/media/phone-pe.svg" style="height:24px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2224%22%3E%3Ctext x=%228%22 y=%2216%22 font-family=%22Arial%22 fill=%22%235F259F%22%3EPhonePe%3C/text%3E%3C/svg%3E';"></td>
+                                <td>UPI-heavy businesses</td>
+                            </tr>
+                        </tbody>
+                    </table> -->
+
+                    <h3>Payment Flow:</h3>
+                    <div class="highlight-box">
+                        <strong>Stage 1:</strong> Advance payment → Deal Confirmed → Trip Created<br>
+                        <strong>Stage 2:</strong> Balance payment → After trip completion<br><br>
+                        <span style="color: #dc3545;">Full payment before trip is NOT recommended</span>
+                    </div>
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div>
+
+            <!-- Section 4: WhatsApp Integration -->
+            <div class="section" data-section="4">
+                <div class="section-header">
+                    <span class="emoji">💬</span>
+                    <span>4. WHATSAPP INTEGRATION (MANDATORY FOR SCALE)</span>
+                </div>
+                <div class="section-content">
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:64px; height:64px;">
+                            <div>
+                                <div class="provider-name">WhatsApp Business API</div>
+                                <p style="color: #6c757d; margin-top: 4px; font-size: 0.9em;">via Gupshup</p>
+                            </div>
+                        </div>
+
+                        <h3>What Is Possible:</h3>
+                        <ul>
+                            <li>Send trip details to customer</li>
+                            <li>Send driver details</li>
+                            <li>Send payment links</li>
+                            <li>Send reminders</li>
+                            <li>Receive live location (manual from driver)</li>
+                            <li>Send booking confirmations</li>
+                        </ul>
+
+                        <!-- <h3 style="color: #dc3545;">What Is NOT Possible:</h3>
+                        <ul>
+                            <li>Automatic GPS tracking</li>
+                            <li>Reading messages silently (privacy violation)</li>
+                            <li>Using personal WhatsApp numbers</li>
+                            <li>Auto-extending live location sharing</li>
+                        </ul> -->
+                    </div>
+
+                    <h3>WhatsApp Cost (India - Approximate):</h3>
+                    <p>WhatsApp charges <strong>per 24-hour conversation</strong>, not per message.</p>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Conversation Type</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Utility (Confirmations, Updates)</td>
+                                <td>₹0.35 – ₹0.55</td>
+                            </tr>
+                            <tr>
+                                <td>Marketing (Promotions)</td>
+                                <td>₹0.80 – ₹0.95</td>
+                            </tr>
+                            <tr>
+                                <td>Gupshup Margin</td>
+                                <td>₹0.05 – ₹0.10</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>WhatsApp Cost Per Trip:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Recipient</th>
+                                <th>Conversations</th>
+                                <th>Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Customer</td>
+                                <td>2</td>
+                                <td>₹1.00</td>
+                            </tr>
+                            <tr>
+                                <td>Driver</td>
+                                <td>2</td>
+                                <td>₹1.00</td>
+                            </tr>
+                            <tr style="background: #d1ecf1; font-weight: bold;">
+                                <td colspan="2"><strong>TOTAL</strong></td>
+                                <td><strong>₹2.00 – ₹2.50</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div>
+
+            <!-- Section 5: Call Masking -->
+            <div class="section" data-section="5">
+                <div class="section-header">
+                    <span class="emoji">☎️</span>
+                    <span>5. CALL MASKING (VERY IMPORTANT)</span>
+                </div>
+                <div class="section-content">
+                    <div class="danger-box">
+                        <strong>Why Call Masking Is CRITICAL:</strong>
+                        <ul>
+                            <li>Protect customer & driver privacy</li>
+                            <li>Prevent off-platform deals (revenue loss)</li>
+                            <li>Industry standard (Uber, Ola, Rapido use it)</li>
+                            <li>Track all communication for quality control</li>
+                        </ul>
+                    </div>
+
+                    <h3>Call Masking Providers (India):</h3>
+
+                    <div class="provider-card">
+                        <div class="provider-header">
+                            <img src="https://www.exotel.com/wp-content/themes/exotel/images/exotel-logo.svg" alt="Exotel" class="provider-logo" onerror="this.style.display='none';">
+                            <div>
+                                <div class="provider-name">
+                                    Exotel
+                                    <span class="badge badge-recommended">RECOMMENDED</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table>
+                            <tr>
+                                <td><strong>Virtual Number</strong></td>
+                                <td>₹100 – ₹200/month</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Per Minute Call</strong></td>
+                                <td>₹0.40 – ₹0.60</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Call Recording</strong></td>
+                                <td>Available</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Call Masking</strong></td>
+                                <td>Full Support</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- <div class="provider-card">
+                        <div class="provider-header">
+                            <div style="width:100px; height:50px; background:#1976d2; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Knowlarity</div> -->
+                            <!-- <div>
+                                <div class="provider-name">
+                                    Knowlarity
+                                    <span class="badge badge-alternative">ALTERNATIVE</span>
+                                </div>
+                                <p style="color: #6c757d; margin-top: 4px; font-size: 0.9em;">Slightly higher cost, Enterprise-focused</p>
+                            </div> 
+                        </div>
+                    </div> -->
+
+                    <h3>How Call Masking Works:</h3>
+                    <div class="flow-model">
+                        <div class="flow-step">
+                            <div class="flow-icon">👨‍✈️</div>
+                            <p><strong>Driver</strong><br>Calls Virtual Number<br>+91-XXXX-VIRT</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">📞</div>
+                            <p><strong>System</strong><br>Routes Call<br>Real numbers hidden</p>
+                        </div>
+                        <div class="flow-arrow">→</div>
+                        <div class="flow-step">
+                            <div class="flow-icon">👤</div>
+                            <p><strong>Customer</strong><br>Receives Call<br>Privacy protected</p>
+                        </div>
+                    </div>
+
+                    <h3>Call Cost Per Trip (Approximate):</h3>
+                    <p>Assuming: 2 calls × 3 minutes per call</p>
+                    <table>
+                        <tr>
+                            <td><strong>Call Charges</strong></td>
+                            <td><strong>₹3 – ₹4</strong></td>
+                        </tr>
+                    </table>
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div>
+
+            <!-- Section 6: Live Location -->
+            <div class="section" data-section="6">
+                <div class="section-header">
+                    <span class="emoji">📍</span>
+                    <span>6. LIVE LOCATION SHARING (REALITY CHECK)</span>
+                </div>
+                <div class="section-content">
+                    <div class="success-box">
+                        <h3>What CAN Be Done:</h3>
+                        <ul>
+                            <li>Driver manually shares live location via WhatsApp</li>
+                            <li>System sends WhatsApp reminders before location expiry</li>
+                            <li>Customer tracks in real-time through WhatsApp</li>
+                        </ul>
+                    </div>
+
+                    <div class="danger-box">
+                        <h3>WhatsApp Limitations (IMPORTANT):</h3>
+                        <ul>
+                            <li>Live location valid for <strong>maximum 8 hours</strong></li>
+                            <li>Must be <strong>manually re-shared</strong> for longer trips</li>
+                            <li>No API to auto-extend location sharing</li>
+                            <li>WhatsApp privacy policy prevents automation</li>
+                        </ul>
+                    </div>
+
+                    <h3>Recommended Approach:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Trip Duration</th>
+                                <th>System Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>≤ 8 hours</td>
+                                <td>One location share sufficient</td>
+                            </tr>
+                            <tr>
+                                <td>> 8 hours</td>
+                                <td>Reminder sent 2 hours before expiry:<br><em>"Your live location will expire in 2 hours. Please re-share to keep customer updated."</em></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="next-button" onclick="startPresentation()">Reset</button>
+            </div>
+
+            <!-- Section 7: Master Data -->
+            <!-- <div class="section" data-section="7">
+                <div class="section-header">
+                    <span class="emoji">📋</span>
+                    <span>7. MASTER DATA</span>
+                </div>
+                <div class="section-content">
+                    <h3>Essential Master Data Entities:</h3>
+                    <ul>
+                        <li><strong>Vehicles:</strong> Types, models, capacities, rates per km/hour</li>
+                        <li><strong>Drivers:</strong> Profiles, licenses, ratings, availability</li>
+                        <li><strong>Locations:</strong> Cities, airports, landmarks for pickups/dropoffs</li>
+                        <li><strong>Pricing Rules:</strong> Base fares, surcharges, discounts</li>
+                        <li><strong>Users:</strong> Sales team roles, permissions</li>
+                    </ul>
+                    <div class="highlight-box">
+                        <strong>Recommendation:</strong> Start with 50-100 vehicle/driver entries. Use CSV import for bulk upload.
+                    </div>
+                    <h3>Cost Estimate for Data Setup:</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Task</th>
+                                <th>Effort (Hours)</th>
+                                <th>Cost (₹)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Initial Data Entry</td>
+                                <td>20-30</td>
+                                <td>10,000 - 15,000</td>
+                            </tr>
+                            <tr>
+                                <td>Ongoing Maintenance</td>
+                                <td>5/month</td>
+                                <td>2,500/month</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button class="next-button" onclick="nextSection()">Next Section →</button>
+            </div> -->
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 0;
+        const sections = document.querySelectorAll('.section');
+
+        function updateVisibility() {
+            sections.forEach((sec, index) => {
+                if (index === currentSection) {
+                    sec.classList.add('visible');
+                } else {
+                    sec.classList.remove('visible');
+                }
+            });
+        }
+
+        function nextSection() {
+            if (currentSection < sections.length - 1) {
+                currentSection++;
+                updateVisibility();
+            } else {
+                alert('End of presentation! Use "Reset" to start over.');
+            }
+        }
+
+        function startPresentation() {
+            currentSection = 0;
+            sections.forEach(sec => sec.classList.remove('visible'));
+            updateVisibility();
+        }
+
+        function showAll() {
+            sections.forEach(sec => sec.classList.add('visible'));
+        }
+
+        function resetPresentation() {
+            currentSection = 0;
+            updateVisibility();
+        }
+
+        // Initialize: Show first section on load
+        window.onload = function() {
+            startPresentation();
+        };
+    </script>
+</body>
+</html>
