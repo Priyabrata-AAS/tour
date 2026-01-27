@@ -1,1106 +1,728 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Booking System - Feasibility & Requirements</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Internal Portal Dashboard</title>
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: white;
-            padding: 20px;
-            min-height: 100vh;
-            color: #333;
-        }
+<style>
 
-        .controls {
-            text-align: center;
-            margin-bottom: 20px;
-            position: sticky;
-            top: 10px;
-            background: #f8f9fa;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 1000;
-            border-radius: 8px;
-            max-width: 1200px;
-            margin: 0 auto 20px;
-            border: 1px solid #e0e0e0;
-        }
-
-        button {
-            background: #495057;
-            color: white;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
-            font-size: 0.95em;
-            cursor: pointer;
-            margin: 4px;
-            transition: all 0.3s;
-            font-weight: 500;
-        }
-
-        button:hover {
-            background: #6c757d;
-            transform: translateY(-1px);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #495057 0%, #343a40 100%);
-            color: white;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            font-weight: 300;
-        }
-
-        .header p {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-
-        .content {
-            padding: 40px;
-        }
-
-        .section {
-            margin-bottom: 40px;
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-            display: none;
-        }
-
-        .section.visible {
-            opacity: 1;
-            transform: translateY(0);
-            display: block;
-        }
-
-        .section-header {
-            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            font-size: 1.4em;
-            font-weight: 500;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .section-content {
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            line-height: 1.7;
-        }
-
-        .section-content h3 {
-            color: #495057;
-            margin: 20px 0 10px 0;
-            font-size: 1.2em;
-            font-weight: 600;
-        }
-
-        .section-content ul {
-            margin-left: 20px;
-            margin-bottom: 15px;
-        }
-
-        .section-content li {
-            margin-bottom: 6px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-        }
-
-        table th {
-            background: #495057;
-            color: white;
-            padding: 12px;
-            text-align: left;
-            font-weight: 500;
-        }
-
-        table td {
-            padding: 12px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        table tr:last-child td {
-            border-bottom: none;
-        }
-
-        table tr:hover {
-            background: #f8f9fa;
-        }
-
-        .highlight-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 16px;
-            border-radius: 6px;
-            margin: 16px 0;
-            font-weight: 500;
-        }
-
-        .success-box {
-            background: #d1ecf1;
-            border-left: 4px solid #17a2b8;
-            padding: 16px;
-            border-radius: 6px;
-            margin: 16px 0;
-        }
-
-        .warning-box {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-            padding: 16px;
-            border-radius: 6px;
-            margin: 16px 0;
-        }
-
-        .danger-box {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-            padding: 16px;
-            border-radius: 6px;
-            margin: 16px 0;
-        }
-
-        .provider-card {
-            background: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 16px 0;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            transition: all 0.3s;
-            border: 1px solid #e9ecef;
-        }
-
-        .provider-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .provider-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .provider-logo {
-            width: 100px;
-            height: 50px;
-            object-fit: contain;
-            background: #f8f9fa;
-            padding: 8px;
-            border-radius: 6px;
-        }
-
-        .provider-name {
-            font-size: 1.5em;
-            font-weight: 600;
-            color: #495057;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 16px;
-            font-size: 0.8em;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-
-        .badge-recommended {
-            background: #28a745;
-            color: white;
-        }
-
-        .badge-alternative {
-            background: #ffc107;
-            color: #212529;
-        }
-
-       .nav-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    margin: 30px 0;
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #0f172a;
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --text-dark: #1f2937;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --shadow: rgba(0, 0, 0, 0.1);
 }
 
-/* Next Button (Primary Action) */
-.next-button {
-    background: #495057;
-    color: #ffffff;
-    border: none;
-    padding: 12px 36px;
-    border-radius: 6px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 600;
+* {
+  box-sizing: border-box;
 }
 
-.next-button:hover {
-    background: #343a40;
-    transform: translateY(-1px);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Back Button (Secondary Action) */
-.back-button {
-    background: #ffffff;
-    color: #212529;
-    border: 1px solid #6c757d;
-    padding: 12px 36px;
-    border-radius: 6px;
-    font-size: 1em;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-weight: 500;
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
-.back-button:hover {
-    background: #f8f9fa;
-    border-color: #495057;
-    transform: translateY(-1px);
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
 }
 
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
 
-        .emoji {
-            font-size: 1.2em;
-        }
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
-        .flow-model {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            padding: 24px;
-            background: white;
-            border-radius: 8px;
-            margin: 16px 0;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
-        }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
+  margin: 0;
+  padding: 20px;
+  min-height: 100vh;
+  animation: fadeIn 0.6s ease-out;
+}
 
-        .flow-step {
-            text-align: center;
-            padding: 16px;
-            flex: 1;
-        }
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
 
-        .flow-icon {
-            font-size: 2.5em;
-            margin-bottom: 8px;
-        }
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+  animation: fadeInUp 0.8s ease-out;
+}
 
-        .flow-arrow {
-            font-size: 1.8em;
-            color: #6c757d;
-        }
+.header h1 {
+  color: white;
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+  font-weight: 700;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
 
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .controls, .next-button {
-                display: none;
-            }
-            .section {
-                display: block !important;
-                opacity: 1 !important;
-                transform: none !important;
-            }
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-            }
-        }
+.header p {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1rem;
+  margin: 0;
+}
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2em;
-            }
-            .flow-model {
-                flex-direction: column;
-            }
-            .flow-arrow {
-                transform: rotate(90deg);
-            }
-            .content {
-                padding: 20px;
-            }
-        }
-    </style>
+h2 {
+  color: var(--secondary);
+  font-size: 1.75rem;
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ---------- CARD ---------- */
+
+.card {
+  background: white;
+  padding: 30px;
+  margin-bottom: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  animation: fadeInUp 0.8s ease-out;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+}
+
+.card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.card:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ---------- TABLE ---------- */
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+}
+
+thead {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+th {
+  color: white;
+  padding: 16px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+tbody tr {
+  transition: all 0.3s ease;
+  border-bottom: 1px solid var(--border);
+}
+
+tbody tr:hover {
+  background: #f8fafc;
+  transform: scale(1.01);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 16px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+}
+
+/* ---------- FORM ---------- */
+
+.form-group {
+  margin-bottom: 24px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  color: var(--text-dark);
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+input {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 2px solid var(--border);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f9fafb;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
+
+/* ---------- BUTTON ---------- */
+
+button {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.2);
+  transition: left 0.5s ease;
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  background: #d1d5db;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+button:disabled:hover {
+  transform: none;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  font-size: 1.05rem;
+  margin-top: 10px;
+}
+
+/* ---------- RESULT ---------- */
+
+.result-box {
+  display: none;
+  margin-top: 30px;
+  animation: slideDown 0.5s ease-out;
+}
+
+/* ---------- STATUS ---------- */
+
+.status-message {
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.success {
+  background: #d1fae5;
+  color: #065f46;
+  border-left: 4px solid var(--success);
+}
+
+.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border-left: 4px solid var(--error);
+}
+
+.error-msg {
+  color: var(--error);
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.warning-msg {
+  color: var(--warning);
+  font-size: 0.85rem;
+  display: block;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+/* ---------- INFO BOX ---------- */
+
+.info-box {
+  background: #eff6ff;
+  border-left: 4px solid var(--primary);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  color: var(--text-dark);
+  font-size: 0.95rem;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* ---------- LOADING ---------- */
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- BADGES ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.badge-error {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ---------- MOBILE RESPONSIVE ---------- */
+
+@media(max-width: 768px) {
+  body {
+    padding: 15px;
+  }
+
+  .header h1 {
+    font-size: 1.75rem;
+  }
+
+  .header p {
+    font-size: 0.95rem;
+  }
+
+  h2 {
+    font-size: 1.4rem;
+  }
+
+  .card {
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 16px;
+  }
+
+  th, td {
+    font-size: 0.85rem;
+    padding: 12px 8px;
+  }
+
+  th {
+    font-size: 0.8rem;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .btn-primary {
+    padding: 14px;
+  }
+
+  input {
+    padding: 12px 14px;
+    font-size: 0.95rem;
+  }
+
+  .table-wrapper {
+    margin: 0 -20px;
+    border-radius: 0;
+  }
+
+  table {
+    font-size: 0.85rem;
+  }
+
+  tbody tr:hover {
+    transform: none;
+  }
+}
+
+@media(max-width: 480px) {
+  .header h1 {
+    font-size: 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.25rem;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  th, td {
+    font-size: 0.8rem;
+    padding: 10px 6px;
+  }
+
+  button {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+  }
+}
+
+/* ---------- ACCESSIBILITY ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+</style>
 </head>
+
 <body>
-    <div class="controls">
-        <button onclick="startPresentation()">▶️ Start Presentation</button>
-        <!-- <button onclick="showAll()">👁️ Show All</button>
-        <button onclick="resetPresentation()">🔄 Reset</button> -->
-        <button onclick="window.print()">🖨️ Print / Download PDF</button>
-    </div>
 
-    <div class="container">
-        <div class="header">
-            <h1>Trip Booking System</h1>
-            <p>Feasibility, Requirements & Cost Analysis</p>
-            <!-- <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Document for Clients, Founders & Stakeholders</p> -->
-        </div>
+<div class="container">
 
-        <div class="content">
-            <!-- Section 1: System Overview -->
-            <div class="section" data-section="1">
-                <div class="section-header">
-                    <span class="emoji">📊</span>
-                    <span>1. SYSTEM OVERVIEW (CLIENT MODEL)</span>
-                </div>
-                <div class="section-content">
-                    <div class="flow-model">
-                        <div class="flow-step">
-                            <div class="flow-icon">📝</div>
-                            <h3>LEAD</h3>
-                            <p>Customer Enquiry</p>
-                        </div>
-                        <div class="flow-arrow">→</div>
-                        <div class="flow-step">
-                            <div class="flow-icon">🤝</div>
-                            <h3>DEAL</h3>
-                            <p>Sales Negotiation</p>
-                        </div>
-                        <div class="flow-arrow">→</div>
-                        <div class="flow-step">
-                            <div class="flow-icon">🚗</div>
-                            <h3>TRIP</h3>
-                            <p>Execution</p>
-                        </div>
-                    </div>
-
-                    <div class="highlight-box">
-                        <h3>Key Features:</h3>
-                        <ul>
-                            <li>No instant booking</li>
-                            <li>Every request handled by <strong>Sales Team</strong></li>
-                            <li>Price negotiated manually</li>
-                            <li>Payment after deal confirmation only</li>
-                            <li>Operations via <strong>WhatsApp + Calls</strong></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="nav-buttons">
-                    <!-- <button class="back-button" onclick="prevSection()">⬅ Back</button> -->
-                    <button class="next-button" onclick="nextSection()">Next ➡</button>
-                </div>
-            </div>
-
-            <!-- Section 2: Customer & Sales Flow -->
-            <div class="section" data-section="2">
-                <div class="section-header">
-                    <span class="emoji">👥</span>
-                    <span>2. CUSTOMER & SALES FLOW</span>
-                </div>
-                <div class="section-content">
-                    <h3>Customer Actions:</h3>
-                    <ul>
-                        <li>Enters personal details</li>
-                        <li>Enters trip details</li>
-                        <li>Submits enquiry</li>
-                    </ul>
-                    <div class="success-box">
-                        Data is saved immediately (even if customer leaves)
-                    </div>
-
-                    <h3>Sales Team Actions:</h3>
-                    <ul>
-                        <li>Receives lead in dashboard</li>
-                        <li>Calls customer</li>
-                        <li>Negotiates price & vehicle</li>
-                        <li>Updates lead status</li>
-                    </ul>
-
-                    <h3>Lead Statuses (Recommended - Final):</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Status</th>
-                                <th>Meaning</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>New</strong></td>
-                                <td>Lead created</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Calling</strong></td>
-                                <td>Call in progress</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Busy</strong></td>
-                                <td>Retry later</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Follow-up</strong></td>
-                                <td>Interested, not confirmed</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Deal Closed</strong></td>
-                                <td>Price agreed</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cancelled</strong></td>
-                                <td>Not interested</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Invalid</strong></td>
-                                <td>Fake / wrong number</td>
-                            </tr>
-                        </tbody>
-                    </table>
+<!-- ================= HEADER ================= -->
 <!-- 
-                    <div class="warning-box">
-                        These statuses <strong>must be finalized before development</strong>
-                    </div> -->
-                </div>
-             <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-    <button class="next-button" onclick="nextSection()">Next ➡</button>
+<div class="header">
+  <h1>🚀 Internal Portal Dashboard</h1>
+  <p>Access all your company portals in one place</p>
+</div> -->
+
+<!-- ================= PORTAL LINKS ================= -->
+
+<div class="card">
+
+<h2>🌐 Internal Company Portals</h2>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Portal Name</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td>International Website</td>
+<td><a href="https://aasint.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>IT Department Website</td>
+<td><a href="https://aas.technology" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>IT Department Dubai Website</td>
+<td><a href="https://aasit.ae" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>Bioscience Department Website</td>
+<td><a href="https://aasbiosciences.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>HRMS Marketing Website</td>
+<td><a href="https://elevate.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>HRMS Portal Production</td>
+<td><a href="https://hr.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>Requisition Portal Production</td>
+<td><a href="https://one.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+<tr>
+<td>Blueprint Portal Production</td>
+<td><a href="https://blu.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
+</tr>
+
+</tbody>
+</table>
 </div>
 
-            </div>
-
-            <!-- Section 3: Payment System -->
-            <div class="section" data-section="3">
-                <div class="section-header">
-                    <span class="emoji">💳</span>
-                    <span>3. PAYMENT SYSTEM (INDIA)</span>
-                </div>
-                <div class="section-content">
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="provider-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div style="display:none; width:100px; height:50px; background:#3395ff; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Razorpay</div>
-                            <div>
-                                <div class="provider-name">
-                                    Razorpay
-                                    <span class="badge badge-recommended">RECOMMENDED</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <table>
-                            <tr>
-                                <td><strong>Setup Fee</strong></td>
-                                <td>₹0</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Monthly Fee</strong></td>
-                                <td>₹0</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Transaction Fee</strong></td>
-                                <td>~2%</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Features</strong></td>
-                                <td>Payment links, Partial payment, UPI, Cards, Netbanking</td>
-                            </tr>
-                        </table>
-
-                        <div class="success-box">
-                            <strong>Why Razorpay:</strong>
-                            <ul>
-                                <li>Most trusted in India</li>
-                                <li>Easy WhatsApp payment link sharing</li>
-                                <li>Best dashboard & webhook support</li>
-                                <li>Instant settlements available</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- <h3>Alternative Options:</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Provider</th>
-                                <th>Logo</th>
-                                <th>When to Use</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Cashfree</strong></td>
-                                <td><img src="https://www.cashfree.com/assets/cashfree-logo.svg" style="height:24px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2224%22%3E%3Ctext x=%228%22 y=%2216%22 font-family=%22Arial%22 fill=%22%23FF6B35%22%3ECashfree%3C/text%3E%3C/svg%3E';"></td>
-                                <td>Backup option</td>
-                            </tr>
-                            <tr>
-                                <td><strong>PhonePe Gateway</strong></td>
-                                <td><img src="https://www.phonepe.com/webstatic/6.4.2/static/media/phone-pe.svg" style="height:24px;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2280%22 height=%2224%22%3E%3Ctext x=%228%22 y=%2216%22 font-family=%22Arial%22 fill=%22%235F259F%22%3EPhonePe%3C/text%3E%3C/svg%3E';"></td>
-                                <td>UPI-heavy businesses</td>
-                            </tr>
-                        </tbody>
-                    </table> -->
-
-                    <h3>Payment Flow:</h3>
-                    <div class="highlight-box">
-                        <strong>Stage 1:</strong> Advance payment → Deal Confirmed → Trip Created<br>
-                        <strong>Stage 2:</strong> Balance payment → After trip completion<br><br>
-                        <span style="color: #dc3545;">Full payment before trip is NOT recommended</span>
-                    </div>
-                </div>
-                    <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-    <button class="next-button" onclick="nextSection()">Next ➡</button>
 </div>
-            </div>
 
-            <!-- Section 4: WhatsApp Integration -->
-            <div class="section" data-section="4">
-                <div class="section-header">
-                    <span class="emoji">💬</span>
-                    <span>4. WHATSAPP INTEGRATION (MANDATORY FOR SCALE)</span>
-                </div>
-                <div class="section-content">
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:64px; height:64px;">
-                            <div>
-                                <div class="provider-name">WhatsApp Business API</div>
-                                <p style="color: #6c757d; margin-top: 4px; font-size: 0.9em;">via Gupshup</p>
-                            </div>
-                        </div>
 
-                        <h3>What Is Possible:</h3>
-                        <ul>
-                            <li>Send trip details to customer</li>
-                            <li>Send driver details</li>
-                            <li>Send payment links</li>
-                            <li>Send reminders</li>
-                            <li>Receive live location (manual from driver)</li>
-                            <li>Send booking confirmations</li>
-                        </ul>
+<!-- ================= CREDENTIAL VIEW ================= -->
 
-                        <!-- <h3 style="color: #dc3545;">What Is NOT Possible:</h3>
-                        <ul>
-                            <li>Automatic GPS tracking</li>
-                            <li>Reading messages silently (privacy violation)</li>
-                            <li>Using personal WhatsApp numbers</li>
-                            <li>Auto-extending live location sharing</li>
-                        </ul> -->
-                    </div>
+<div class="card">
 
-                    <h3>WhatsApp Cost (India - Approximate):</h3>
-                    <p>WhatsApp charges <strong>per 24-hour conversation</strong>, not per message.</p>
+<h2>🔐 View Portal Credentials</h2>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Conversation Type</th>
-                                <th>Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Utility (Confirmations, Updates)</td>
-                                <td>₹0.35 – ₹0.55</td>
-                            </tr>
-                            <tr>
-                                <td>Marketing (Promotions)</td>
-                                <td>₹0.80 – ₹0.95</td>
-                            </tr>
-                            <tr>
-                                <td>Gupshup Margin</td>
-                                <td>₹0.05 – ₹0.10</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <h3>WhatsApp Cost Per Trip:</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Recipient</th>
-                                <th>Conversations</th>
-                                <th>Cost</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Customer</td>
-                                <td>2</td>
-                                <td>₹1.00</td>
-                            </tr>
-                            <tr>
-                                <td>Driver</td>
-                                <td>2</td>
-                                <td>₹1.00</td>
-                            </tr>
-                            <tr style="background: #d1ecf1; font-weight: bold;">
-                                <td colspan="2"><strong>TOTAL</strong></td>
-                                <td><strong>₹2.00 – ₹2.50</strong></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                    <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-    <button class="next-button" onclick="nextSection()">Next ➡</button>
+<div class="info-box">
+  <strong>🔒 Secure Access:</strong> To view your portal credentials, please verify your registered email and phone number.
 </div>
-            </div>
 
-            <!-- Section 5: Call Masking -->
-            <div class="section" data-section="5">
-                <div class="section-header">
-                    <span class="emoji">☎️</span>
-                    <span>5. CALL MASKING (VERY IMPORTANT)</span>
-                </div>
-                <div class="section-content">
-                    <div class="danger-box">
-                        <strong>Why Call Masking Is CRITICAL:</strong>
-                        <ul>
-                            <li>Protect customer & driver privacy</li>
-                            <li>Prevent off-platform deals (revenue loss)</li>
-                            <li>Industry standard (Uber, Ola, Rapido use it)</li>
-                            <li>Track all communication for quality control</li>
-                        </ul>
-                    </div>
-
-                    <h3>Call Masking Providers (India):</h3>
-
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://www.exotel.com/wp-content/themes/exotel/images/exotel-logo.svg" alt="Exotel" class="provider-logo" onerror="this.style.display='none';">
-                            <div>
-                                <div class="provider-name">
-                                    Exotel
-                                    <span class="badge badge-recommended">RECOMMENDED</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <table>
-                            <tr>
-                                <td><strong>Virtual Number</strong></td>
-                                <td>₹100 – ₹200/month</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Per Minute Call</strong></td>
-                                <td>₹0.40 – ₹0.60</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Call Recording</strong></td>
-                                <td>Available</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Call Masking</strong></td>
-                                <td>Full Support</td>
-                            </tr>
-                        </table>
-                    </div>
-
-                    <!-- <div class="provider-card">
-                        <div class="provider-header">
-                            <div style="width:100px; height:50px; background:#1976d2; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Knowlarity</div> -->
-                            <!-- <div>
-                                <div class="provider-name">
-                                    Knowlarity
-                                    <span class="badge badge-alternative">ALTERNATIVE</span>
-                                </div>
-                                <p style="color: #6c757d; margin-top: 4px; font-size: 0.9em;">Slightly higher cost, Enterprise-focused</p>
-                            </div> 
-                        </div>
-                    </div> -->
-
-                    <h3>How Call Masking Works:</h3>
-                    <div class="flow-model">
-                        <div class="flow-step">
-                            <div class="flow-icon">👨‍✈️</div>
-                            <p><strong>Driver</strong><br>Calls Virtual Number<br>+91-XXXX-VIRT</p>
-                        </div>
-                        <div class="flow-arrow">→</div>
-                        <div class="flow-step">
-                            <div class="flow-icon">📞</div>
-                            <p><strong>System</strong><br>Routes Call<br>Real numbers hidden</p>
-                        </div>
-                        <div class="flow-arrow">→</div>
-                        <div class="flow-step">
-                            <div class="flow-icon">👤</div>
-                            <p><strong>Customer</strong><br>Receives Call<br>Privacy protected</p>
-                        </div>
-                    </div>
-
-                    <h3>Call Cost Per Trip (Approximate):</h3>
-                    <p>Assuming: 2 calls × 3 minutes per call</p>
-                    <table>
-                        <tr>
-                            <td><strong>Call Charges</strong></td>
-                            <td><strong>₹3 – ₹4</strong></td>
-                        </tr>
-                    </table>
-                </div>
-                    <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-    <button class="next-button" onclick="nextSection()">Next ➡</button>
+<div class="form-group">
+<label>Professional Email Address</label>
+<input type="email" id="email" placeholder="Enter your registered email">
 </div>
-            </div>
 
-            <!-- Section 6: Live Location -->
-            <div class="section" data-section="6">
-                <div class="section-header">
-                    <span class="emoji">📍</span>
-                    <span>6. LIVE LOCATION SHARING (REALITY CHECK)</span>
-                </div>
-                <div class="section-content">
-                    <div class="success-box">
-                        <h3>What CAN Be Done:</h3>
-                        <ul>
-                            <li>Driver manually shares live location via WhatsApp</li>
-                            <li>System sends WhatsApp reminders before location expiry</li>
-                            <li>Customer tracks in real-time through WhatsApp</li>
-                        </ul>
-                    </div>
-
-                    <div class="danger-box">
-                        <h3>WhatsApp Limitations (IMPORTANT):</h3>
-                        <ul>
-                            <li>Live location valid for <strong>maximum 8 hours</strong></li>
-                            <li>Must be <strong>manually re-shared</strong> for longer trips</li>
-                            <li>No API to auto-extend location sharing</li>
-                            <li>WhatsApp privacy policy prevents automation</li>
-                        </ul>
-                    </div>
-
-                    <h3>Recommended Approach:</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Trip Duration</th>
-                                <th>System Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>≤ 8 hours</td>
-                                <td>One location share sufficient</td>
-                            </tr>
-                            <tr>
-                                <td>> 8 hours</td>
-                                <td>Reminder sent 2 hours before expiry:<br><em>"Your live location will expire in 2 hours. Please re-share to keep customer updated."</em></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                    <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-    <button class="next-button" onclick="nextSection()">Next ➡</button>
+<div class="form-group">
+<label>Personal Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter your registered phone number">
 </div>
-            </div>
 
-          <div class="section" data-section="8">
-                <div class="section-header">
-                    <span class="emoji">🔌</span>
-                    <span>7. REQUIRED EXTERNAL APIs & INTEGRATIONS</span>
-                </div>
-                <div class="section-content">
-                    <h3>Overview:</h3>
-                    <p>The system relies on several external APIs for core functionalities. Below is a summary of each, including usage context and approximate costs per trip.</p>
+<button class="btn-primary" onclick="verifyUser()">
+  <span id="btnText">Verify & View Credentials</span>
+</button>
 
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://developers.google.com/maps/images/branding-guidelines/logo-blue.svg" alt="Google Maps" class="provider-logo" onerror="this.style.display='none';">
-                            <div style="display:none; width:100px; height:50px; background:#4285f4; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Google Maps</div>
-                            <div>
-                                <div class="provider-name">
-                                    Google Maps API (Distance Matrix / Directions)
-                                    <span class="badge badge-recommended">RECOMMENDED</span>
-                                </div>
-                            </div>
-                        </div>
-                        <h3>Usage:</h3>
-                        <ul>
-                            <li>Calculate distance (km) and estimated travel time between pickup and drop locations during lead creation.</li>
-                            <li>Assist sales team in quoting accurate prices based on route estimates.</li>
-                            <!-- <li>Optional: Provide directions to drivers during trip execution.</li> -->
-                        </ul>
-                        <h3>Pricing (Legacy APIs):</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Tier</th>
-                                    <th>Cost per 1,000 Requests (USD)</th>
-                                    <th>Approx. Cost per 1,000 Requests (₹)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Free Tier (Monthly)</td>
-                                    <td>10,000 requests</td>
-                                    <td>₹0</td>
-                                </tr>
-                                <tr>
-                                    <td>0-100,000 requests</td>
-                                    <td>$5.00</td>
-                                    <td>₹415</td>
-                                </tr>
-                                <tr>
-                                    <td>100,001+ requests</td>
-                                    <td>$4.00</td>
-                                    <td>₹332</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="success-box">
-                            <strong>Per Trip Cost:</strong> ~₹0.40 (assuming 1 request per trip, post-free tier). Negligible for low volumes.
-                        </div>
-                    </div>
+<div id="result" class="result-box"></div>
 
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://razorpay.com/assets/razorpay-glyph.svg" alt="Razorpay" class="provider-logo" onerror="this.style.display='none';">
-                            <div style="display:none; width:100px; height:50px; background:#3395ff; color:white; display:flex; align-items:center; justify-content:center; border-radius:6px; font-weight:bold; font-size:0.9em;">Razorpay</div>
-                            <div>
-                                <div class="provider-name">Razorpay API</div>
-                            </div>
-                        </div>
-                        <h3>Usage:</h3>
-                        <ul>
-                            <li>Generate payment links for advance and balance payments.</li>
-                            <li>Handle UPI, cards, netbanking, and refunds.</li>
-                            <li>Integrate with WhatsApp for link sharing.</li>
-                        </ul>
-                        <h3>Pricing:</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Fee Type</th>
-                                    <th>Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Setup / Monthly</td>
-                                    <td>₹0</td>
-                                </tr>
-                                <tr>
-                                    <td>Transaction Fee</td>
-                                    <td>~2% per transaction</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="warning-box">
-                            <strong>Per Trip Cost:</strong> ~2% of trip value (e.g., ₹20 for ₹1,000 trip). Variable based on payment amount.
-                        </div>
-                    </div>
+</div>
 
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" style="width:64px; height:64px;">
-                            <div>
-                                <div class="provider-name">WhatsApp Business API (via Gupshup)</div>
-                            </div>
-                        </div>
-                        <h3>Usage:</h3>
-                        <ul>
-                            <li>Send automated  confirmations and reminders to customers and drivers.</li>
-                            <li>Share payment links and driver details.</li>
-                            <li>Receive manual live location shares from drivers.</li>
-                        </ul>
-                        <h3>Pricing:</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Cost per Conversation</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Utility</td>
-                                    <td>₹0.35 – ₹0.55</td>
-                                </tr>
-                                 <tr>
-                                <td>Marketing (Promotions)</td>
-                                <td>₹0.80 – ₹0.95</td>
-                            </tr>
-                                <tr>
-                                    <td>Gupshup Margin</td>
-                                    <td>₹0.05 – ₹0.10</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="success-box">
-                            <strong>Per Trip Cost:</strong> ₹2.00 – ₹2.50 (2 conversations each for customer and driver).
-                        </div>
-                    </div>
+</div>
 
-                    <div class="provider-card">
-                        <div class="provider-header">
-                            <img src="https://www.exotel.com/wp-content/themes/exotel/images/exotel-logo.svg" alt="Exotel" class="provider-logo" onerror="this.style.display='none';">
-                            <div>
-                                <div class="provider-name">Exotel API (Call Masking)</div>
-                            </div>
-                        </div>
-                        <h3>Usage:</h3>
-                        <ul>
-                            <li>Mask phone numbers during sales calls and trip coordination between customers and drivers.</li>
-                            <li>Enable call recording for quality assurance.</li>
-                        </ul>
-                        <h3>Pricing:</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Cost</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Virtual Number (Monthly)</td>
-                                    <td>₹100 – ₹200</td>
-                                </tr>
-                                <tr>
-                                    <td>Per Minute Call</td>
-                                    <td>₹0.40 – ₹0.60</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="warning-box">
-                            <strong>Per Trip Cost:</strong> ₹3 – ₹4 (assuming 2 calls × 3 minutes).
-                        </div>
-                    </div>
 
-                    <h3>Summary of Per-Trip External Costs (Approximate):</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>API</th>
-                                <th>Per-Trip Cost (₹)</th>
-                                <th>Notes</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Google Maps</td>
-                                <td>0.40</td>
-                                <td>1 request; free up to 10k/month</td>
-                            </tr>
-                            <tr>
-                                <td>Razorpay</td>
-                                <td>Variable (2% of trip value)</td>
-                                <td>E.g., ₹20 for ₹1,000 trip</td>
-                            </tr>
-                            <tr>
-                                <td>WhatsApp</td>
-                                <td>2.00 – 2.50</td>
-                                <td>4 conversations</td>
-                            </tr>
-                            <tr>
-                                <td>Exotel</td>
-                                <td>3 – 4</td>
-                                <td>6 minutes of calls</td>
-                            </tr>
-                            <tr style="background: #d1ecf1; font-weight: bold;">
-                                <td><strong>TOTAL (Fixed)</strong></td>
-                                <td><strong>₹5.40 – 6.90</strong></td>
-                                <td>Excluding payment %</td>
-                            </tr>
-                        </tbody>
-                    </table>
+<script>
 
-                    <!-- <div class="highlight-box">
-                        <strong>Recommendation:</strong> All integrations are essential for a scalable, professional system. Start with free tiers where possible to minimize initial costs.
-                    </div> -->
-                </div>
-                    <div class="nav-buttons">
-    <button class="back-button" onclick="prevSection()">⬅ Back</button>
-                <button class="next-button" onclick="startPresentation()">Restart</button>
-            </div>
-        </div>
-    </div>
+// ================= PERSONAL DETAILS =================
 
-    <script>
-        let currentSection = 0;
-        const sections = document.querySelectorAll('.section');
+const personalDetails = {
+  email: "chairman@aasint.com",
+  phone: "9776666598"
+};
 
-        function updateVisibility() {
-            sections.forEach((sec, index) => {
-                if (index === currentSection) {
-                    sec.classList.add('visible');
-                } else {
-                    sec.classList.remove('visible');
-                }
-            });
-        }
+// ================= VERIFY FUNCTION =================
 
-        function nextSection() {
-            if (currentSection < sections.length - 1) {
-                currentSection++;
-                updateVisibility();
-            } else {
-                alert('End of presentation! Use "Reset" to start over.');
-            }
-        }
-        function prevSection() {
-    if (currentSection > 0) {
-        currentSection--;
-        updateVisibility();
-    } else {
-        alert('You are already at the beginning of the presentation.');
-    }
+function verifyUser() {
+
+const email = document.getElementById("email").value.trim();
+const phone = document.getElementById("phone").value.trim();
+const resultBox = document.getElementById("result");
+const btnText = document.getElementById("btnText");
+
+// Clear previous results
+resultBox.style.display = "none";
+
+// Validation
+if(!email || !phone){
+  resultBox.style.display = "block";
+  resultBox.innerHTML = "<div class='status-message error'>⚠️ Please enter both email and phone number</div>";
+  return;
 }
 
+// Email format validation
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if(!emailRegex.test(email)){
+  resultBox.style.display = "block";
+  resultBox.innerHTML = "<div class='status-message error'>⚠️ Please enter a valid email address</div>";
+  return;
+}
 
-        function startPresentation() {
-            currentSection = 0;
-            sections.forEach(sec => sec.classList.remove('visible'));
-            updateVisibility();
-        }
+// Show loading state
+btnText.innerHTML = '<span class="loading"></span>';
 
-        function showAll() {
-            sections.forEach(sec => sec.classList.add('visible'));
-        }
+// Simulate API call with timeout
+setTimeout(() => {
+  btnText.textContent = 'Verify & View Credentials';
+  
+  // Verify credentials
+  if(email !== personalDetails.email || phone !== personalDetails.phone){
+    resultBox.style.display = "block";
+    resultBox.innerHTML = "<div class='status-message error'>❌ Verification Failed - Invalid credentials</div>";
+    return;
+  }
 
-        function resetPresentation() {
-            currentSection = 0;
-            updateVisibility();
-        }
+  // ================= BUILD SUCCESS OUTPUT =================
 
-        // Initialize: Show first section on load
-        window.onload = function() {
-            startPresentation();
-        };
-    </script>
+  let html = `<div class="status-message success">✅ Verification Successful! Welcome back.</div>`;
+
+  html += `<div class="table-wrapper">
+  <table>
+  <thead>
+  <tr>
+  <th>Portal</th>
+  <th>Username</th>
+  <th>Password</th>
+  <th>Status</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <!-- Requisition Portal -->
+  <tr>
+  <td><strong>Requisition Portal</strong></td>
+  <td>chairman@aasint.com</td>
+  <td><code>Chairman#$189</code></td>
+  <td>
+    <a href="https://one.aasint.com" target="_blank"><button>Open Portal</button></a>
+  </td>
+  </tr>
+
+  <!-- HRMS Portal -->
+  <tr>
+  <td><strong>HRMS Portal</strong></td>
+  <td>-</td>
+  <td>-</td>
+  <td>
+    <button disabled>Not Available</button>
+    <span class="warning-msg">⚠️ You are not onboarded on HRMS</span>
+  </td>
+  </tr>
+
+  <!-- Blueprint Portal -->
+  <tr>
+  <td><strong>Blueprint System</strong></td>
+  <td>-</td>
+  <td>-</td>
+  <td>
+    <button disabled>Restricted</button>
+    <span class="error-msg">🚫 Head of the company has no role in blueprint portal</span>
+  </td>
+  </tr>
+
+  </tbody>
+  </table>
+  </div>`;
+
+  resultBox.style.display = "block";
+  resultBox.innerHTML = html;
+
+}, 1000);
+
+}
+
+// ================= ENTER KEY SUPPORT =================
+
+document.addEventListener('DOMContentLoaded', function() {
+  const inputs = document.querySelectorAll('input');
+  inputs.forEach(input => {
+    input.addEventListener('keypress', function(e) {
+      if(e.key === 'Enter') {
+        verifyUser();
+      }
+    });
+  });
+});
+
+</script>
+
 </body>
 </html>
