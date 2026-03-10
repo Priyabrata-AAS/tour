@@ -3,726 +3,1757 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Internal Portal Dashboard</title>
-
+<title>Pharmacy ERP — Complete System Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-
-:root {
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --secondary: #0f172a;
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --text-dark: #1f2937;
-  --text-light: #6b7280;
-  --border: #e5e7eb;
-  --shadow: rgba(0, 0, 0, 0.1);
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --surface2: #16161f;
+    --border: #1e1e2e;
+    --accent: #00e5ff;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --green: #10b981;
+    --red: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'Space Mono', monospace;
+    --display: 'Syne', sans-serif;
+    --body: 'DM Sans', sans-serif;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-@keyframes shimmer {
-  0% {
-    background-position: -1000px 0;
-  }
-  100% {
-    background-position: 1000px 0;
-  }
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  background: linear-gradient(135deg, #ffffff 0%, #ffffff 100%);
-  margin: 0;
-  padding: 20px;
-  min-height: 100vh;
-  animation: fadeIn 0.6s ease-out;
-}
-
-.container {
-  max-width: 1200px;
-  margin: auto;
-}
-
-.header {
-  text-align: center;
-  margin-bottom: 40px;
-  animation: fadeInUp 0.8s ease-out;
-}
-
-.header h1 {
-  color: white;
-  font-size: 2.5rem;
-  margin: 0 0 10px 0;
-  font-weight: 700;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.header p {
-  color: rgba(255, 255, 255, 0.9);
-  font-size: 1.1rem;
-  margin: 0;
-}
-
-h2 {
-  color: var(--secondary);
-  font-size: 1.75rem;
-  margin: 0 0 20px 0;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* ---------- CARD ---------- */
-
-.card {
-  background: white;
-  padding: 30px;
-  margin-bottom: 30px;
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-  animation: fadeInUp 0.8s ease-out;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-}
-
-.card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.card:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* ---------- TABLE ---------- */
-
-.table-wrapper {
-  overflow-x: auto;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-}
-
-thead {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  position: sticky;
-  top: 0;
-  z-index: 10;
-}
-
-th {
-  color: white;
-  padding: 16px;
-  text-align: left;
-  font-weight: 600;
-  font-size: 0.95rem;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-
-tbody tr {
-  transition: all 0.3s ease;
-  border-bottom: 1px solid var(--border);
-}
-
-tbody tr:hover {
-  background: #f8fafc;
-  transform: scale(1.01);
-}
-
-tbody tr:last-child {
-  border-bottom: none;
-}
-
-td {
-  padding: 16px;
-  color: var(--text-dark);
-  font-size: 0.95rem;
-}
-
-/* ---------- FORM ---------- */
-
-.form-group {
-  margin-bottom: 24px;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-label {
-  display: block;
-  font-weight: 600;
-  color: var(--text-dark);
-  margin-bottom: 8px;
-  font-size: 0.95rem;
-}
-
-input {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border);
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: #f9fafb;
-}
-
-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  background: white;
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-  transform: translateY(-2px);
-}
-
-input::placeholder {
-  color: #9ca3af;
-}
-
-/* ---------- BUTTON ---------- */
-
-button {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.2);
-  transition: left 0.5s ease;
-}
-
-button:hover::before {
-  left: 100%;
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
-}
-
-button:active {
-  transform: translateY(0);
-}
-
-button:disabled {
-  background: #d1d5db;
-  cursor: not-allowed;
-  box-shadow: none;
-}
-
-button:disabled:hover {
-  transform: none;
-}
-
-.btn-primary {
-  width: 100%;
-  padding: 16px;
-  font-size: 1.05rem;
-  margin-top: 10px;
-}
-
-/* ---------- RESULT ---------- */
-
-.result-box {
-  display: none;
-  margin-top: 30px;
-  animation: slideDown 0.5s ease-out;
-}
-
-/* ---------- STATUS ---------- */
-
-.status-message {
-  padding: 16px 20px;
-  border-radius: 12px;
-  margin-bottom: 20px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  animation: fadeInUp 0.5s ease-out;
-}
-
-.success {
-  background: #d1fae5;
-  color: #065f46;
-  border-left: 4px solid var(--success);
-}
-
-.error {
-  background: #fee2e2;
-  color: #991b1b;
-  border-left: 4px solid var(--error);
-}
-
-.error-msg {
-  color: var(--error);
-  font-size: 0.85rem;
-  display: block;
-  margin-top: 6px;
-  font-weight: 500;
-}
-
-.warning-msg {
-  color: var(--warning);
-  font-size: 0.85rem;
-  display: block;
-  margin-top: 6px;
-  font-weight: 500;
-}
-
-/* ---------- INFO BOX ---------- */
-
-.info-box {
-  background: #eff6ff;
-  border-left: 4px solid var(--primary);
-  padding: 16px;
-  border-radius: 12px;
-  margin-bottom: 24px;
-  color: var(--text-dark);
-  font-size: 0.95rem;
-  animation: fadeInUp 0.6s ease-out;
-}
-
-/* ---------- LOADING ---------- */
-
-.loading {
-  display: inline-block;
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  border-top-color: white;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-/* ---------- BADGES ---------- */
-
-.badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.badge-success {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.badge-warning {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.badge-error {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-/* ---------- MOBILE RESPONSIVE ---------- */
-
-@media(max-width: 768px) {
   body {
-    padding: 15px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--body);
+    overflow-x: hidden;
+    line-height: 1.6;
   }
 
-  .header h1 {
-    font-size: 1.75rem;
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+    position: relative;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(0,229,255,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.06) 0%, transparent 50%);
   }
 
-  .header p {
-    font-size: 0.95rem;
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
   }
 
-  h2 {
-    font-size: 1.4rem;
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid rgba(0,229,255,0.3);
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 32px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    animation: fadeDown 0.6s ease both;
   }
 
-  .card {
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 16px;
+  .hero h1 {
+    font-family: var(--display);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 24px;
+    animation: fadeDown 0.6s 0.1s ease both;
   }
 
-  th, td {
-    font-size: 0.85rem;
-    padding: 12px 8px;
+  .hero h1 span {
+    color: var(--accent);
   }
 
-  th {
-    font-size: 0.8rem;
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--muted);
+    max-width: 600px;
+    animation: fadeDown 0.6s 0.2s ease both;
   }
 
-  button {
-    width: 100%;
-    padding: 10px 16px;
-    font-size: 0.9rem;
+  .toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 48px;
+    animation: fadeDown 0.6s 0.3s ease both;
   }
 
-  .btn-primary {
-    padding: 14px;
+  .toc a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 8px 16px;
+    border-radius: 2px;
+    transition: all 0.2s;
   }
 
-  input {
-    padding: 12px 14px;
-    font-size: 0.95rem;
+  .toc a:hover {
+    color: var(--accent);
+    border-color: var(--accent);
   }
 
-  .table-wrapper {
-    margin: 0 -20px;
-    border-radius: 0;
+  /* SECTION */
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px;
+    border-top: 1px solid var(--border);
   }
 
-  table {
-    font-size: 0.85rem;
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 16px;
   }
 
-  tbody tr:hover {
-    transform: none;
+  .section-title {
+    font-family: var(--display);
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 800;
+    margin-bottom: 12px;
   }
-}
 
-@media(max-width: 480px) {
-  .header h1 {
+  .section-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 48px;
+    max-width: 600px;
+  }
+
+  /* STAGE HEADER */
+  .stage {
+    margin-bottom: 64px;
+  }
+
+  .stage-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stage-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--bg);
+    background: var(--accent);
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+
+  .stage-num.purple { background: var(--accent2); }
+  .stage-num.amber { background: var(--accent3); color: #0a0a0f; }
+  .stage-num.green { background: var(--green); }
+  .stage-num.red { background: var(--red); }
+
+  .stage-title {
+    font-family: var(--display);
     font-size: 1.5rem;
+    font-weight: 700;
   }
 
-  h2 {
-    font-size: 1.25rem;
+  /* STEP CARD */
+  .step-grid {
+    display: grid;
+    gap: 16px;
   }
 
-  .card {
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px 28px;
+    position: relative;
+    transition: border-color 0.2s;
+  }
+
+  .step-card:hover {
+    border-color: rgba(0,229,255,0.2);
+  }
+
+  .step-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 4px 0 0 4px;
+  }
+
+  .step-card.purple::before { background: var(--accent2); }
+  .step-card.amber::before { background: var(--accent3); }
+  .step-card.green::before { background: var(--green); }
+  .step-card.red::before { background: var(--red); }
+
+  .step-title {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .step-icon {
+    width: 28px;
+    height: 28px;
+    background: rgba(0,229,255,0.1);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  .step-icon.purple { background: rgba(124,58,237,0.15); }
+  .step-icon.amber { background: rgba(245,158,11,0.15); }
+  .step-icon.green { background: rgba(16,185,129,0.1); }
+  .step-icon.red { background: rgba(239,68,68,0.1); }
+
+  .step-desc {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+
+  /* CODE BLOCK */
+  .code-block {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-x: auto;
+    position: relative;
+  }
+
+  .code-block .comment { color: #4a5568; }
+  .code-block .key { color: var(--accent); }
+  .code-block .val { color: #fbbf24; }
+  .code-block .str { color: var(--green); }
+  .code-block .kw { color: var(--accent2); }
+  .code-block .table-name { color: #f472b6; }
+  .code-block .op { color: var(--red); }
+
+  .code-label {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* TWO COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  @media (max-width: 700px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* TRIGGER GRID */
+  .trigger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .trigger-card {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
     padding: 16px;
   }
 
-  th, td {
+  .trigger-card .t-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .trigger-card.purple .t-label { color: var(--accent2); }
+  .trigger-card.amber .t-label { color: var(--accent3); }
+  .trigger-card.green .t-label { color: var(--green); }
+
+  .trigger-card .t-body {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text);
+    line-height: 1.7;
+  }
+
+  /* FLOW DIAGRAM */
+  .flow-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .flow-node {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 28px;
+    font-family: var(--mono);
+    font-size: 12px;
+    text-align: center;
+    min-width: 260px;
+    position: relative;
+    transition: all 0.2s;
+  }
+
+  .flow-node:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .flow-node.accent { border-color: rgba(0,229,255,0.4); color: var(--accent); }
+  .flow-node.purple { border-color: rgba(124,58,237,0.4); color: #a78bfa; }
+  .flow-node.amber { border-color: rgba(245,158,11,0.4); color: var(--accent3); }
+  .flow-node.green { border-color: rgba(16,185,129,0.4); color: var(--green); }
+
+  .flow-arrow {
+    width: 1px;
+    height: 28px;
+    background: linear-gradient(to bottom, var(--border), rgba(0,229,255,0.3));
+    position: relative;
+  }
+
+  .flow-arrow::after {
+    content: '▼';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 8px;
+    color: var(--accent);
+  }
+
+  .flow-sub {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    margin: 4px 0;
+  }
+
+  /* BARCODE SECTION */
+  .barcode-verdict {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 700px) {
+    .barcode-verdict { grid-template-columns: 1fr; }
+  }
+
+  .verdict-card {
+    border-radius: 4px;
+    padding: 28px;
+    border: 1px solid;
+  }
+
+  .verdict-card.good {
+    background: rgba(16,185,129,0.04);
+    border-color: rgba(16,185,129,0.25);
+  }
+
+  .verdict-card.bad {
+    background: rgba(239,68,68,0.04);
+    border-color: rgba(239,68,68,0.25);
+  }
+
+  .verdict-title {
+    font-family: var(--display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .verdict-title.good { color: var(--green); }
+  .verdict-title.bad { color: var(--red); }
+
+  .verdict-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+  }
+
+  .verdict-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+  }
+
+  .verdict-dot.good { background: var(--green); }
+  .verdict-dot.bad { background: var(--red); }
+
+  /* BARCODE VISUAL */
+  .barcode-visual {
+    background: #fff;
+    border-radius: 4px;
+    padding: 20px 28px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin: 0 auto;
+  }
+
+  .barcode-bars {
+    display: flex;
+    gap: 2px;
+    height: 60px;
+    align-items: flex-end;
+  }
+
+  .bar {
+    background: #000;
+    width: 3px;
+    border-radius: 1px;
+  }
+
+  .barcode-number {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #333;
+    letter-spacing: 2px;
+  }
+
+  /* GS1 BREAKDOWN */
+  .gs1-breakdown {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .gs1-field {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 16px;
+  }
+
+  .gs1-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .gs1-value {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .gs1-desc {
     font-size: 0.8rem;
-    padding: 10px 6px;
+    color: var(--muted);
+    margin-top: 4px;
   }
 
-  button {
-    font-size: 0.85rem;
-    padding: 10px 12px;
+  /* REPORT CARDS */
+  .report-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
   }
-}
 
-/* ---------- ACCESSIBILITY ---------- */
-
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  .report-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
   }
-}
 
+  .report-title {
+    font-family: var(--display);
+    font-weight: 700;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+  }
+
+  .report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .report-table th {
+    color: var(--muted);
+    text-align: left;
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 400;
+    letter-spacing: 1px;
+  }
+
+  .report-table td {
+    padding: 8px 8px;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+    color: var(--text);
+  }
+
+  .report-table tr:last-child td { border-bottom: none; }
+
+  .tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
+  .tag.expired { background: rgba(239,68,68,0.15); color: var(--red); }
+  .tag.critical { background: rgba(245,158,11,0.15); color: var(--accent3); }
+  .tag.near { background: rgba(16,185,129,0.1); color: var(--green); }
+  .tag.paid { background: rgba(16,185,129,0.1); color: var(--green); }
+  .tag.unpaid { background: rgba(239,68,68,0.1); color: var(--red); }
+
+  /* ALERT BOX */
+  .alert {
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
+  .alert.warn {
+    background: rgba(245,158,11,0.08);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--accent3);
+  }
+
+  .alert.danger {
+    background: rgba(239,68,68,0.08);
+    border: 1px solid rgba(239,68,68,0.3);
+    color: var(--red);
+  }
+
+  .alert.info {
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.2);
+    color: var(--accent);
+  }
+
+  /* FINAL FLOW */
+  .mega-flow {
+    display: flex;
+    overflow-x: auto;
+    gap: 0;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    align-items: center;
+  }
+
+  .mf-node {
+    flex-shrink: 0;
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 18px;
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.5;
+    min-width: 130px;
+  }
+
+  .mf-node .mf-icon { font-size: 18px; display: block; margin-bottom: 6px; }
+  .mf-node .mf-label { color: var(--muted); font-size: 9px; letter-spacing: 1px; display: block; margin-top: 4px; }
+
+  .mf-node.accent { border-color: rgba(0,229,255,0.4); }
+  .mf-node.purple { border-color: rgba(124,58,237,0.4); }
+  .mf-node.amber { border-color: rgba(245,158,11,0.4); }
+  .mf-node.green { border-color: rgba(16,185,129,0.4); }
+
+  .mf-arrow {
+    flex-shrink: 0;
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(0,229,255,0.3), rgba(0,229,255,0.1));
+    position: relative;
+  }
+
+  .mf-arrow::after {
+    content: '▶';
+    position: absolute;
+    right: -6px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 8px;
+    color: var(--accent);
+  }
+
+  /* COMPARISON */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .compare-table th {
+    background: var(--surface2);
+    padding: 14px 20px;
+    text-align: left;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 1px solid var(--border);
+  }
+
+  .compare-table th:first-child { color: var(--muted); }
+  .compare-table th:nth-child(2) { color: var(--red); }
+  .compare-table th:nth-child(3) { color: var(--green); }
+
+  .compare-table td {
+    padding: 12px 20px;
+    border: 1px solid var(--border);
+    font-size: 0.875rem;
+    vertical-align: top;
+  }
+
+  .compare-table tr:nth-child(even) td { background: rgba(255,255,255,0.01); }
+
+  .tick { color: var(--green); font-weight: 700; }
+  .cross { color: var(--red); font-weight: 700; }
+
+  /* ANIMATIONS */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 0 24px;
+  }
+
+  /* INLINE TAG */
+  .inline-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    background: rgba(0,229,255,0.1);
+    color: var(--accent);
+    margin-left: 6px;
+  }
+
+  /* DB SCHEMA */
+  .schema-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+  }
+
+  .schema-table {
+    background: #0d0d14;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .schema-head {
+    background: rgba(0,229,255,0.08);
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+
+  .schema-head.purple { background: rgba(124,58,237,0.08); color: #a78bfa; }
+  .schema-head.amber { background: rgba(245,158,11,0.08); color: var(--accent3); }
+  .schema-head.green { background: rgba(16,185,129,0.08); color: var(--green); }
+
+  .schema-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 7px 14px;
+    border-bottom: 1px solid rgba(30,30,46,0.5);
+    font-family: var(--mono);
+    font-size: 11px;
+  }
+
+  .schema-row:last-child { border-bottom: none; }
+  .schema-col { color: var(--text); }
+  .schema-type { color: var(--muted); font-size: 10px; }
+  .schema-pk { color: var(--accent3); font-size: 9px; margin-left: 4px; }
+
+  /* SPEED METER */
+  .speed-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .speed-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 20px;
+  }
+
+  .speed-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .speed-value {
+    font-family: var(--display);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .speed-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-top: 12px;
+    overflow: hidden;
+  }
+
+  .speed-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: width 1s ease;
+  }
+
+  .speed-fill.purple { background: var(--accent2); }
+  .speed-fill.green { background: var(--green); }
+  .speed-fill.amber { background: var(--accent3); }
 </style>
 </head>
-
 <body>
 
-<div class="container">
+<!-- HERO -->
+<section class="hero">
+  <div class="badge">System Architecture v1.0</div>
+  <h1>Pharmacy ERP<br><span>Complete Engine</span></h1>
+  <p>Entry → Inventory → Stock Management → Reports. Every layer, every trigger, every database table — explained with precision.</p>
+  <nav class="toc">
+    <a href="#stage1">01 Entry Engine</a>
+    <a href="#stage2">02 Inventory Engine</a>
+    <a href="#stage3">03 Billing Engine</a>
+    <a href="#stage4">04 Stock Management</a>
+    <a href="#stage5">05 Reports</a>
+    <a href="#barcode">06 Barcode Deep Dive</a>
+    <a href="#flow">07 Master Flow</a>
+  </nav>
+</section>
 
-<!-- ================= HEADER ================= -->
-<!-- 
-<div class="header">
-  <h1>🚀 Internal Portal Dashboard</h1>
-  <p>Access all your company portals in one place</p>
-</div> -->
+<!-- DB SCHEMA OVERVIEW -->
+<section class="section">
+  <div class="section-label">Database Design</div>
+  <div class="section-title">All Tables. One View.</div>
+  <div class="section-sub">Every table involved across the full system. Normalized, indexed, optimized.</div>
 
-<!-- ================= PORTAL LINKS ================= -->
+  <div class="schema-grid">
+    <div class="schema-table">
+      <div class="schema-head">products</div>
+      <div class="schema-row"><span class="schema-col">product_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">name</span><span class="schema-type">VARCHAR (indexed)</span></div>
+      <div class="schema-row"><span class="schema-col">barcode</span><span class="schema-type">VARCHAR (indexed)</span></div>
+      <div class="schema-row"><span class="schema-col">company</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">category</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">gst_slab</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">hsn_code</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">min_stock</span><span class="schema-type">INTEGER</span></div>
+      <div class="schema-row"><span class="schema-col">reorder_qty</span><span class="schema-type">INTEGER</span></div>
+    </div>
 
-<div class="card">
+    <div class="schema-table">
+      <div class="schema-head purple">inventory_batch</div>
+      <div class="schema-row"><span class="schema-col">batch_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">product_id <span class="schema-pk">FK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">batch_no</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">expiry</span><span class="schema-type">DATE (indexed)</span></div>
+      <div class="schema-row"><span class="schema-col">total_qty</span><span class="schema-type">INTEGER</span></div>
+      <div class="schema-row"><span class="schema-col">available_qty</span><span class="schema-type">INTEGER</span></div>
+      <div class="schema-row"><span class="schema-col">reserved_qty</span><span class="schema-type">INTEGER</span></div>
+      <div class="schema-row"><span class="schema-col">purchase_price</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">mrp</span><span class="schema-type">DECIMAL</span></div>
+    </div>
 
-<h2>🌐 Internal Company Portals</h2>
+    <div class="schema-table">
+      <div class="schema-head amber">purchase_invoice</div>
+      <div class="schema-row"><span class="schema-col">invoice_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">supplier_id <span class="schema-pk">FK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">invoice_number</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">date</span><span class="schema-type">DATE</span></div>
+      <div class="schema-row"><span class="schema-col">due_date</span><span class="schema-type">DATE</span></div>
+      <div class="schema-row"><span class="schema-col">total_amount</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">status</span><span class="schema-type">ENUM</span></div>
+    </div>
 
-<div class="table-wrapper">
-<table>
-<thead>
-<tr>
-<th>Portal Name</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
+    <div class="schema-table">
+      <div class="schema-head green">sales_invoice</div>
+      <div class="schema-row"><span class="schema-col">invoice_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">customer_id <span class="schema-pk">FK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">date</span><span class="schema-type">DATE</span></div>
+      <div class="schema-row"><span class="schema-col">total</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">gst_amount</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">discount</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">payment_mode</span><span class="schema-type">ENUM</span></div>
+    </div>
 
-<tr>
-<td>International Website</td>
-<td><a href="https://aasint.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+    <div class="schema-table">
+      <div class="schema-head">suppliers</div>
+      <div class="schema-row"><span class="schema-col">supplier_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">name</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">gst_number</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">credit_days</span><span class="schema-type">INTEGER</span></div>
+      <div class="schema-row"><span class="schema-col">opening_balance</span><span class="schema-type">DECIMAL</span></div>
+    </div>
 
-<tr>
-<td>IT Department Website</td>
-<td><a href="https://aas.technology" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+    <div class="schema-table">
+      <div class="schema-head purple">ledger</div>
+      <div class="schema-row"><span class="schema-col">entry_id <span class="schema-pk">PK</span></span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">date</span><span class="schema-type">DATE</span></div>
+      <div class="schema-row"><span class="schema-col">debit_account</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">credit_account</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">amount</span><span class="schema-type">DECIMAL</span></div>
+      <div class="schema-row"><span class="schema-col">ref_id</span><span class="schema-type">VARCHAR</span></div>
+      <div class="schema-row"><span class="schema-col">ref_type</span><span class="schema-type">ENUM</span></div>
+    </div>
+  </div>
+</section>
 
-<tr>
-<td>IT Department Dubai Website</td>
-<td><a href="https://aasit.ae" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+<div class="divider"></div>
 
-<tr>
-<td>Bioscience Department Website</td>
-<td><a href="https://aasbiosciences.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+<!-- STAGE 1: ENTRY ENGINE -->
+<section class="section" id="stage1">
+  <div class="section-label">Stage 01</div>
+  <div class="section-title">Entry Engine</div>
+  <div class="section-sub">Medicine enters the system. Every step from supplier invoice to database record.</div>
 
-<tr>
-<td>HRMS Marketing Website</td>
-<td><a href="https://elevate.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+  <div class="stage">
+    <div class="step-grid">
 
-<tr>
-<td>HRMS Portal Production</td>
-<td><a href="https://hr.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+      <div class="step-card">
+        <div class="step-title"><div class="step-icon">🏢</div>Step 1 — Supplier Master (One Time Setup)</div>
+        <div class="step-desc">Created once. Linked to every future purchase. Never re-entered.</div>
+        <div class="code-block">
+          <span class="code-label">suppliers TABLE</span>
+<span class="table-name">suppliers</span> {
+  <span class="key">supplier_id</span>     : <span class="str">"S001"</span>
+  <span class="key">name</span>            : <span class="str">"X Distributor"</span>
+  <span class="key">phone</span>           : <span class="str">"9876543210"</span>
+  <span class="key">gst_number</span>      : <span class="str">"27AAAPZ1234"</span>
+  <span class="key">credit_days</span>     : <span class="val">30</span>
+  <span class="key">opening_balance</span> : <span class="val">₹15,000</span>
+}</div>
+      </div>
 
-<tr>
-<td>Requisition Portal Production</td>
-<td><a href="https://one.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+      <div class="step-card">
+        <div class="step-title"><div class="step-icon">💊</div>Step 2 — Medicine Master (One Time Setup)</div>
+        <div class="step-desc">Created once per medicine. Barcode, HSN code, GST slab — all stored here permanently.</div>
+        <div class="code-block">
+          <span class="code-label">products TABLE</span>
+<span class="table-name">products</span> {
+  <span class="key">product_id</span>   : <span class="str">"D123"</span>
+  <span class="key">name</span>         : <span class="str">"Dolo 650"</span>
+  <span class="key">barcode</span>      : <span class="str">"8901234567890"</span>  <span class="comment">← GS1 barcode</span>
+  <span class="key">company</span>      : <span class="str">"Micro Labs"</span>
+  <span class="key">category</span>     : <span class="str">"Tablet"</span>
+  <span class="key">gst_slab</span>     : <span class="val">12%</span>
+  <span class="key">hsn_code</span>     : <span class="str">"30049099"</span>
+  <span class="key">min_stock</span>    : <span class="val">20</span>
+  <span class="key">reorder_qty</span>  : <span class="val">100</span>
+  <span class="key">substitutes</span>  : [<span class="str">"Crocin"</span>, <span class="str">"Calpol"</span>, <span class="str">"Pacimol"</span>]
+}</div>
+      </div>
 
-<tr>
-<td>Blueprint Portal Production</td>
-<td><a href="https://blu.aasint.com" target="_blank"><button>Visit Portal</button></a></td>
-</tr>
+      <div class="step-card">
+        <div class="step-title"><div class="step-icon">📋</div>Step 3 — Purchase Invoice Entry</div>
+        <div class="step-desc">Pharmacist receives physical invoice from distributor. Enters invoice-level details first.</div>
+        <div class="two-col">
+          <div class="code-block">
+            <span class="code-label">USER ENTERS</span>
+Supplier   : X Distributor
+Invoice No : 1324
+Date       : 04-04-2026
+Due Date   : 04-05-2026
+            <span class="comment">(auto: +30 credit days)</span></div>
+          <div class="code-block">
+            <span class="code-label">purchase_invoice TABLE</span>
+<span class="key">invoice_id</span>     : <span class="str">"P501"</span>
+<span class="key">supplier_id</span>    : <span class="str">"S001"</span>
+<span class="key">invoice_number</span> : <span class="str">"1324"</span>
+<span class="key">date</span>           : <span class="str">"04-04-2026"</span>
+<span class="key">due_date</span>       : <span class="str">"04-05-2026"</span>
+<span class="key">status</span>         : <span class="str">"UNPAID"</span></div>
+        </div>
+      </div>
 
-</tbody>
-</table>
-</div>
+      <div class="step-card amber">
+        <div class="step-title"><div class="step-icon amber">📦</div>Step 4 — Line Item Entry (Per Medicine)</div>
+        <div class="step-desc">For each medicine in the invoice. GS1 barcode scan auto-fills batch + expiry. Chemist only types quantity + price.</div>
+        <div class="two-col">
+          <div class="code-block">
+            <span class="code-label">WITHOUT GS1 SCAN (Marg style)</span>
+Medicine      : <span class="op">Dolo 650</span>     <span class="comment">← manual</span>
+Batch         : <span class="op">A-12</span>         <span class="comment">← manual</span>
+Expiry        : <span class="op">23-05-2027</span>   <span class="comment">← manual</span>
+Quantity      : 50
+Purchase Rate : ₹23
+MRP           : ₹30
+GST %         : 12%
+<span class="comment">→ 7 fields to enter manually</span></div>
+          <div class="code-block">
+            <span class="code-label">WITH GS1 SCAN (your system)</span>
+<span class="comment">Scan box barcode ▼</span>
+Medicine      : <span class="str">Dolo 650</span>    <span class="comment">← AUTO</span>
+Batch         : <span class="str">A-12</span>        <span class="comment">← AUTO</span>
+Expiry        : <span class="str">23-05-2027</span>  <span class="comment">← AUTO</span>
+Quantity      : 50          <span class="comment">← only this</span>
+Purchase Rate : ₹23         <span class="comment">← only this</span>
+MRP           : ₹30         <span class="comment">← only this</span>
+GST %         : <span class="str">12%</span>         <span class="comment">← AUTO</span>
+<span class="comment">→ 3 fields only. 70% faster.</span></div>
+        </div>
+        <div class="code-block" style="margin-top:12px;">
+          <span class="code-label">purchase_items TABLE</span>
+<span class="key">item_id</span>        : <span class="str">"PI900"</span>
+<span class="key">invoice_id</span>     : <span class="str">"P501"</span>
+<span class="key">product_id</span>     : <span class="str">"D123"</span>
+<span class="key">batch</span>          : <span class="str">"A-12"</span>
+<span class="key">expiry</span>         : <span class="str">"23-05-2027"</span>
+<span class="key">qty</span>            : <span class="val">50</span>
+<span class="key">purchase_price</span> : <span class="val">23</span>
+<span class="key">mrp</span>            : <span class="val">30</span>
+<span class="key">gst_percent</span>    : <span class="val">12</span>
+<span class="key">gst_amount</span>     : <span class="val">126</span>
+<span class="key">total</span>          : <span class="val">1276</span></div>
+      </div>
 
-</div>
+      <div class="step-card green">
+        <div class="step-title"><div class="step-icon green">⚡</div>Step 5 — Save Triggers (4 fire simultaneously)</div>
+        <div class="step-desc">One click. Four database operations fire in sequence before system returns "Saved".</div>
+        <div class="trigger-grid">
+          <div class="trigger-card">
+            <div class="t-label">TRIGGER 1 — BATCH</div>
+            <div class="t-body">
+batch_master {<br>
+&nbsp; batch_id : "B777"<br>
+&nbsp; product_id : "D123"<br>
+&nbsp; batch_no : "A-12"<br>
+&nbsp; expiry : "23-05-2027"<br>
+&nbsp; mrp : 30<br>
+&nbsp; purchase_price : 23<br>
+}
+            </div>
+          </div>
+          <div class="trigger-card purple">
+            <div class="t-label">TRIGGER 2 — INVENTORY</div>
+            <div class="t-body">
+inventory_batch {<br>
+&nbsp; product_id : "D123"<br>
+&nbsp; batch_id : "B777"<br>
+&nbsp; total_qty : 50<br>
+&nbsp; available_qty : 50<br>
+&nbsp; reserved_qty : 0<br>
+}
+            </div>
+          </div>
+          <div class="trigger-card amber">
+            <div class="t-label">TRIGGER 3 — ACCOUNTING</div>
+            <div class="t-body">
+ledger {<br>
+&nbsp; Dr Inventory A/C ₹1276<br>
+&nbsp; Dr GST Input A/C ₹126<br>
+&nbsp; Cr Supplier A/C ₹1276<br>
+}<br>
+<span style="color:#4a5568">← fully automatic</span>
+            </div>
+          </div>
+          <div class="trigger-card green">
+            <div class="t-label">TRIGGER 4 — CACHE</div>
+            <div class="t-body">
+Redis UPDATE {<br>
+&nbsp; product:D123:stock<br>
+&nbsp; → 50<br>
+&nbsp; product:D123:batches<br>
+&nbsp; → ["B777"]<br>
+}
+            </div>
+          </div>
+        </div>
+      </div>
 
+    </div>
+  </div>
+</section>
 
-<!-- ================= CREDENTIAL VIEW ================= -->
+<div class="divider"></div>
 
-<div class="card">
+<!-- STAGE 2: INVENTORY ENGINE -->
+<section class="section" id="stage2">
+  <div class="section-label">Stage 02</div>
+  <div class="section-title">Inventory Engine</div>
+  <div class="section-sub">How medicine lives inside the system. Batch tracking, expiry logic, reorder alerts.</div>
 
-<h2>🔐 View Portal Credentials</h2>
+  <div class="stage">
+    <div class="step-grid">
 
-<div class="info-box">
-  <strong>🔒 Secure Access:</strong> To view your portal credentials, please verify your registered email and phone number.
-</div>
+      <div class="step-card purple">
+        <div class="step-title"><div class="step-icon purple">🗂️</div>Batch-Driven Structure</div>
+        <div class="step-desc">Normal POS: Product → Quantity. Pharmacy ERP: Product → Batch → Expiry → Quantity. This is the fundamental difference.</div>
+        <div class="code-block">
+          <span class="code-label">INVENTORY TREE</span>
+<span class="key">Dolo 650</span> (product_id: D123)
+  <span class="comment">├─ Batch A-12</span>
+  <span class="comment">│    batch_id    : B777</span>
+  <span class="comment">│    expiry      : 23-05-2027</span>
+  <span class="comment">│    total_qty   : 50</span>
+  <span class="comment">│    available   : 43  ← total - reserved - damaged</span>
+  <span class="comment">│    reserved    : 5   ← pending orders</span>
+  <span class="comment">│    damaged     : 2   ← marked damaged</span>
+  <span class="comment">│</span>
+  <span class="comment">└─ Batch C-19  (second purchase arrived)</span>
+  <span class="comment">     batch_id    : B778</span>
+  <span class="comment">     expiry      : 15-08-2027</span>
+  <span class="comment">     total_qty   : 100</span>
+  <span class="comment">     available   : 100</span>
 
-<div class="form-group">
-<label>Professional Email Address</label>
-<input type="email" id="email" placeholder="Enter your registered email">
-</div>
+<span class="key">Total Stock</span> = <span class="val">150</span> strips
+<span class="key">Total Available</span> = <span class="val">143</span> strips</div>
+      </div>
 
-<div class="form-group">
-<label>Personal Phone Number</label>
-<input type="tel" id="phone" placeholder="Enter your registered phone number">
-</div>
+      <div class="step-card purple">
+        <div class="step-title"><div class="step-icon purple">🔢</div>FIFO Logic — Earliest Expiry First</div>
+        <div class="step-desc">System always sells the batch closest to expiry. Chemist does not decide. System decides automatically.</div>
+        <div class="code-block">
+          <span class="code-label">AUTO BATCH SELECTION QUERY</span>
+<span class="kw">SELECT</span> batch_id, batch_no, expiry, available_qty
+<span class="kw">FROM</span> <span class="table-name">inventory_batch</span>
+<span class="kw">WHERE</span> product_id = <span class="str">'D123'</span>
+  <span class="kw">AND</span> available_qty > <span class="val">0</span>
+  <span class="kw">AND</span> status != <span class="str">'EXPIRED'</span>
+<span class="kw">ORDER BY</span> expiry <span class="kw">ASC</span>   <span class="comment">← FIFO</span>
+<span class="kw">LIMIT</span> <span class="val">1</span>
 
-<button class="btn-primary" onclick="verifyUser()">
-  <span id="btnText">Verify & View Credentials</span>
-</button>
+<span class="comment">Result:</span>
+<span class="comment">Batch A-12  Exp May 2027  Qty 43  ← auto selected</span>
+<span class="comment">Batch C-19  Exp Aug 2027  Qty 100 ← skipped for now</span></div>
+      </div>
 
-<div id="result" class="result-box"></div>
+      <div class="step-card red">
+        <div class="step-title"><div class="step-icon red">⏰</div>Expiry Tracking Engine — Background Job</div>
+        <div class="step-desc">Runs every night at midnight. Scans entire inventory. Flags and alerts automatically.</div>
+        <div class="two-col">
+          <div class="code-block">
+            <span class="code-label">CRON JOB (runs 00:00 daily)</span>
+<span class="kw">FOR EACH</span> batch <span class="kw">IN</span> inventory_batch:
 
-</div>
+  <span class="kw">IF</span> expiry < today
+    status = <span class="str">"EXPIRED"</span>
+    available_qty = <span class="val">0</span>
+    <span class="op">FIRE alert: REMOVE NOW</span>
 
-</div>
+  <span class="kw">ELSE IF</span> expiry < today + <span class="val">30</span>
+    status = <span class="str">"CRITICAL"</span>
+    <span class="op">FIRE alert: URGENT</span>
 
+  <span class="kw">ELSE IF</span> expiry < today + <span class="val">90</span>
+    status = <span class="str">"NEAR_EXPIRY"</span>
+    <span class="op">FIRE alert: WARNING</span></div>
+          <div>
+            <div class="alert danger">⛔ EXPIRED — Remove immediately<br>Dolo 650  Batch A-01  3 days ago  Qty: 12  ₹276 at risk</div>
+            <div class="alert warn">⚠ CRITICAL — Expires in 18 days<br>Crocin 500  Batch B-11  18 days  Qty: 30  ₹600 at risk</div>
+            <div class="alert info">ℹ NEAR EXPIRY — 67 days remaining<br>Azee 500  Batch C-22  67 days  Qty: 50</div>
+          </div>
+        </div>
+      </div>
 
-<script>
+      <div class="step-card amber">
+        <div class="step-title"><div class="step-icon amber">📉</div>Reorder Level Engine</div>
+        <div class="step-desc">Each medicine has a minimum stock threshold. System alerts when stock drops below it.</div>
+        <div class="code-block">
+          <span class="code-label">REORDER CHECK LOGIC</span>
+<span class="kw">FOR EACH</span> product <span class="kw">IN</span> products:
 
-// ================= PERSONAL DETAILS =================
+  current_stock = <span class="kw">SUM</span>(available_qty)
+    <span class="kw">FROM</span> <span class="table-name">inventory_batch</span>
+    <span class="kw">WHERE</span> product_id = product.id
 
-const personalDetails = {
-  email: "chairman@aasint.com",
-  phone: "9776666598"
-};
+  <span class="kw">IF</span> current_stock < product.min_stock
+    <span class="op">CREATE reorder_alert</span> {
+      product     : product.name,
+      current_qty : current_stock,
+      min_stock   : product.min_stock,
+      order_qty   : product.reorder_qty
+    }
 
-// ================= VERIFY FUNCTION =================
+<span class="comment">─────────────────────────────────</span>
+<span class="comment">📦 REORDER ALERTS</span>
+<span class="comment">Dolo 650   Stock: 8  Min: 20  → Order 100</span>
+<span class="comment">Azee 500   Stock: 3  Min: 10  → Order 50</span></div>
+      </div>
 
-function verifyUser() {
+    </div>
+  </div>
+</section>
 
-const email = document.getElementById("email").value.trim();
-const phone = document.getElementById("phone").value.trim();
-const resultBox = document.getElementById("result");
-const btnText = document.getElementById("btnText");
+<div class="divider"></div>
 
-// Clear previous results
-resultBox.style.display = "none";
+<!-- STAGE 3: BILLING ENGINE -->
+<section class="section" id="stage3">
+  <div class="section-label">Stage 03</div>
+  <div class="section-title">Billing Engine</div>
+  <div class="section-sub">Most performance-critical part. 1000+ bills/day. Speed is everything. 6 steps, 4 DB triggers.</div>
 
-// Validation
-if(!email || !phone){
-  resultBox.style.display = "block";
-  resultBox.innerHTML = "<div class='status-message error'>⚠️ Please enter both email and phone number</div>";
-  return;
+  <div class="speed-grid" style="margin-bottom:32px;">
+    <div class="speed-card">
+      <div class="speed-label">BARCODE LOOKUP</div>
+      <div class="speed-value">&lt;1ms</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Indexed barcode query</div>
+      <div class="speed-bar"><div class="speed-fill" style="width:99%"></div></div>
+    </div>
+    <div class="speed-card">
+      <div class="speed-label">TEXT SEARCH (cached)</div>
+      <div class="speed-value">&lt;5ms</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Redis → Meilisearch</div>
+      <div class="speed-bar"><div class="speed-fill" style="width:90%"></div></div>
+    </div>
+    <div class="speed-card">
+      <div class="speed-label">STOCK DEDUCTION</div>
+      <div class="speed-value">&lt;3ms</div>
+      <div style="font-size:0.8rem;color:var(--muted)">Single UPDATE query</div>
+      <div class="speed-bar"><div class="speed-fill green" style="width:95%"></div></div>
+    </div>
+    <div class="speed-card">
+      <div class="speed-label">TOTAL BILL CREATION</div>
+      <div class="speed-value">&lt;50ms</div>
+      <div style="font-size:0.8rem;color:var(--muted)">All 4 triggers complete</div>
+      <div class="speed-bar"><div class="speed-fill amber" style="width:75%"></div></div>
+    </div>
+  </div>
+
+  <div class="step-grid">
+
+    <div class="step-card">
+      <div class="step-title"><div class="step-icon">🔍</div>Step 1 — Medicine Search (Two Methods)</div>
+      <div class="two-col">
+        <div class="code-block">
+          <span class="code-label">METHOD A: TEXT SEARCH</span>
+Chemist types: <span class="str">"dol"</span>
+
+<span class="comment">1. Check Redis cache first</span>
+<span class="kw">GET</span> cache:search:<span class="str">"dol"</span>
+<span class="comment">  → HIT? Return in &lt;1ms</span>
+<span class="comment">  → MISS? Query PostgreSQL</span>
+
+<span class="kw">SELECT</span> product_id, name, mrp
+<span class="kw">FROM</span> <span class="table-name">products</span>
+<span class="kw">WHERE</span> name <span class="kw">LIKE</span> <span class="str">'dol%'</span>
+<span class="kw">LIMIT</span> <span class="val">10</span>
+
+Results:
+<span class="str">Dolo 650, Dolopar, Dolwin</span></div>
+        <div class="code-block">
+          <span class="code-label">METHOD B: BARCODE SCAN ⚡ FASTER</span>
+Chemist scans: <span class="str">8901234567890</span>
+
+<span class="kw">SELECT</span> product_id, name
+<span class="kw">FROM</span> <span class="table-name">products</span>
+<span class="kw">WHERE</span> barcode = <span class="str">'8901234567890'</span>
+
+<span class="comment">Single indexed lookup.</span>
+<span class="comment">No ambiguity. No typo risk.</span>
+<span class="comment">Zero manual input.</span>
+
+Result: <span class="str">Dolo 650 (D123)</span>
+Time: <span class="val">&lt; 1ms</span></div>
+      </div>
+    </div>
+
+    <div class="step-card purple">
+      <div class="step-title"><div class="step-icon purple">📦</div>Step 2 — Auto Batch Selection</div>
+      <div class="step-desc">System picks earliest expiry batch automatically. Chemist never touches batch selection.</div>
+      <div class="code-block">
+<span class="kw">SELECT</span> batch_id, batch_no, expiry, available_qty
+<span class="kw">FROM</span> <span class="table-name">inventory_batch</span>
+<span class="kw">WHERE</span> product_id = <span class="str">'D123'</span>
+  <span class="kw">AND</span> available_qty > <span class="val">0</span>
+  <span class="kw">AND</span> status = <span class="str">'ACTIVE'</span>
+<span class="kw">ORDER BY</span> expiry <span class="kw">ASC</span>
+<span class="kw">LIMIT</span> <span class="val">1</span>
+
+<span class="comment">Auto selected:</span>
+<span class="comment">Batch A-12  Exp 23-05-2027  Available: 43</span></div>
+    </div>
+
+    <div class="step-card amber">
+      <div class="step-title"><div class="step-icon amber">🧮</div>Step 3 — Price Calculation (Automatic)</div>
+      <div class="step-desc">Chemist enters only quantity. Every price, discount, and GST is computed by system.</div>
+      <div class="code-block">
+          <span class="code-label">PRICE ENGINE</span>
+Input:
+  mrp      = <span class="val">₹30</span>
+  qty      = <span class="val">2</span>
+  discount = <span class="val">5%</span>
+  gst      = <span class="val">12%</span>
+
+<span class="comment">─────────────────────────────</span>
+gross          = mrp × qty         = <span class="val">₹60.00</span>
+discount_amt   = gross × 5%       = <span class="val">₹3.00</span>
+taxable_value  = gross - discount  = <span class="val">₹57.00</span>
+gst_amount     = taxable × 12%    = <span class="val">₹6.84</span>
+final_total    = taxable + gst     = <span class="val">₹63.84</span>
+
+<span class="comment">─────────────────────────────</span>
+<span class="comment">Chemist sees only: ₹63.84</span>
+<span class="comment">System handles all math.</span></div>
+    </div>
+
+    <div class="step-card green">
+      <div class="step-title"><div class="step-icon green">⚡</div>Step 4-6 — Bill Save (4 Triggers Fire)</div>
+      <div class="step-desc">Single Save fires all database operations in sequence. Atomic — all succeed or all rollback.</div>
+      <div class="trigger-grid">
+        <div class="trigger-card green">
+          <div class="t-label">TRIGGER 1 — STOCK DEDUCT</div>
+          <div class="t-body">
+<span class="kw">UPDATE</span> inventory_batch<br>
+<span class="kw">SET</span> available_qty<br>
+&nbsp; = available_qty - 2<br>
+<span class="kw">WHERE</span> batch_id = 'B777'<br><br>
+Before: 43<br>
+After : 41
+          </div>
+        </div>
+        <div class="trigger-card">
+          <div class="t-label">TRIGGER 2 — INVOICE</div>
+          <div class="t-body">
+sales_invoice {<br>
+&nbsp; invoice_id : "SI2001"<br>
+&nbsp; customer_id : "C101"<br>
+&nbsp; date : today<br>
+&nbsp; total : ₹63.84<br>
+&nbsp; gst : ₹6.84<br>
+&nbsp; payment : "CASH"<br>
+}
+          </div>
+        </div>
+        <div class="trigger-card purple">
+          <div class="t-label">TRIGGER 3 — LINE ITEMS</div>
+          <div class="t-body">
+sales_items {<br>
+&nbsp; invoice_id : "SI2001"<br>
+&nbsp; product_id : "D123"<br>
+&nbsp; batch_id : "B777"<br>
+&nbsp; qty : 2<br>
+&nbsp; price : ₹30<br>
+&nbsp; discount : 5%<br>
+}
+          </div>
+        </div>
+        <div class="trigger-card amber">
+          <div class="t-label">TRIGGER 4 — ACCOUNTING</div>
+          <div class="t-body">
+ledger {<br>
+&nbsp; Dr Cash A/C ₹63.84<br>
+&nbsp; Cr Sales A/C ₹57.00<br>
+&nbsp; Cr GST A/C ₹6.84<br>
+}<br><br>
+← fully automatic
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STAGE 4: STOCK MANAGEMENT -->
+<section class="section" id="stage4">
+  <div class="section-label">Stage 04</div>
+  <div class="section-title">Stock Management Engine</div>
+  <div class="section-sub">Everything between purchase and sale. Adjustments, returns, damage handling.</div>
+
+  <div class="step-grid">
+
+    <div class="step-card red">
+      <div class="step-title"><div class="step-icon red">⚠️</div>Stock Adjustment (Damaged / Lost / Correction)</div>
+      <div class="step-desc">Every adjustment is logged. Nothing silently changes. Full audit trail maintained.</div>
+      <div class="code-block">
+        <span class="code-label">stock_adjustments TABLE</span>
+<span class="table-name">stock_adjustments</span> {
+  <span class="key">adjustment_id</span>  : <span class="str">"ADJ001"</span>
+  <span class="key">product_id</span>     : <span class="str">"D123"</span>
+  <span class="key">batch_id</span>       : <span class="str">"B777"</span>
+  <span class="key">type</span>           : <span class="str">"DAMAGED"</span>  <span class="comment">← DAMAGED | LOST | CORRECTION</span>
+  <span class="key">qty_change</span>     : <span class="val">-5</span>
+  <span class="key">reason</span>         : <span class="str">"Found broken strips in batch"</span>
+  <span class="key">date</span>           : <span class="str">"10-03-2026"</span>
+  <span class="key">approved_by</span>    : <span class="str">"Manager_ID"</span>
 }
 
-// Email format validation
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-if(!emailRegex.test(email)){
-  resultBox.style.display = "block";
-  resultBox.innerHTML = "<div class='status-message error'>⚠️ Please enter a valid email address</div>";
-  return;
-}
+<span class="kw">Effect on inventory_batch:</span>
+available_qty: <span class="val">43</span> → <span class="val">38</span>
+damaged_qty  : <span class="val">2</span>  → <span class="val">7</span></div>
+    </div>
 
-// Show loading state
-btnText.innerHTML = '<span class="loading"></span>';
+    <div class="two-col">
+      <div class="step-card purple">
+        <div class="step-title"><div class="step-icon purple">↩️</div>Return to Supplier</div>
+        <div class="step-desc">Near expiry or damaged stock sent back. Inventory reduced. Supplier account credited automatically.</div>
+        <div class="code-block">
+          <span class="code-label">purchase_returns TABLE</span>
+<span class="key">return_id</span>    : <span class="str">"PR001"</span>
+<span class="key">invoice_id</span>   : <span class="str">"P501"</span>
+<span class="key">product_id</span>   : <span class="str">"D123"</span>
+<span class="key">batch_id</span>     : <span class="str">"B777"</span>
+<span class="key">qty</span>          : <span class="val">10</span>
+<span class="key">reason</span>       : <span class="str">"Near expiry"</span>
 
-// Simulate API call with timeout
-setTimeout(() => {
-  btnText.textContent = 'Verify & View Credentials';
-  
-  // Verify credentials
-  if(email !== personalDetails.email || phone !== personalDetails.phone){
-    resultBox.style.display = "block";
-    resultBox.innerHTML = "<div class='status-message error'>❌ Verification Failed - Invalid credentials</div>";
-    return;
-  }
+<span class="kw">Effects:</span>
+inventory_batch qty <span class="op">-10</span>
+ledger: Dr Supplier A/C ₹230
+        Cr Inventory A/C ₹230</div>
+      </div>
 
-  // ================= BUILD SUCCESS OUTPUT =================
+      <div class="step-card green">
+        <div class="step-title"><div class="step-icon green">↪️</div>Customer Return</div>
+        <div class="step-desc">Customer returns wrong medicine. Stock restored. Refund posted to accounts automatically.</div>
+        <div class="code-block">
+          <span class="code-label">sales_returns TABLE</span>
+<span class="key">return_id</span>    : <span class="str">"SR001"</span>
+<span class="key">invoice_id</span>   : <span class="str">"SI2001"</span>
+<span class="key">product_id</span>   : <span class="str">"D123"</span>
+<span class="key">batch_id</span>     : <span class="str">"B777"</span>
+<span class="key">qty</span>          : <span class="val">1</span>
+<span class="key">reason</span>       : <span class="str">"Wrong medicine"</span>
 
-  let html = `<div class="status-message success">✅ Verification Successful! Welcome back.</div>`;
+<span class="kw">Effects:</span>
+inventory_batch qty <span class="op">+1</span>
+ledger: Dr Sales A/C ₹30
+        Cr Cash A/C ₹30</div>
+      </div>
+    </div>
 
-  html += `<div class="table-wrapper">
-  <table>
-  <thead>
-  <tr>
-  <th>Portal</th>
-  <th>Username</th>
-  <th>Password</th>
-  <th>Status</th>
-  </tr>
-  </thead>
-  <tbody>
+  </div>
+</section>
 
-  <!-- Requisition Portal -->
-  <tr>
-  <td><strong>Requisition Portal</strong></td>
-  <td>chairman@aasint.com</td>
-  <td><code>Chairman#$189</code></td>
-  <td>
-    <a href="https://one.aasint.com" target="_blank"><button>Open Portal</button></a>
-  </td>
-  </tr>
+<div class="divider"></div>
 
-  <!-- HRMS Portal -->
-  <tr>
-  <td><strong>HRMS Portal</strong></td>
-  <td>-</td>
-  <td>-</td>
-  <td>
-    <button disabled>Not Available</button>
-    <span class="warning-msg">⚠️ You are not onboarded on HRMS</span>
-  </td>
-  </tr>
+<!-- STAGE 5: REPORTS -->
+<section class="section" id="stage5">
+  <div class="section-label">Stage 05</div>
+  <div class="section-title">Reports Engine</div>
+  <div class="section-sub">Owner visibility. Real-time data from all tables aggregated and displayed.</div>
 
-  <!-- Blueprint Portal -->
-  <tr>
-  <td><strong>Blueprint System</strong></td>
-  <td>-</td>
-  <td>-</td>
-  <td>
-    <button disabled>Restricted</button>
-    <span class="error-msg">🚫 Head of the company has no role in blueprint portal</span>
-  </td>
-  </tr>
+  <div class="report-grid">
 
-  </tbody>
-  </table>
-  </div>`;
+    <div class="report-card">
+      <div class="report-title">📊 Stock Report</div>
+      <table class="report-table">
+        <tr><th>Medicine</th><th>Batch</th><th>Qty</th><th>Value</th></tr>
+        <tr><td>Dolo 650</td><td>A-12</td><td>41</td><td>₹943</td></tr>
+        <tr><td>Azee 500</td><td>B-21</td><td>20</td><td>₹900</td></tr>
+        <tr><td>Crocin</td><td>C-11</td><td>35</td><td>₹700</td></tr>
+        <tr><td colspan="3" style="color:var(--muted)">Total Inventory Value</td><td style="color:var(--green)">₹2,543</td></tr>
+      </table>
+    </div>
 
-  resultBox.style.display = "block";
-  resultBox.innerHTML = html;
+    <div class="report-card">
+      <div class="report-title">💰 Sales Report</div>
+      <table class="report-table">
+        <tr><th>Date</th><th>Bills</th><th>Revenue</th><th>GST</th></tr>
+        <tr><td>10-03</td><td>47</td><td>₹18,400</td><td>₹2,208</td></tr>
+        <tr><td>09-03</td><td>52</td><td>₹21,000</td><td>₹2,520</td></tr>
+        <tr><td>08-03</td><td>39</td><td>₹15,600</td><td>₹1,872</td></tr>
+      </table>
+    </div>
 
-}, 1000);
+    <div class="report-card">
+      <div class="report-title">🏭 Purchase Report</div>
+      <table class="report-table">
+        <tr><th>Supplier</th><th>Amount</th><th>Status</th></tr>
+        <tr><td>X Dist</td><td>₹1,276</td><td><span class="tag unpaid">UNPAID</span></td></tr>
+        <tr><td>Y Dist</td><td>₹4,500</td><td><span class="tag paid">PAID</span></td></tr>
+        <tr><td>Z Dist</td><td>₹2,800</td><td><span class="tag paid">PAID</span></td></tr>
+      </table>
+    </div>
 
-}
+    <div class="report-card">
+      <div class="report-title">🧾 GST Report (Monthly)</div>
+      <table class="report-table">
+        <tr><th>Slab</th><th>Taxable</th><th>Collected</th><th>Paid</th></tr>
+        <tr><td>5%</td><td>₹12,000</td><td>₹600</td><td>₹400</td></tr>
+        <tr><td>12%</td><td>₹45,000</td><td>₹5,400</td><td>₹3,200</td></tr>
+        <tr><td>18%</td><td>₹8,000</td><td>₹1,440</td><td>₹900</td></tr>
+        <tr><td colspan="3" style="color:var(--muted)">Net GST Payable</td><td style="color:var(--accent3)">₹2,940</td></tr>
+      </table>
+    </div>
 
-// ================= ENTER KEY SUPPORT =================
+    <div class="report-card">
+      <div class="report-title">⏰ Expiry Report</div>
+      <table class="report-table">
+        <tr><th>Medicine</th><th>Expiry</th><th>Status</th><th>Risk</th></tr>
+        <tr><td>Dolo 650 A-01</td><td>PAST</td><td><span class="tag expired">EXPIRED</span></td><td>₹276</td></tr>
+        <tr><td>Crocin B-11</td><td>18 days</td><td><span class="tag critical">CRITICAL</span></td><td>₹600</td></tr>
+        <tr><td>Azee C-22</td><td>67 days</td><td><span class="tag near">NEAR</span></td><td>₹450</td></tr>
+      </table>
+    </div>
 
-document.addEventListener('DOMContentLoaded', function() {
-  const inputs = document.querySelectorAll('input');
-  inputs.forEach(input => {
-    input.addEventListener('keypress', function(e) {
-      if(e.key === 'Enter') {
-        verifyUser();
-      }
-    });
-  });
-});
+    <div class="report-card">
+      <div class="report-title">📈 Profit Per Medicine</div>
+      <table class="report-table">
+        <tr><th>Medicine</th><th>Buy</th><th>Sell</th><th>Margin</th></tr>
+        <tr><td>Dolo 650</td><td>₹23</td><td>₹28.5</td><td style="color:var(--green)">24.1%</td></tr>
+        <tr><td>Azee 500</td><td>₹45</td><td>₹58</td><td style="color:var(--green)">28.8%</td></tr>
+        <tr><td>Crocin</td><td>₹18</td><td>₹22</td><td style="color:var(--green)">22.2%</td></tr>
+      </table>
+    </div>
 
-</script>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- BARCODE SECTION -->
+<section class="section" id="barcode">
+  <div class="section-label">Deep Dive — Barcode</div>
+  <div class="section-title">Why Barcode Works.<br>Where It Doesn't.</div>
+  <div class="section-sub">The clearest possible breakdown of when barcode is your biggest advantage — and when it fails.</div>
+
+  <!-- VERDICT -->
+  <div class="barcode-verdict">
+    <div class="verdict-card good">
+      <div class="verdict-title good">✅ Where Barcode WINS</div>
+
+      <div class="verdict-item">
+        <div class="verdict-dot good"></div>
+        <div><strong>Speed at billing counter</strong> — Scan takes 0.5 seconds. Typing takes 5–10 seconds. 1000 bills/day = hours saved.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot good"></div>
+        <div><strong>Zero typo errors</strong> — "Azithromycin" typed wrong = wrong medicine sold. Barcode scan = always exact match.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot good"></div>
+        <div><strong>GS1-128 auto-fills batch + expiry</strong> — Modern medicine boxes already have GS1-128 barcodes. One scan fills product, batch, AND expiry.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot good"></div>
+        <div><strong>Purchase entry becomes fast</strong> — Receiving 50 medicines? Scan each box. No manual entry. Entire purchase done in minutes.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot good"></div>
+        <div><strong>Single indexed DB query</strong> — WHERE barcode = ? uses index. Returns in under 1ms regardless of database size.</div>
+      </div>
+    </div>
+
+    <div class="verdict-card bad">
+      <div class="verdict-title bad">❌ Where Barcode FAILS</div>
+
+      <div class="verdict-item">
+        <div class="verdict-dot bad"></div>
+        <div><strong>Old stock has no barcode</strong> — Many generic medicines and local brands come without any barcode. System must fallback to text search.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot bad"></div>
+        <div><strong>Damaged/faded barcodes</strong> — Strips that are torn, wet, or faded won't scan. System needs a manual fallback always.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot bad"></div>
+        <div><strong>Basic EAN-13 has no batch data</strong> — Most retail barcodes are EAN-13 (13 digits, product only). No batch, no expiry. GS1-128 adoption is still incomplete in Indian pharma.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot bad"></div>
+        <div><strong>Scanner hardware dependency</strong> — Barcode scanning needs physical scanner or camera. In small pharmacies without hardware, it's a barrier.</div>
+      </div>
+      <div class="verdict-item">
+        <div class="verdict-dot bad"></div>
+        <div><strong>Strip-level tracking impossible</strong> — When a customer returns 1 strip from a box of 10, there is no strip-level barcode. Batch level is the finest granularity possible.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GS1 BREAKDOWN -->
+  <div class="step-card" style="margin-bottom:24px;">
+    <div class="step-title"><div class="step-icon">🔲</div>GS1-128 Barcode — What's Inside</div>
+    <div class="step-desc">This is the industry standard barcode on modern medicine packaging. One scan gives you everything.</div>
+
+    <div style="display:flex; justify-content:center; margin: 24px 0;">
+      <div class="barcode-visual">
+        <div class="barcode-bars">
+          <div class="bar" style="height:55px"></div><div class="bar" style="height:40px;width:2px"></div><div class="bar" style="height:55px;width:4px"></div><div class="bar" style="height:35px"></div><div class="bar" style="height:55px;width:2px"></div><div class="bar" style="height:48px"></div><div class="bar" style="height:55px;width:3px"></div><div class="bar" style="height:42px"></div><div class="bar" style="height:55px"></div><div class="bar" style="height:38px;width:2px"></div><div class="bar" style="height:55px;width:4px"></div><div class="bar" style="height:45px"></div><div class="bar" style="height:55px;width:2px"></div><div class="bar" style="height:50px"></div><div class="bar" style="height:55px;width:3px"></div><div class="bar" style="height:43px"></div><div class="bar" style="height:55px"></div><div class="bar" style="height:37px;width:2px"></div><div class="bar" style="height:55px;width:4px"></div><div class="bar" style="height:46px"></div><div class="bar" style="height:55px;width:2px"></div><div class="bar" style="height:41px"></div><div class="bar" style="height:55px;width:3px"></div><div class="bar" style="height:49px"></div><div class="bar" style="height:55px"></div><div class="bar" style="height:36px;width:2px"></div><div class="bar" style="height:55px;width:4px"></div><div class="bar" style="height:44px"></div><div class="bar" style="height:55px;width:2px"></div><div class="bar" style="height:52px"></div><div class="bar" style="height:55px;width:3px"></div><div class="bar" style="height:40px"></div><div class="bar" style="height:55px"></div><div class="bar" style="height:38px;width:2px"></div><div class="bar" style="height:55px;width:4px"></div><div class="bar" style="height:47px"></div><div class="bar" style="height:55px;width:2px"></div><div class="bar" style="height:43px"></div><div class="bar" style="height:55px;width:3px"></div><div class="bar" style="height:50px"></div><div class="bar" style="height:55px"></div>
+        </div>
+        <div class="barcode-number">0 1  8901234567890  10  A-12  17  270523</div>
+        <div style="font-size:10px;color:#888;font-family:monospace;">GS1-128 Standard</div>
+      </div>
+    </div>
+
+    <div class="gs1-breakdown">
+      <div class="gs1-field">
+        <div class="gs1-label">APPLICATION IDENTIFIER 01</div>
+        <div class="gs1-value">8901234567890</div>
+        <div class="gs1-desc">GTIN — Global Trade Item Number. Identifies the product. Maps to product_id in your DB.</div>
+      </div>
+      <div class="gs1-field">
+        <div class="gs1-label">APPLICATION IDENTIFIER 10</div>
+        <div class="gs1-value">A-12</div>
+        <div class="gs1-desc">Batch / Lot Number. Auto-fills batch field in purchase entry. Eliminates manual typing.</div>
+      </div>
+      <div class="gs1-field">
+        <div class="gs1-label">APPLICATION IDENTIFIER 17</div>
+        <div class="gs1-value">270523</div>
+        <div class="gs1-desc">Expiry Date (YYMMDD format). = May 2027. Auto-fills expiry. Zero human error possible.</div>
+      </div>
+      <div class="gs1-field">
+        <div class="gs1-label">APPLICATION IDENTIFIER 21</div>
+        <div class="gs1-value">SN-9981234</div>
+        <div class="gs1-desc">Serial Number (for high-value/controlled drugs). Enables unit-level tracking.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div style="overflow-x:auto;">
+    <table class="compare-table">
+      <tr>
+        <th>Scenario</th>
+        <th>❌ Without Barcode (Marg Style)</th>
+        <th>✅ With GS1-128 (Your System)</th>
+      </tr>
+      <tr>
+        <td>Receiving 50 medicines in purchase</td>
+        <td>Type each name, batch, expiry manually. 50 × 7 fields = 350 inputs</td>
+        <td>Scan each box. 50 × 1 scan = 50 inputs. Batch + expiry auto-filled</td>
+      </tr>
+      <tr>
+        <td>Billing 1 medicine</td>
+        <td>Type 4 letters → select from dropdown → confirm batch</td>
+        <td>Scan barcode → done. 0.5 seconds total</td>
+      </tr>
+      <tr>
+        <td>Wrong medicine dispensed</td>
+        <td>Human typed "Amoxyclav" instead of "Amoxicillin". Possible.</td>
+        <td>Barcode scan = exact product. Impossible to pick wrong medicine.</td>
+      </tr>
+      <tr>
+        <td>Expiry tracking during purchase</td>
+        <td>Pharmacist types expiry. Typo = wrong expiry in system</td>
+        <td>GS1 scan reads expiry from manufacturer. 100% accurate.</td>
+      </tr>
+      <tr>
+        <td>Medicine with no barcode</td>
+        <td><span class="tick">✓</span> Works fine. Text search handles it.</td>
+        <td><span class="cross">✗</span> Must fallback to text search. Scanner useless here.</td>
+      </tr>
+      <tr>
+        <td>Damaged/torn strip</td>
+        <td><span class="tick">✓</span> Still type name manually.</td>
+        <td><span class="cross">✗</span> Can't scan. Needs manual fallback.</td>
+      </tr>
+      <tr>
+        <td>Small pharmacy, no scanner</td>
+        <td><span class="tick">✓</span> Works on any computer.</td>
+        <td><span class="cross">✗</span> Needs hardware investment.</td>
+      </tr>
+    </table>
+  </div>
+
+  <div style="margin-top:24px;" class="step-card green">
+    <div class="step-title"><div class="step-icon green">💡</div>The Right Answer: Hybrid System</div>
+    <div class="step-desc">Never force one method. Build both. Let the system decide.</div>
+    <div class="code-block">
+      <span class="code-label">SMART SEARCH LOGIC</span>
+<span class="kw">IF</span> input = barcode_scan
+  → <span class="str">WHERE barcode = ?</span>   <span class="comment">← fastest path</span>
+
+<span class="kw">ELSE IF</span> input = text AND top medicines cache warm
+  → <span class="str">Redis cache lookup</span>   <span class="comment">← &lt; 1ms</span>
+
+<span class="kw">ELSE IF</span> input = text
+  → <span class="str">WHERE name LIKE ?</span>    <span class="comment">← indexed PG query</span>
+
+<span class="kw">IF</span> NOTHING FOUND
+  → <span class="str">Meilisearch fuzzy</span>    <span class="comment">← handles typos</span>
+  → "Did you mean Azithromycin?"
+
+<span class="comment">All 4 paths. Zero failure mode.</span></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MASTER FLOW -->
+<section class="section" id="flow">
+  <div class="section-label">Master Flow</div>
+  <div class="section-title">Everything Connected</div>
+  <div class="section-sub">The complete engine from supplier to report. Every stage linked.</div>
+
+  <div class="flow-container" style="margin-bottom:48px;">
+    <div class="flow-node accent">🏭 SUPPLIER<br><span style="font-size:9px;color:var(--muted)">produces medicine</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">📦 DISTRIBUTOR<br><span style="font-size:9px;color:var(--muted)">sends invoice + stock</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node accent">🔲 GS1 BARCODE SCAN<br><span style="font-size:9px;color:var(--muted)">product + batch + expiry auto</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">📋 PURCHASE ENTRY<br><span style="font-size:9px;color:var(--muted)">purchase_invoice + purchase_items</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node purple">⚡ 4 TRIGGERS FIRE<br><span style="font-size:9px;color:var(--muted)">batch + inventory + ledger + cache</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">🗂️ INVENTORY LIVES<br><span style="font-size:9px;color:var(--muted)">inventory_batch table (FIFO)</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node amber">🔁 BACKGROUND JOBS<br><span style="font-size:9px;color:var(--muted)">expiry checks + reorder alerts</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">👤 CUSTOMER ARRIVES<br><span style="font-size:9px;color:var(--muted)">needs medicine</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node accent">🔲 SCAN OR SEARCH<br><span style="font-size:9px;color:var(--muted)">barcode → Redis → PostgreSQL</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">🧮 PRICE CALCULATED<br><span style="font-size:9px;color:var(--muted)">MRP - discount + GST</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node green">⚡ 4 TRIGGERS FIRE<br><span style="font-size:9px;color:var(--muted)">stock deduct + invoice + items + ledger</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node">🧾 BILL GENERATED<br><span style="font-size:9px;color:var(--muted)">print / WhatsApp PDF</span></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node amber">📊 REPORTS UPDATE<br><span style="font-size:9px;color:var(--muted)">real-time across all dashboards</span></div>
+  </div>
+
+  <!-- WHY THIS BEATS MARG -->
+  <div class="stage-header">
+    <div class="stage-num red">EDGE</div>
+    <div class="stage-title">Why This System Beats Marg — Summary</div>
+  </div>
+
+  <div class="trigger-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px,1fr));">
+    <div class="trigger-card">
+      <div class="t-label">PROBLEM 1 — PURCHASE ENTRY</div>
+      <div class="t-body">
+Marg: 7 manual fields per medicine<br><br>
+Your system: GS1 scan → 3 fields only<br>
+Batch + expiry auto from barcode<br>
+<span style="color:var(--green)">70% faster. Zero batch entry errors.</span>
+      </div>
+    </div>
+    <div class="trigger-card purple">
+      <div class="t-label">PROBLEM 2 — BILLING SPEED</div>
+      <div class="t-body">
+Marg: Text search only, local DB<br><br>
+Your system: Redis cache + barcode scan<br>
+Fuzzy search for typos<br>
+<span style="color:var(--green)">Sub-millisecond. 1000+ bills/day easy.</span>
+      </div>
+    </div>
+    <div class="trigger-card amber">
+      <div class="t-label">PROBLEM 3 — OWNER VISIBILITY</div>
+      <div class="t-body">
+Marg: Desktop only, no mobile<br><br>
+Your system: PWA + real-time dashboard<br>
+Owner sees stock, sales, alerts<br>
+<span style="color:var(--green)">From phone. From anywhere.</span>
+      </div>
+    </div>
+    <div class="trigger-card green">
+      <div class="t-label">PROBLEM 4 — DISTRIBUTOR LOCK-IN</div>
+      <div class="t-body">
+Marg: Forces Marg format invoices<br><br>
+Your system: Distributor portal<br>Any format → auto parsed<br>
+<span style="color:var(--green)">One-click purchase entry. Marg's moat destroyed.</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:48px; text-align:center; padding:40px; background:var(--surface); border:1px solid var(--border); border-radius:4px;">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:2px;margin-bottom:16px;">BUILD ORDER</div>
+    <div style="font-family:var(--display);font-size:1.4rem;font-weight:800;margin-bottom:8px;">Phase 1 → Phase 2 → Phase 3 → Phase 4</div>
+    <div style="display:flex;justify-content:center;gap:0;flex-wrap:wrap;margin-top:24px;">
+      <div style="padding:12px 20px;border:1px solid rgba(0,229,255,0.3);font-family:var(--mono);font-size:11px;color:var(--accent)">01 CORE ENGINE<br><span style="color:var(--muted)">products + inventory</span></div>
+      <div style="padding:12px 20px;border:1px solid rgba(124,58,237,0.3);font-family:var(--mono);font-size:11px;color:#a78bfa">02 BILLING POS<br><span style="color:var(--muted)">barcode + GST bills</span></div>
+      <div style="padding:12px 20px;border:1px solid rgba(245,158,11,0.3);font-family:var(--mono);font-size:11px;color:var(--accent3)">03 INTELLIGENCE<br><span style="color:var(--muted)">expiry + reorder + substitutes</span></div>
+      <div style="padding:12px 20px;border:1px solid rgba(16,185,129,0.3);font-family:var(--mono);font-size:11px;color:var(--green)">04 NETWORK<br><span style="color:var(--muted)">distributor portal + mobile</span></div>
+    </div>
+  </div>
+</section>
+
+<footer style="text-align:center;padding:40px 24px;border-top:1px solid var(--border);font-family:var(--mono);font-size:11px;color:var(--muted);">
+  PHARMACY ERP — SYSTEM ARCHITECTURE DOCUMENT &nbsp;|&nbsp; ENTRY → INVENTORY → BILLING → REPORTS
+</footer>
 
 </body>
 </html>
