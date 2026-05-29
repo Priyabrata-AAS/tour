@@ -1,546 +1,1680 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trip Booking System Flow - Document View</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Calibri', 'Arial', sans-serif;
-            background: #f0f0f0;
-            padding: 20px;
-        }
-
-        .controls {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        button {
-            background: #2c3e50;
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 5px;
-            font-size: 1em;
-            cursor: pointer;
-            margin: 0 10px;
-            transition: all 0.3s;
-        }
-
-        button:hover {
-            background: #34495e;
-        }
-
-        .page-container {
-            max-width: 8.5in;
-            margin: 0 auto;
-            background: white;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        }
-
-        .page {
-            width: 8.5in;
-            min-height: 11in;
-            padding: 0.75in;
-            background: white;
-            margin-bottom: 20px;
-            position: relative;
-            page-break-after: always;
-        }
-
-        .page-number {
-            position: absolute;
-            bottom: 0.5in;
-            right: 0.75in;
-            font-size: 10pt;
-            color: #666;
-        }
-
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            font-size: 20pt;
-            margin-bottom: 10pt;
-            border-bottom: 3pt solid #3498db;
-            padding-bottom: 8pt;
-        }
-
-        h2 {
-            color: #2c3e50;
-            font-size: 16pt;
-            margin-top: 16pt;
-            margin-bottom: 10pt;
-            background: #ecf0f1;
-            padding: 8pt;
-            border-left: 4pt solid #3498db;
-        }
-
-        h3 {
-            color: #34495e;
-            font-size: 13pt;
-            margin-top: 12pt;
-            margin-bottom: 8pt;
-            font-weight: bold;
-        }
-
-        h4 {
-            color: #555;
-            font-size: 11pt;
-            margin-top: 10pt;
-            margin-bottom: 6pt;
-            font-weight: bold;
-        }
-
-        p, li {
-            font-size: 11pt;
-            line-height: 1.4;
-            color: #333;
-            margin-bottom: 6pt;
-        }
-
-        ul, ol {
-            margin-left: 20pt;
-            margin-bottom: 10pt;
-        }
-
-        li {
-            margin-bottom: 4pt;
-        }
-
-        .flow-box {
-            border: 2pt solid #3498db;
-            border-radius: 5pt;
-            padding: 10pt;
-            margin: 10pt 0;
-            background: #f8f9fa;
-        }
-
-        .step-header {
-            background: #3498db;
-            color: white;
-            padding: 6pt 10pt;
-            border-radius: 3pt;
-            font-weight: bold;
-            font-size: 11pt;
-            margin-bottom: 8pt;
-        }
-
-        .decision-box {
-            background: #fff3cd;
-            border: 2pt solid #ffc107;
-            padding: 10pt;
-            margin: 10pt 0;
-            border-radius: 5pt;
-            text-align: center;
-            font-weight: bold;
-            font-size: 11pt;
-        }
-
-        .branch-container {
-            display: flex;
-            gap: 15pt;
-            margin: 10pt 0;
-        }
-
-        .branch {
-            flex: 1;
-            border: 2pt dashed #666;
-            padding: 10pt;
-            border-radius: 5pt;
-        }
-
-        .branch-title {
-            background: #2ecc71;
-            color: white;
-            padding: 6pt;
-            text-align: center;
-            font-weight: bold;
-            margin-bottom: 8pt;
-            border-radius: 3pt;
-            font-size: 11pt;
-        }
-
-        .branch.negotiation .branch-title {
-            background: #e74c3c;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 2pt 8pt;
-            border-radius: 3pt;
-            font-size: 9pt;
-            font-weight: bold;
-            margin-right: 5pt;
-        }
-
-        .status-confirmed { background: #2ecc71; color: white; }
-        .status-pending { background: #f39c12; color: white; }
-        .status-abandoned { background: #e74c3c; color: white; }
-
-        .table-container {
-            display: flex;
-            gap: 10pt;
-            margin: 10pt 0;
-        }
-
-        .master-table {
-            flex: 1;
-            border: 1pt solid #bdc3c7;
-            border-radius: 3pt;
-            overflow: hidden;
-        }
-
-        .table-header {
-            background: #34495e;
-            color: white;
-            padding: 6pt;
-            font-weight: bold;
-            font-size: 10pt;
-            text-align: center;
-        }
-
-        .table-body {
-            padding: 8pt;
-            font-size: 9pt;
-            line-height: 1.3;
-        }
-
-        .arrow-down {
-            text-align: center;
-            font-size: 16pt;
-            color: #3498db;
-            margin: 5pt 0;
-        }
-
-        .highlight {
-            background: #ffeb3b;
-            padding: 0 3pt;
-            font-weight: bold;
-        }
-
-        .note {
-            background: #e8f4f8;
-            border-left: 3pt solid #3498db;
-            padding: 8pt;
-            margin: 8pt 0;
-            font-size: 10pt;
-            font-style: italic;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-            .controls {
-                display: none;
-            }
-            .page-container {
-                box-shadow: none;
-                max-width: 100%;
-            }
-            .page {
-                margin: 0;
-                box-shadow: none;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project X — Live Operations</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap%22 rel="stylesheet">
+<style>
+:root {
+  --ink: #1A1614;
+  --paper: #F5F0E8;
+  --cream: #EDE7D6;
+  --gold: #C9A84C;
+  --gold-lt: #F0DFA0;
+  --gold-dk: #8C6D28;
+  --rust: #B54E2A;
+  --forest: #2A5C45;
+  --navy: #1E3A5F;
+  --purple: #4A2080;
+  --slate: #4A5568;
+  --muted: #8A7F74;
+  --border: #D4C9B4;
+  --white: #FDFAF4;
+  --danger: #C0392B;
+  --success: #27AE60;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);font-family:'Outfit',sans-serif;color:var(--ink);min-height:100vh}
+.app{display:flex;height:100vh;overflow:hidden}
+.sidebar{width:228px;background:var(--ink);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.topbar{background:var(--white);border-bottom:2px solid var(--border);padding:14px 26px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.content{flex:1;overflow-y:auto;padding:26px}
+ 
+/* SIDEBAR */
+.brand{padding:22px 18px 16px;border-bottom:1px solid #2A2420}
+.brand-name{font-family:'DM Serif Display',serif;font-size:23px;color:var(--gold);letter-spacing:.01em}
+.brand-tagline{font-size:10px;color:#5A5250;letter-spacing:.14em;text-transform:uppercase;margin-top:3px;font-family:'DM Mono',monospace}
+.nav-section{padding:16px 14px 5px;font-size:9px;font-family:'DM Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#3E3A38}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;border-radius:7px;margin:2px 8px;transition:all .15s;color:#9A948E;font-size:13px;font-weight:500}
+.nav-item:hover{background:#252120;color:var(--gold-lt)}
+.nav-item.active{background:linear-gradient(90deg,#2E2820,#252120);color:var(--gold);border-left:2px solid var(--gold);margin-left:6px;padding-left:12px}
+.nav-icon{font-size:14px;width:20px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:10px;padding:2px 7px;border-radius:10px;font-family:'DM Mono',monospace;font-weight:500}
+.nav-badge.g{background:var(--forest)}
+.nav-badge.b{background:var(--navy)}
+ 
+/* TOPBAR */
+.page-title{font-family:'DM Serif Display',serif;font-size:21px;color:var(--ink)}
+.page-sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;letter-spacing:.03em}
+.topbar-right{display:flex;gap:8px;align-items:center}
+ 
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;transition:all .15s;white-space:nowrap;text-decoration:none}
+.btn-primary{background:var(--gold);color:var(--ink)}
+.btn-primary:hover{background:var(--gold-dk);color:var(--white)}
+.btn-success{background:var(--forest);color:white}
+.btn-success:hover{filter:brightness(1.15)}
+.btn-danger{background:var(--rust);color:white}
+.btn-danger:hover{filter:brightness(1.1)}
+.btn-ghost{background:transparent;color:var(--slate);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--cream)}
+.btn-purple{background:var(--purple);color:white}
+.btn-purple:hover{filter:brightness(1.15)}
+.btn-navy{background:var(--navy);color:white}
+.btn-sm{padding:5px 11px;font-size:12px;border-radius:6px}
+.btn:disabled{opacity:.4;cursor:not-allowed;pointer-events:none}
+ 
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:22px}
+.card+.card{margin-top:14px}
+ 
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid transparent;white-space:nowrap;font-family:'DM Mono',monospace;letter-spacing:.03em}
+.pill::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.pill-new{background:#FFF7ED;color:#B45309;border-color:#FDE68A}
+.pill-contacted{background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.pill-qualified{background:#F0FDF4;color:#15803D;border-color:#BBF7D0}
+.pill-proposal{background:#FAF5FF;color:#7E22CE;border-color:#E9D5FF}
+.pill-won{background:#F0FDF4;color:#15803D;border-color:#86EFAC}
+.pill-lost{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.pill-active{background:#E0F2FE;color:#0369A1;border-color:#BAE6FD}
+.pill-completed{background:#F0FDF4;color:#166534;border-color:#86EFAC}
+.pill-pending{background:#FFFBEB;color:#B45309;border-color:#FDE68A}
+.pill-paid{background:#F0FDF4;color:#15803D;border-color:#86EFAC}
+.pill-overdue{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.pill-signed{background:#F0FDF4;color:#166534;border-color:#86EFAC}
+.pill-draft{background:#F8FAFC;color:#64748B;border-color:#CBD5E1}
+.pill-sent{background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.pill-accepted{background:#F0FDF4;color:#15803D;border-color:#86EFAC}
+.pill-rejected{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.pill-hold{background:#F5F3FF;color:#6D28D9;border-color:#DDD6FE}
+ 
+/* TABLES */
+.tbl-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:var(--cream);padding:10px 14px;text-align:left;font-size:10px;font-family:'DM Mono',monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);white-space:nowrap}
+tbody td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--slate);vertical-align:middle}
+tbody tr:last-child td{border-bottom:none}
+tbody tr:hover td{background:#FDFAF4}
+.td-main{font-weight:700;color:var(--ink);font-size:13px}
+.td-sub{font-size:11px;color:var(--muted);font-weight:400;margin-top:2px}
+ 
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+ 
+/* KPI */
+.kpi{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;background:var(--cream);opacity:.5}
+.kpi-num{font-family:'DM Serif Display',serif;font-size:30px;color:var(--ink);line-height:1;position:relative;z-index:1}
+.kpi-label{font-size:11px;color:var(--muted);margin-top:5px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase}
+.kpi-change{font-size:12px;margin-top:8px;font-weight:600}
+.up{color:var(--forest)}.dn{color:var(--rust)}
+ 
+/* MODAL */
+.overlay{position:fixed;inset:0;background:rgba(26,22,20,.6);z-index:1000;display:none;align-items:center;justify-content:center;backdrop-filter:blur(2px)}
+.overlay.open{display:flex}
+.modal{background:var(--white);border-radius:16px;padding:30px;width:580px;max-width:96vw;max-height:92vh;overflow-y:auto;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.3)}
+.modal-title{font-family:'DM Serif Display',serif;font-size:22px;margin-bottom:3px}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:22px;font-family:'DM Mono',monospace;letter-spacing:.02em}
+.modal-close{position:absolute;top:18px;right:18px;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--cream);cursor:pointer;font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:center;transition:all .15s}
+.modal-close:hover{background:var(--ink);color:white}
+.modal-footer{display:flex;gap:8px;justify-content:flex-end;margin-top:22px;padding-top:18px;border-top:1px solid var(--border)}
+ 
+/* FORMS */
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.frow.full{grid-template-columns:1fr}
+.fg{display:flex;flex-direction:column;gap:5px}
+label{font-size:11px;font-weight:700;color:var(--slate);letter-spacing:.05em;text-transform:uppercase}
+input,select,textarea{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Outfit',sans-serif;font-size:13px;color:var(--ink);background:var(--white);outline:none;transition:border-color .15s;width:100%}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{resize:vertical;min-height:72px}
+select option{font-family:'Outfit',sans-serif}
+input[readonly]{background:var(--cream);color:var(--muted)}
+ 
+/* SECTION HEADERS */
+.sec-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.sec-left{display:flex;align-items:center;gap:12px}
+.sec-num{background:var(--ink);color:var(--gold);padding:3px 10px;border-radius:5px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em}
+.sec-title{font-family:'DM Serif Display',serif;font-size:22px}
+ 
+/* KANBAN */
+.kanban{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px}
+.k-col{min-width:195px;flex-shrink:0;background:var(--cream);border-radius:10px;padding:10px}
+.k-hd{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace}
+.k-count{background:var(--border);color:var(--slate);padding:1px 8px;border-radius:10px;font-size:10px}
+.k-card{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:6px;font-size:12px;cursor:pointer;transition:box-shadow .15s}
+.k-card:hover{box-shadow:0 4px 12px rgba(0,0,0,.08)}
+.k-name{font-weight:700;color:var(--ink);font-size:13px}
+.k-co{color:var(--muted);font-size:11px;margin-top:1px}
+.k-val{font-size:11px;color:var(--gold-dk);font-weight:700;margin-top:5px;font-family:'DM Mono',monospace}
+.k-empty{font-size:11px;color:var(--muted);text-align:center;padding:14px;border:1px dashed var(--border);border-radius:7px}
+ 
+/* TIMELINE */
+.tl{position:relative;padding-left:22px}
+.tl::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:1px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-18px;width:10px;height:10px;border-radius:50%;border:2px solid var(--white);top:3px}
+.tl-text{font-size:12px;color:var(--slate);line-height:1.5}
+.tl-time{font-size:10px;color:var(--muted);font-family:'DM Mono',monospace;margin-top:2px}
+ 
+/* PROGRESS */
+.prog{height:7px;background:var(--border);border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gold-dk),var(--gold));border-radius:4px;transition:width .4s ease}
+ 
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--border);margin-bottom:18px}
+.tab{padding:9px 16px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s}
+.tab:hover{color:var(--ink)}
+.tab.active{color:var(--gold-dk);border-bottom-color:var(--gold)}
+ 
+/* STAT ROW */
+.stat-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.stat-box{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:14px 20px;flex-shrink:0}
+.stat-n{font-family:'DM Serif Display',serif;font-size:24px}
+.stat-l{font-size:11px;color:var(--muted);margin-top:2px;font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:.06em}
+ 
+/* PROPOSAL PREVIEW */
+.prop-preview{border:1.5px solid var(--border);border-radius:12px;overflow:hidden}
+.prop-hd{background:var(--ink);padding:20px 24px}
+.prop-title{font-family:'DM Serif Display',serif;font-size:20px;color:var(--gold)}
+.prop-body{padding:20px 24px}
+.prop-section{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.prop-section:last-child{border-bottom:none;margin-bottom:0}
+.prop-sec-title{font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;font-family:'DM Mono',monospace}
+.line-item{display:flex;justify-content:space-between;align-items:center;padding:7px 0;font-size:13px;border-bottom:1px dashed var(--border)}
+.line-item:last-child{border-bottom:none}
+.prop-total{background:var(--cream);border-radius:8px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.prop-total-val{font-family:'DM Serif Display',serif;font-size:24px;color:var(--gold-dk)}
+ 
+/* CONTRACT */
+.contract-box{border:2px solid var(--border);border-radius:10px;padding:22px;background:var(--white)}
+.clause{margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.clause:last-child{border-bottom:none;margin-bottom:0}
+.clause-title{font-weight:700;font-size:12px;color:var(--ink);margin-bottom:4px}
+.clause-body{font-size:12px;color:var(--slate);line-height:1.65}
+ 
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.empty-icon{font-size:40px;margin-bottom:12px}
+.empty-text{font-size:14px;color:var(--muted)}
+.empty-hint{font-size:12px;color:var(--muted);margin-top:6px;opacity:.7}
+ 
+/* TOAST */
+.toast{position:fixed;bottom:26px;right:26px;background:var(--ink);color:var(--gold-lt);padding:14px 20px;border-radius:10px;font-size:13px;font-weight:500;z-index:9999;display:none;border-left:3px solid var(--gold);box-shadow:0 8px 32px rgba(0,0,0,.35);max-width:340px;line-height:1.5}
+.toast.show{display:block;animation:slideUp .25s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+ 
+/* FLOW STEPS */
+.flow-steps{display:flex;align-items:center;gap:0;margin-bottom:24px;background:var(--white);border:1px solid var(--border);border-radius:12px;padding:14px 20px;overflow-x:auto}
+.flow-step{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;border:2px solid var(--border);color:var(--muted);background:var(--cream);transition:all .3s}
+.step-dot.done{background:var(--forest);color:white;border-color:var(--forest)}
+.step-dot.active{background:var(--gold);color:var(--ink);border-color:var(--gold-dk)}
+.step-label{font-size:11px;font-weight:600;color:var(--muted);white-space:nowrap}
+.step-label.done{color:var(--forest)}.step-label.active{color:var(--gold-dk)}
+.step-arrow{color:var(--border);font-size:14px;margin:0 6px}
+ 
+/* ALERT BANNER */
+.alert{border-radius:8px;padding:12px 16px;font-size:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px}
+.alert-info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1D4ED8}
+.alert-warn{background:#FFFBEB;border:1px solid #FDE68A;color:#B45309}
+.alert-success{background:#F0FDF4;border:1px solid #BBF7D0;color:#15803D}
+ 
+/* RESPONSIVE */
+@media(max-width:860px){.sidebar{display:none}.g4,.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.g2,.g4,.g3{grid-template-columns:1fr}.frow{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-    <!-- <div class="controls">
-        <button onclick="window.print()">🖨️ Print / Save as PDF</button>
-        <button onclick="downloadDoc()">📄 Download as Document</button>
-    </div> -->
-
-    <div class="page-container">
-        <!-- PAGE 1 -->
-        <div class="page">
-            <h1>🚗 TRIP BOOKING SYSTEM - COMPLETE FLOW</h1>
-            
-            <h2>1. CUSTOMER JOURNEY (END USER FLOW)</h2>
-
-            <div class="flow-box">
-                <div class="step-header">STEP 1: Customer Visits Website/App</div>
-                <ul>
-                    <li>Customer opens the trip booking platform</li>
-                    <li>Clicks <span class="highlight">"Book a Trip"</span></li>
-                </ul>
-            </div>
-
-            <div class="arrow-down">⬇️</div>
-
-            <div class="flow-box">
-                <div class="step-header">STEP 2: Customer Enters Trip Details</div>
-                <p><strong>Customer fills in:</strong></p>
-                <ul>
-                    <li>Name & Mobile Number</li>
-                    <li>Pickup Location</li>
-                    <li>Drop Location</li>
-                    <li>Trip Type: <em>One-way / Round Trip / Per-day rental</em></li>
-                    <li>Number of days / Estimated distance</li>
-                    <li>Required vehicle type: <em>Sedan / SUV / Traveller</em></li>
-                </ul>
-                <div class="note">
-                    ✅ These details are <strong>saved immediately</strong> in the system (even if customer leaves later)
-                </div>
-            </div>
-
-            <div class="arrow-down">⬇️</div>
-
-            <div class="flow-box">
-                <div class="step-header">STEP 3: System Calculates Price Automatically</div>
-                <p><strong>Based on:</strong></p>
-                <ul>
-                    <li>Selected vehicle type</li>
-                    <li>Distance / number of days</li>
-                    <li>Fare rules (per km / per day / night charges)</li>
-                </ul>
-                <p><strong>The system:</strong></p>
-                <ul>
-                    <li>Fetches prices from <strong>Fare Master</strong></li>
-                    <li>Filters available vehicles from <strong>Vehicle Master</strong></li>
-                    <li>Shows: Available vehicles, Seating capacity, Final price (transparent breakup)</li>
-                </ul>
-            </div>
-
-            <div class="arrow-down">⬇️</div>
-
-            <div class="decision-box">
-                🔀 STEP 4: CUSTOMER DECISION POINT<br>
-                Two Possible Flows Start Here
-            </div>
-
-            <div class="arrow-down">⬇️</div>
-
-            <div class="branch-container">
-                <div class="branch">
-                    <div class="branch-title">✅ FLOW 1.1: Direct Booking</div>
-                    
-                    <h4>Step 5A: Customer Proceeds to Payment</h4>
-                    <ul>
-                        <li>Clicks "Confirm & Pay"</li>
-                        <li>Secure payment link generated</li>
-                        <li>Customer completes payment</li>
-                    </ul>
-
-                    <h4>Step 6A: Booking Confirmation</h4>
-                    <p>After successful payment:</p>
-                    <ul>
-                        <li>Trip ID is generated</li>
-                        <li>Vehicle and driver are locked</li>
-                        <li>Notifications sent to: Customer, Admin, Assigned Driver</li>
-                    </ul>
-                    <p><span class="status-badge status-confirmed">✓ CONFIRMED</span></p>
-
-                    <h4>Step 7A: Trip Execution</h4>
-                    <ul>
-                        <li>Driver receives trip details</li>
-                        <li>Trip starts on scheduled date</li>
-                        <li>Trip completes</li>
-                        <li>Trip marked as COMPLETED</li>
-                    </ul>
-                </div>
-
-                <div class="branch negotiation">
-                    <div class="branch-title">🔄 FLOW 1.2: Negotiation Path</div>
-                    
-                    <h4>Step 5B: Customer Leaves Without Payment</h4>
-                    <ul>
-                        <li>Customer exits the site</li>
-                        <li>Booking marked as "Incomplete/Abandoned"</li>
-                        <li><strong>Customer details NOT lost</strong></li>
-                    </ul>
-                    <p><span class="status-badge status-abandoned">ABANDONED</span></p>
-
-                    <h4>Step 6B: Sales Team Follow-Up</h4>
-                    <p>Team gets list with:</p>
-                    <ul>
-                        <li>Name & Mobile number</li>
-                        <li>Pickup location</li>
-                        <li>Required vehicle type</li>
-                        <li>Initial quoted price</li>
-                    </ul>
-
-                    <h4>Step 7B: Call & Negotiation</h4>
-                    <p>Each call tracked with status:</p>
-                    <ul>
-                        <li>New → Ringing → Busy</li>
-                        <li>Rejected / Deal Closed</li>
-                    </ul>
-                    <p>Retry where possible, stop on rejected leads</p>
-
-                    <h4>Step 8B: Deal Closure</h4>
-                    <p>If customer agrees on negotiated price:</p>
-                    <ul>
-                        <li>New payment link generated</li>
-                        <li>Customer completes payment</li>
-                    </ul>
-
-                    <h4>Step 9B: Booking Confirmation</h4>
-                    <ul>
-                        <li>Trip ID generated</li>
-                        <li>Driver & vehicle assigned</li>
-                        <li>Notifications sent</li>
-                    </ul>
-                    <div class="note">→ Flow merges with Flow 1.1 (Trip Execution)</div>
-                </div>
-            </div>
-
-            <div class="page-number">Page 1 of 2</div>
-        </div>
-
-        <!-- PAGE 2 -->
-        <div class="page">
-            <h1>🚗 TRIP BOOKING SYSTEM - COMPLETE FLOW</h1>
-
-            <h2>2. ADMIN & OPERATIONS FLOW</h2>
-
-            <h3>Admin Capabilities</h3>
-            <div class="flow-box">
-                <ul>
-                    <li><strong>View all bookings</strong> (confirmed & abandoned)</li>
-                    <li><strong>Manage:</strong>
-                        <ul>
-                            <li>Vehicles (add, edit, remove)</li>
-                            <li>Drivers (assign, manage documents)</li>
-                            <li>Fare rules (pricing updates)</li>
-                        </ul>
-                    </li>
-                    <li><strong>Track:</strong>
-                        <ul>
-                            <li>Conversion rates</li>
-                            <li>Negotiation success rates</li>
-                            <li>Revenue and profit margins</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-
-            <h3>Driver Flow</h3>
-            <div class="flow-box">
-                <ol>
-                    <li>Driver receives trip details via SMS/App notification</li>
-                    <li>Accepts assignment</li>
-                    <li>Prepares vehicle and reports ready</li>
-                    <li>Completes trip</li>
-                    <li>Status updated automatically in system</li>
-                </ol>
-            </div>
-
-            <h2>3. MASTER DATA USAGE (BACKEND TABLES)</h2>
-            
-            <p><em>These tables power the entire system and work behind the scenes:</em></p>
-
-            <div class="table-container">
-                <div class="master-table">
-                    <div class="table-header">🚙 VEHICLE MASTER</div>
-                    <div class="table-body">
-                        <strong>Stores:</strong><br>
-                        • Vehicle registration details<br>
-                        • Vehicle type & model<br>
-                        • Seat capacity<br>
-                        • Certifications & insurance<br>
-                        • Current availability status<br>
-                        • Maintenance records<br>
-                        • Fuel type & mileage<br><br>
-                        <strong>Used For:</strong><br>
-                        Filtering available vehicles based on customer requirements
-                    </div>
-                </div>
-
-                <div class="master-table">
-                    <div class="table-header">👨‍✈️ DRIVER MASTER</div>
-                    <div class="table-body">
-                        <strong>Stores:</strong><br>
-                        • Driver profile & contact<br>
-                        • License & documents<br>
-                        • Years of experience<br>
-                        • Assigned vehicle ID<br>
-                        • Current availability<br>
-                        • Performance ratings<br>
-                        • Languages spoken<br><br>
-                        <strong>Used For:</strong><br>
-                        Assigning qualified drivers to confirmed trips
-                    </div>
-                </div>
-
-                <div class="master-table">
-                    <div class="table-header">💰 FARE MASTER</div>
-                    <div class="table-body">
-                        <strong>Stores:</strong><br>
-                        • Base fare per vehicle type<br>
-                        • Per km charges<br>
-                        • Per day charges<br>
-                        • Night charges (surcharge)<br>
-                        • Driver allowance/charges<br>
-                        • Seasonal pricing rules<br>
-                        • Discount codes<br><br>
-                        <strong>Used For:</strong><br>
-                        Auto-calculating trip prices instantly
-                    </div>
-                </div>
-            </div>
-
-            <h2>4. KEY SYSTEM FEATURES</h2>
-
-            <div class="flow-box">
-                <h3>Data Retention & Lead Recovery</h3>
-                <ul>
-                    <li>Every customer inquiry is saved, even if they abandon</li>
-                    <li>Sales team can recover lost leads through follow-up</li>
-                    <li>Negotiation tracking ensures no opportunity is missed</li>
-                </ul>
-            </div>
-
-            <div class="flow-box">
-                <h3>Automated Pricing & Transparency</h3>
-                <ul>
-                    <li>Real-time price calculation based on multiple factors</li>
-                    <li>Transparent breakup shown to customers</li>
-                    <li>Dynamic pricing based on demand and availability</li>
-                </ul>
-            </div>
-
-            <div class="flow-box">
-                <h3>Notification System</h3>
-                <ul>
-                    <li>Multi-channel: SMS, WhatsApp, Email</li>
-                    <li>Sent to all stakeholders: Customer, Admin, Driver</li>
-                    <li>Real-time status updates throughout trip lifecycle</li>
-                </ul>
-            </div>
-
-            <div class="flow-box">
-                <h3>Status Tracking</h3>
-                <p><strong>Customer statuses:</strong> New Inquiry → Quoted → Paid → Confirmed → In Progress → Completed</p>
-                <p><strong>Abandoned lead statuses:</strong> New → Contacted → Ringing → Busy → Rejected → Deal Closed</p>
-            </div>
-
-            <h2>5. WORKFLOW SUMMARY</h2>
-            
-            <div class="note">
-                <strong>Success Flow:</strong> Customer inquiry → Price quote → Payment → Confirmation → Driver assignment → Trip execution → Completion
-            </div>
-
-            <div class="note" style="background: #fff3e0; border-left-color: #ff9800;">
-                <strong>Recovery Flow:</strong> Customer inquiry → Price quote → Abandonment → Sales follow-up → Negotiation → Deal closure → Payment → Back to Success Flow
-            </div>
-
-            <div class="page-number">Page 2 of 2</div>
-        </div>
+<div class="app">
+ 
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="brand">
+    <div class="brand-name">Project X</div>
+    <div class="brand-tagline">Live Operations</div>
+  </div>
+ 
+  <div class="nav-section">Pipeline</div>
+  <div class="nav-item active" onclick="nav('dashboard')" id="nav-dashboard"><span class="nav-icon">📊</span>Dashboard</div>
+  <div class="nav-item" onclick="nav('leads')" id="nav-leads"><span class="nav-icon">🎯</span>Leads <span class="nav-badge" id="nb-leads">0</span></div>
+  <div class="nav-item" onclick="nav('crm')" id="nav-crm"><span class="nav-icon">🗂</span>CRM Pipeline</div>
+ 
+  <div class="nav-section">Sales</div>
+  <div class="nav-item" onclick="nav('proposals')" id="nav-proposals"><span class="nav-icon">📝</span>Proposals <span class="nav-badge b" id="nb-proposals">0</span></div>
+  <div class="nav-item" onclick="nav('contracts')" id="nav-contracts"><span class="nav-icon">📜</span>Contracts <span class="nav-badge" id="nb-contracts">0</span></div>
+ 
+  <div class="nav-section">Operations</div>
+  <div class="nav-item" onclick="nav('clients')" id="nav-clients"><span class="nav-icon">🏢</span>Clients <span class="nav-badge g" id="nb-clients">0</span></div>
+  <div class="nav-item" onclick="nav('projects')" id="nav-projects"><span class="nav-icon">🚀</span>Projects <span class="nav-badge g" id="nb-projects">0</span></div>
+ 
+  <div class="nav-section">Finance</div>
+  <div class="nav-item" onclick="nav('invoices')" id="nav-invoices"><span class="nav-icon">🧾</span>Invoices <span class="nav-badge" id="nb-invoices">0</span></div>
+  <div class="nav-item" onclick="nav('payments')" id="nav-payments"><span class="nav-icon">💳</span>Payments <span class="nav-badge g" id="nb-payments">0</span></div>
+</div>
+ 
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="tb-title">Dashboard</div>
+      <div class="page-sub" id="tb-sub">Full pipeline overview</div>
     </div>
+    <div class="topbar-right">
+      <button class="btn btn-primary" onclick="openModal('m-lead')">+ New Lead</button>
+    </div>
+  </div>
+  <div class="content" id="content"></div>
+</div>
+</div>
+ 
+<div class="toast" id="toast"></div>
+ 
+<!-- ══════════ MODAL: ADD LEAD ══════════ -->
+<div class="overlay" id="m-lead">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('m-lead')">✕</button>
+    <div class="modal-title">Add New Lead</div>
+    <div class="modal-sub">Step 1 of the lifecycle — lead enters CRM as New</div>
+    <div class="frow">
+      <div class="fg"><label>Full Name *</label><input id="lf-name" placeholder="Rahul Sharma"></div>
+      <div class="fg"><label>Email *</label><input type="email" id="lf-email" placeholder="rahul@company.com"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Company *</label><input id="lf-company" placeholder="Company Ltd."></div>
+      <div class="fg"><label>Phone</label><input id="lf-phone" placeholder="+91 98..."></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Source</label>
+        <select id="lf-source">
+          <option>Web Form</option><option>Referral</option><option>LinkedIn</option><option>Cold Call</option><option>Event</option><option>Manual</option>
+        </select>
+      </div>
+      <div class="fg"><label>Est. Deal Value (₹)</label><input type="number" id="lf-value" placeholder="500000"></div>
+    </div>
+    <div class="frow full">
+      <div class="fg"><label>Initial Notes</label><textarea id="lf-notes" placeholder="What do they need?"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-lead')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveLead()">Add Lead →</button>
+    </div>
+  </div>
+</div>
 
-    <script>
-        function downloadDoc() {
-            alert('To save as Word document:\n\n1. Click "Print / Save as PDF" button\n2. In print dialog, choose "Save as PDF"\n3. Open the PDF in Microsoft Word\n4. Word will convert it to editable document\n\nAlternatively, you can copy all content and paste into Word directly.');
-        }
-    </script>
+<!-- ══════════ MODAL: BUILD PROPOSAL ══════════ -->
+<div class="overlay" id="m-proposal">
+  <div class="modal" style="width:640px">
+    <button class="modal-close" onclick="closeModal('m-proposal')">✕</button>
+    <div class="modal-title">Build Proposal</div>
+    <div class="modal-sub" id="pm-sub">Select a qualified lead to propose</div>
+    <div class="frow">
+      <div class="fg"><label>Lead / Client *</label>
+        <select id="pm-lead">
+          <option value="">— Select Lead —</option>
+        </select>
+      </div>
+      <div class="fg"><label>Project Title *</label><input id="pm-title" placeholder="e.g. Website Redesign"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Valid Until</label><input type="date" id="pm-validity"></div>
+      <div class="fg"><label>Deposit % on Signing</label><input type="number" id="pm-deposit" value="30" min="0" max="100"></div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label style="display:block;margin-bottom:8px">Scope / Line Items *</label>
+      <div id="pm-items"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:6px" onclick="addLineItem()">+ Add Item</button>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Payment Terms (days)</label><input type="number" id="pm-terms" value="30"></div>
+      <div class="fg"><label>GST %</label><input type="number" id="pm-gst" value="18"></div>
+    </div>
+    <div class="frow full">
+      <div class="fg"><label>Executive Summary</label><textarea id="pm-summary" placeholder="Brief overview of the solution you're proposing..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-proposal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProposal()">Create & Send Proposal →</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: VIEW PROPOSAL ══════════ -->
+<div class="overlay" id="m-view-proposal">
+  <div class="modal" style="width:660px">
+    <button class="modal-close" onclick="closeModal('m-view-proposal')">✕</button>
+    <div id="m-view-proposal-body"></div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: SIGN CONTRACT ══════════ -->
+<div class="overlay" id="m-contract">
+  <div class="modal" style="width:640px">
+    <button class="modal-close" onclick="closeModal('m-contract')">✕</button>
+    <div class="modal-title">E-Sign Contract</div>
+    <div class="modal-sub" id="cm-sub">Review terms and sign below</div>
+    <div class="contract-box" style="max-height:360px;overflow-y:auto;margin-bottom:16px" id="cm-content"></div>
+    <div class="frow full">
+      <div class="fg">
+        <label>Client Signature — Type full name to execute *</label>
+        <input id="cm-sig" placeholder="Type client's full legal name">
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:4px;font-family:'DM Mono',monospace">Timestamp and IP auto-recorded on signing.</div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-contract')">Cancel</button>
+      <button class="btn btn-purple" onclick="signContract()">✍️ Execute Contract</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: ADD MILESTONE ══════════ -->
+<div class="overlay" id="m-milestone">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('m-milestone')">✕</button>
+    <div class="modal-title">Add Milestone</div>
+    <div class="modal-sub" id="msm-sub">—</div>
+    <div class="frow">
+      <div class="fg"><label>Milestone Name *</label><input id="ms-name" placeholder="e.g. Phase 1 – Design"></div>
+      <div class="fg"><label>Due Date</label><input type="date" id="ms-due"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Payment Amount (₹)</label><input type="number" id="ms-amount" placeholder="0"></div>
+      <div class="fg"><label>Auto-Invoice on Complete?</label>
+        <select id="ms-inv"><option value="yes">Yes — auto invoice</option><option value="no">No</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-milestone')">Cancel</button>
+      <button class="btn btn-success" onclick="saveMilestone()">Add Milestone</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: RAISE INVOICE ══════════ -->
+<div class="overlay" id="m-invoice">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('m-invoice')">✕</button>
+    <div class="modal-title">Raise Invoice</div>
+    <div class="modal-sub" id="im-sub">—</div>
+    <div class="frow">
+      <div class="fg"><label>Invoice Type</label>
+        <select id="im-type"><option>Deposit</option><option>Milestone</option><option>Progress</option><option>Final</option><option>Retainer</option></select>
+      </div>
+      <div class="fg"><label>Due Date</label><input type="date" id="im-due"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Amount (₹) *</label><input type="number" id="im-amount" placeholder="0"></div>
+      <div class="fg"><label>GST %</label><input type="number" id="im-tax" value="18"></div>
+    </div>
+    <div class="frow full">
+      <div class="fg"><label>Notes</label><textarea id="im-notes" placeholder="Optional notes..."></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-invoice')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveInvoice()">Send Invoice</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: RECORD PAYMENT ══════════ -->
+<div class="overlay" id="m-payment">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('m-payment')">✕</button>
+    <div class="modal-title">Record Payment</div>
+    <div class="modal-sub" id="paym-sub">—</div>
+    <div class="frow">
+      <div class="fg"><label>Amount Received (₹) *</label><input type="number" id="pay-amount" placeholder="0"></div>
+      <div class="fg"><label>Payment Date</label><input type="date" id="pay-date"></div>
+    </div>
+    <div class="frow">
+      <div class="fg"><label>Payment Method</label>
+        <select id="pay-method"><option>Bank Transfer</option><option>UPI</option><option>Stripe</option><option>PayPal</option><option>Cheque</option><option>Cash</option></select>
+      </div>
+      <div class="fg"><label>Transaction Ref / UTR</label><input id="pay-ref" placeholder="e.g. UTR123456"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-payment')">Cancel</button>
+      <button class="btn btn-success" onclick="recordPayment()">✅ Mark as Paid</button>
+    </div>
+  </div>
+</div>
+ 
+<!-- ══════════ MODAL: LOG ACTIVITY ══════════ -->
+<div class="overlay" id="m-activity">
+  <div class="modal" style="width:480px">
+    <button class="modal-close" onclick="closeModal('m-activity')">✕</button>
+    <div class="modal-title">Log Activity</div>
+    <div class="modal-sub" id="am-sub">—</div>
+    <div class="frow">
+      <div class="fg"><label>Activity Type</label>
+        <select id="am-type"><option>📞 Call</option><option>📧 Email</option><option>📅 Meeting</option><option>📝 Note</option><option>🔔 Follow-up</option></select>
+      </div>
+      <div class="fg"><label>Date</label><input type="date" id="am-date"></div>
+    </div>
+    <div class="frow full">
+      <div class="fg"><label>Notes *</label><textarea id="am-notes" placeholder="What happened / what was discussed?"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('m-activity')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveActivity()">Log Activity</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE — single source of truth
+// ═══════════════════════════════════════════════════════════
+const S = {
+  page: 'dashboard',
+  leads: [],
+  proposals: [],
+  contracts: [],
+  clients: [],
+  projects: [],
+  invoices: [],
+  payments: [],
+  lineItems: [],
+  // context holders
+  _ctx: {}
+};
+ 
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+const uid = p => p + '-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,5).toUpperCase();
+const today = () => new Date().toISOString().split('T')[0];
+const now = () => new Date().toLocaleString('en-IN', {day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+const fmtMoney = n => '₹' + Number(n||0).toLocaleString('en-IN');
+const fmtDate = d => { if(!d) return '—'; const dt = new Date(d+'T00:00:00'); return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}); };
+const futureDate = days => { const d = new Date(); d.setDate(d.getDate()+days); return d.toISOString().split('T')[0]; };
+const val = id => document.getElementById(id)?.value || '';
+const setVal = (id,v) => { const el = document.getElementById(id); if(el) el.value = v; };
+ 
+let _toastT = null;
+function toast(msg, type='info') {
+  clearTimeout(_toastT);
+  const t = document.getElementById('toast');
+  t.innerHTML = msg;
+  t.style.borderLeftColor = type==='success'?'var(--forest)':type==='danger'?'var(--rust)':'var(--gold)';
+  t.classList.add('show');
+  _toastT = setTimeout(()=>t.classList.remove('show'), 4000);
+}
+ 
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+ 
+// ═══════════════════════════════════════════════════════════
+// DERIVED STATUS — computed from actual data, not manually set
+// ═══════════════════════════════════════════════════════════
+function getLeadStatus(lead) {
+  // Status is computed from what actually happened, not stored manually
+  const contract = S.contracts.find(c => c.leadId === lead.id);
+  if (contract && contract.status === 'Signed') return 'Won';
+  if (contract) return 'Proposal Sent';
+  const proposal = S.proposals.find(p => p.leadId === lead.id);
+  if (proposal && proposal.status === 'Rejected') return lead._manualStatus === 'Lost' ? 'Lost' : 'Contacted';
+  if (proposal) return 'Proposal Sent';
+  return lead._manualStatus || 'New';
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// STATUS PILL RENDERER
+// ═══════════════════════════════════════════════════════════
+const pillMap = {
+  'New':'pill-new','Contacted':'pill-contacted','Qualified':'pill-qualified',
+  'Proposal Sent':'pill-proposal','Won':'pill-won','Lost':'pill-lost',
+  'Active':'pill-active','Completed':'pill-completed','On Hold':'pill-hold',
+  'Paid':'pill-paid','Overdue':'pill-overdue','Sent':'pill-sent',
+  'Draft':'pill-draft','Signed':'pill-signed','Pending':'pill-pending',
+  'Pending Signature':'pill-pending','Accepted':'pill-accepted','Rejected':'pill-rejected',
+};
+const pill = s => `<span class="pill ${pillMap[s]||'pill-draft'}">${s}</span>`;
+ 
+// ═══════════════════════════════════════════════════════════
+// BADGE UPDATER
+// ═══════════════════════════════════════════════════════════
+function updateBadges() {
+  const activeLeads = S.leads.filter(l => !['Won','Lost'].includes(getLeadStatus(l)));
+  document.getElementById('nb-leads').textContent = activeLeads.length;
+  document.getElementById('nb-proposals').textContent = S.proposals.filter(p => p.status === 'Sent').length;
+  document.getElementById('nb-contracts').textContent = S.contracts.filter(c => c.status === 'Pending Signature').length;
+  document.getElementById('nb-clients').textContent = S.clients.length;
+  document.getElementById('nb-projects').textContent = S.projects.filter(p => p.status === 'Active').length;
+  document.getElementById('nb-invoices').textContent = S.invoices.filter(i => ['Sent','Overdue'].includes(i.status)).length;
+  document.getElementById('nb-payments').textContent = S.payments.length;
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════
+const pageInfo = {
+  dashboard: ['Dashboard', 'Full pipeline overview'],
+  leads: ['Lead Entry', 'All incoming leads'],
+  crm: ['CRM Pipeline', 'Manage lead stages & activities'],
+  proposals: ['Proposals', 'Build, send & track proposals'],
+  contracts: ['Contracts', 'Review & e-sign agreements'],
+  clients: ['Client Management', 'Active client accounts'],
+  projects: ['Project Management', 'Delivery & milestone tracking'],
+  invoices: ['Invoices', 'Billing & payment requests'],
+  payments: ['Payments', 'Recorded receipts'],
+};
+ 
+function nav(page) {
+  S.page = page;
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const el = document.getElementById('nav-'+page);
+  if (el) el.classList.add('active');
+  const [t,s] = pageInfo[page] || ['—','—'];
+  document.getElementById('tb-title').textContent = t;
+  document.getElementById('tb-sub').textContent = s;
+  const mc = document.getElementById('content');
+  mc.innerHTML = '';
+  const pages = { dashboard:renderDashboard, leads:renderLeads, crm:renderCRM,
+    proposals:renderProposals, contracts:renderContracts, clients:renderClients,
+    projects:renderProjects, invoices:renderInvoices, payments:renderPayments };
+  if (pages[page]) pages[page](mc);
+  updateBadges();
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// LIFECYCLE FLOW BANNER
+// ═══════════════════════════════════════════════════════════
+function flowBanner(activeStep) {
+  const steps = ['Lead','Qualify','Proposal','Contract','Client','Project','Invoice','Payment'];
+  return `<div class="flow-steps">
+    ${steps.map((s,i) => `
+      <div class="flow-step">
+        <div class="step-dot ${i<activeStep?'done':i===activeStep?'active':''}">${i<activeStep?'✓':i+1}</div>
+        <div class="step-label ${i<activeStep?'done':i===activeStep?'active':''}">${s}</div>
+      </div>
+      ${i<steps.length-1?'<div class="step-arrow">›</div>':''}`).join('')}
+  </div>`;
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════════
+function renderDashboard(mc) {
+  const pipeline = S.leads.reduce((a,l) => a+(Number(l.value)||0), 0);
+  const wonVal = S.clients.reduce((a,c) => a+(Number(c.contractValue)||0), 0);
+  const invoiced = S.invoices.reduce((a,i) => a+(Number(i.total)||0), 0);
+  const collected = S.payments.reduce((a,p) => a+(Number(p.amount)||0), 0);
+ 
+  const kanbanCols = ['New','Contacted','Qualified','Proposal Sent','Won'];
+  const kanban = kanbanCols.map(col => {
+    const cards = S.leads.filter(l => getLeadStatus(l) === col);
+    return `<div class="k-col">
+      <div class="k-hd"><span>${col}</span><span class="k-count">${cards.length}</span></div>
+      ${!cards.length ? `<div class="k-empty">Empty</div>` :
+        cards.map(l => `<div class="k-card" onclick="nav('crm')">
+          <div class="k-name">${l.name}</div>
+          <div class="k-co">${l.company}</div>
+          <div class="k-val">${fmtMoney(l.value)}</div>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+ 
+  // activity feed
+  const allActivity = [];
+  S.leads.forEach(l => (l.activities||[]).forEach(a => allActivity.push({...a, who:l.name})));
+  S.invoices.forEach(i => allActivity.push({type:'invoice', text:`Invoice ${i.id} sent — ${fmtMoney(i.total)}`, time:i.created, who:i.clientName}));
+  S.payments.forEach(p => allActivity.push({type:'payment', text:`Payment received ${fmtMoney(p.amount)}`, time:p.createdAt||p.date, who:p.clientName}));
+  S.contracts.forEach(c => c.signedAt && allActivity.push({type:'contract', text:`Contract ${c.id} signed`, time:c.signedAt, who:c.company}));
+  allActivity.sort((a,b) => (b.time||'').localeCompare(a.time||''));
+  const icons = {call:'📞',email:'📧',meeting:'📅',note:'📝','follow-up':'🔔',invoice:'🧾',payment:'💳',contract:'✍️'};
+ 
+  const pending = [];
+  S.leads.filter(l=>getLeadStatus(l)==='New').forEach(l=>pending.push(`<div onclick="nav('crm')" style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">📞 Contact <strong>${l.name}</strong> — ${l.company}</div>`));
+  S.proposals.filter(p=>p.status==='Sent').forEach(p=>pending.push(`<div onclick="nav('proposals')" style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">📝 Follow up on proposal for <strong>${p.company}</strong></div>`));
+  S.contracts.filter(c=>c.status==='Pending Signature').forEach(c=>pending.push(`<div onclick="nav('contracts')" style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">✍️ Contract awaiting signature — <strong>${c.company}</strong></div>`));
+  S.invoices.filter(i=>i.status==='Overdue').forEach(i=>pending.push(`<div onclick="nav('invoices')" style="cursor:pointer;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px">⚠️ Overdue invoice <strong>${i.id}</strong> — ${fmtMoney(i.total)}</div>`));
+ 
+  mc.innerHTML = `
+    ${flowBanner(0)}
+    <div class="g4" style="margin-bottom:18px">
+      <div class="kpi"><div class="kpi-num">${S.leads.length}</div><div class="kpi-label">Total Leads</div><div class="kpi-change up">Pipeline: ${fmtMoney(pipeline)}</div></div>
+      <div class="kpi"><div class="kpi-num">${S.clients.length}</div><div class="kpi-label">Active Clients</div><div class="kpi-change up">Won: ${fmtMoney(wonVal)}</div></div>
+      <div class="kpi"><div class="kpi-num">${S.projects.filter(p=>p.status==='Active').length}</div><div class="kpi-label">Active Projects</div><div class="kpi-change">of ${S.projects.length} total</div></div>
+      <div class="kpi"><div class="kpi-num">${fmtMoney(collected)}</div><div class="kpi-label">Collected</div><div class="kpi-change ${invoiced>0?'up':''}">Invoiced: ${fmtMoney(invoiced)}</div></div>
+    </div>
+    <div class="g2" style="margin-bottom:18px">
+      <div class="card">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+          <span style="font-weight:700;font-size:14px">Lead Pipeline</span>
+          <button class="btn btn-primary btn-sm" onclick="openModal('m-lead')">+ Add Lead</button>
+        </div>
+        <div class="kanban">${kanban}</div>
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">Recent Activity</div>
+        <div class="tl">
+          ${!allActivity.length ? `<div class="empty"><div class="empty-icon">📋</div><div class="empty-text">No activity yet</div></div>` :
+            allActivity.slice(0,10).map(a=>`<div class="tl-item">
+              <div class="tl-dot" style="background:var(--gold)"></div>
+              <div class="tl-text">${icons[a.type]||'•'} ${a.text}${a.who?` — <em>${a.who}</em>`:''}</div>
+              <div class="tl-time">${a.time||''}</div>
+            </div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px">Pending Actions</div>
+        ${!pending.length ? `<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">All caught up!</div></div>` : pending.join('')}
+      </div>
+      <div class="card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:10px">Outstanding Invoices</div>
+        ${buildOutstandingInvoices()}
+      </div>
+    </div>`;
+}
+ 
+function buildOutstandingInvoices() {
+  const list = S.invoices.filter(i=>['Sent','Overdue'].includes(i.status));
+  if (!list.length) return `<div class="empty"><div class="empty-icon">🎉</div><div class="empty-text">No outstanding invoices</div></div>`;
+  return `<div class="tbl-wrap"><table>
+    <thead><tr><th>Invoice</th><th>Client</th><th>Amount</th><th>Status</th></tr></thead>
+    <tbody>${list.map(i=>`<tr onclick="nav('invoices')" style="cursor:pointer">
+      <td class="td-main">${i.id}</td><td>${i.clientName}</td>
+      <td style="font-weight:700;color:var(--gold-dk)">${fmtMoney(i.total)}</td>
+      <td>${pill(i.status)}</td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// LEADS PAGE
+// ═══════════════════════════════════════════════════════════
+
+
+function renderLeads(mc) {
+  mc.innerHTML = `
+    ${flowBanner(0)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">01</span><span class="sec-title">Lead Entry</span></div>
+      <button class="btn btn-primary" onclick="openModal('m-lead')">+ Add Lead</button>
+    </div>
+    <div class="stat-row">
+      ${['New','Contacted','Qualified','Proposal Sent','Won','Lost'].map(s=>`
+        <div class="stat-box"><div class="stat-n">${S.leads.filter(l=>getLeadStatus(l)===s).length}</div><div class="stat-l">${s}</div></div>`).join('')}
+      <div class="stat-box"><div class="stat-n" style="color:var(--gold-dk)">${fmtMoney(S.leads.reduce((a,l)=>a+(Number(l.value)||0),0))}</div><div class="stat-l">Pipeline</div></div>
+    </div>
+    <div class="card">
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Name & Contact</th><th>Company</th><th>Source</th><th>Value</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+          <tbody>
+            ${!S.leads.length ? `<tr><td colspan="7"><div class="empty"><div class="empty-icon">🎯</div><div class="empty-text">No leads yet</div><div class="empty-hint">Click "Add Lead" to start your pipeline</div></div></td></tr>` :
+            S.leads.map((l,i) => {
+              const st = getLeadStatus(l);
+              const hasProposal = S.proposals.some(p=>p.leadId===l.id);
+              const hasContract = S.contracts.some(c=>c.leadId===l.id&&c.status==='Signed');
+              return `<tr>
+                <td><div class="td-main">${l.name}</div><div class="td-sub">${l.email}${l.phone?' · '+l.phone:''}</div></td>
+                <td>${l.company}</td>
+                <td style="font-size:12px;color:var(--muted)">${l.source}</td>
+                <td style="font-weight:700;color:var(--gold-dk);font-family:'DM Mono',monospace">${fmtMoney(l.value)}</td>
+                <td>${pill(st)}</td>
+                <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${fmtDate(l.created)}</td>
+                <td>
+                  <div style="display:flex;gap:5px;flex-wrap:wrap">
+                    ${!hasProposal&&!hasContract?`<button class="btn btn-ghost btn-sm" onclick="openProposalFor('${l.id}')">📝 Proposal</button>`:''}
+                    <button class="btn btn-ghost btn-sm" onclick="openActivityFor('${l.id}')">📋 Log</button>
+                    ${!['Won','Lost'].includes(st)?`<button class="btn btn-ghost btn-sm" onclick="setLeadManualStatus(${i},'Contacted')">→ Contact</button>`:''}
+                    ${st==='Contacted'?`<button class="btn btn-ghost btn-sm" onclick="setLeadManualStatus(${i},'Qualified')">→ Qualify</button>`:''}
+                    ${st!=='Won'&&st!=='Lost'?`<button class="btn btn-danger btn-sm" onclick="setLeadManualStatus(${i},'Lost')">✕ Lost</button>`:''}
+                  </div>
+                </td>
+              </tr>`;}).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+}
+ 
+function saveLead() {
+  const name = val('lf-name').trim();
+  const email = val('lf-email').trim();
+  const company = val('lf-company').trim();
+  if (!name || !company) { toast('Name and Company are required', 'danger'); return; }
+ 
+  const lead = {
+    id: uid('L'),
+    name, email, company,
+    phone: val('lf-phone'),
+    source: val('lf-source'),
+    value: Number(val('lf-value'))||0,
+    notes: val('lf-notes'),
+    _manualStatus: 'New',
+    created: today(),
+    activities: [{type:'note', text:`Lead added via ${val('lf-source')}`, time:now()}]
+  };
+  S.leads.push(lead);
+  closeModal('m-lead');
+  ['lf-name','lf-email','lf-company','lf-phone','lf-value','lf-notes'].forEach(id=>setVal(id,''));
+  toast(`✅ Lead "${name}" added!`, 'success');
+  nav('leads');
+}
+ 
+function setLeadManualStatus(idx, status) {
+  const l = S.leads[idx];
+  const old = getLeadStatus(l);
+  l._manualStatus = status;
+  l.activities.push({type:'note', text:`Status updated: ${old} → ${status}`, time:now()});
+  toast(`${l.name} → ${status}`);
+  updateBadges();
+  nav('leads');
+}
+ 
+function openActivityFor(leadId) {
+  S._ctx.activityLeadId = leadId;
+  const l = S.leads.find(x=>x.id===leadId);
+  document.getElementById('am-sub').textContent = `Lead: ${l.name} — ${l.company}`;
+  setVal('am-date', today());
+  setVal('am-notes','');
+  openModal('m-activity');
+}
+ 
+function saveActivity() {
+  const notes = val('am-notes').trim();
+  if (!notes) { toast('Notes required','danger'); return; }
+  const l = S.leads.find(x=>x.id===S._ctx.activityLeadId);
+  if (!l) return;
+  const typeRaw = val('am-type');
+  const typeKey = typeRaw.replace(/[^a-z]/gi,'').toLowerCase().trim();
+  l.activities.push({type:typeKey, text:`${typeRaw}: ${notes}`, time:now()});
+  closeModal('m-activity');
+  toast('Activity logged!','success');
+  updateBadges();
+  nav(S.page);
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// CRM PAGE
+// ═══════════════════════════════════════════════════════════
+function renderCRM(mc) {
+  const cols = ['New','Contacted','Qualified','Proposal Sent','Won','Lost'];
+  const kanban = cols.map(col => {
+    const cards = S.leads.filter(l => getLeadStatus(l) === col);
+    const cColors = {Won:'var(--forest)',Lost:'var(--rust)','Proposal Sent':'var(--purple)'};
+    return `<div class="k-col" style="${cColors[col]?'border-top:2px solid '+cColors[col]:''}">
+      <div class="k-hd"><span>${col}</span><span class="k-count">${cards.length}</span></div>
+      ${!cards.length ? `<div class="k-empty">No leads</div>` :
+        cards.map(l => {
+          const hasProposal = S.proposals.some(p=>p.leadId===l.id);
+          return `<div class="k-card">
+            <div class="k-name">${l.name}</div>
+            <div class="k-co">${l.company}</div>
+            <div class="k-val">${fmtMoney(l.value)}</div>
+            <div style="margin-top:7px;display:flex;gap:4px;flex-wrap:wrap">
+              ${col==='New'?`<button class="btn btn-ghost btn-sm" style="font-size:10px" onclick="crmMove('${l.id}','Contacted')">→ Contact</button>`:''}
+              ${col==='Contacted'?`<button class="btn btn-ghost btn-sm" style="font-size:10px" onclick="crmMove('${l.id}','Qualified')">→ Qualify</button>`:''}
+              ${(col==='Qualified'||col==='Contacted')&&!hasProposal?`<button class="btn btn-primary btn-sm" style="font-size:10px" onclick="openProposalFor('${l.id}')">📝 Proposal</button>`:''}
+              ${!['Won','Lost'].includes(col)?`<button class="btn btn-danger btn-sm" style="font-size:10px" onclick="crmMove('${l.id}','Lost')">✕ Lost</button>`:''}
+              <button class="btn btn-ghost btn-sm" style="font-size:10px" onclick="openActivityFor('${l.id}')">📋 Log</button>
+            </div>
+          </div>`;}).join('')}
+    </div>`;
+  }).join('');
+ 
+  const allAct = [];
+  S.leads.forEach(l => (l.activities||[]).forEach(a => allAct.push({...a,lead:l.name,company:l.company})));
+  allAct.sort((a,b)=>(b.time||'').localeCompare(a.time||''));
+ 
+  mc.innerHTML = `
+    ${flowBanner(1)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">02</span><span class="sec-title">CRM Pipeline</span></div>
+      <button class="btn btn-primary" onclick="openModal('m-lead')">+ Add Lead</button>
+    </div>
+    <div class="card" style="margin-bottom:16px">
+      <div class="alert alert-info" style="margin-bottom:12px">💡 Move leads through stages using the buttons on each card. Once Qualified, build a Proposal to continue the lifecycle.</div>
+      <div class="kanban" style="padding-bottom:8px">${kanban}</div>
+    </div>
+    <div class="card">
+      <div style="font-weight:700;font-size:14px;margin-bottom:12px">Full Activity Log</div>
+      <div style="max-height:300px;overflow-y:auto">
+        ${!allAct.length ? `<div class="empty"><div class="empty-text">No activities logged</div></div>` :
+          allAct.slice(0,30).map(a=>`
+            <div style="display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;align-items:flex-start">
+              <span style="color:var(--muted);font-family:'DM Mono',monospace;font-size:10px;white-space:nowrap;margin-top:2px">${a.time||''}</span>
+              <span>${a.text}</span>
+              <span style="margin-left:auto;color:var(--muted);white-space:nowrap;font-size:11px">${a.lead}</span>
+            </div>`).join('')}
+      </div>
+    </div>`;
+}
+ 
+function crmMove(leadId, status) {
+  const l = S.leads.find(x=>x.id===leadId);
+  if (!l) return;
+  const old = getLeadStatus(l);
+  l._manualStatus = status;
+  l.activities.push({type:'note', text:`Moved in CRM: ${old} → ${status}`, time:now()});
+  toast(`${l.name} → ${status}`, 'success');
+  updateBadges();
+  nav('crm');
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// PROPOSALS — fully fixed
+// ═══════════════════════════════════════════════════════════
+function openProposalFor(leadId) {
+  // Populate lead dropdown with all leads that don't have an active proposal/contract yet
+  const eligible = S.leads.filter(l => {
+    const hasSigned = S.contracts.some(c => c.leadId === l.id && c.status === 'Signed');
+    const hasAccepted = S.proposals.some(p => p.leadId === l.id && p.status === 'Accepted');
+    return !hasSigned && !hasAccepted;
+  });
+ 
+  const sel = document.getElementById('pm-lead');
+  sel.innerHTML = `<option value="">— Select Lead —</option>` +
+    eligible.map(l => `<option value="${l.id}" ${l.id===leadId?'selected':''}>${l.name} — ${l.company} (${fmtMoney(l.value)})</option>`).join('');
+ 
+  // Reset form
+  S.lineItems = [{desc:'',qty:1,rate:0}];
+  setVal('pm-title','');
+  setVal('pm-summary','');
+  setVal('pm-deposit','30');
+  setVal('pm-terms','30');
+  setVal('pm-gst','18');
+  setVal('pm-validity', futureDate(30));
+ 
+  if (leadId) {
+    const l = S.leads.find(x=>x.id===leadId);
+    document.getElementById('pm-sub').textContent = `Building for: ${l.name} — ${l.company}`;
+  } else {
+    document.getElementById('pm-sub').textContent = 'Select a lead from the dropdown to proceed';
+  }
+ 
+  renderLineItems();
+  openModal('m-proposal');
+}
+ 
+function renderLineItems() {
+  const c = document.getElementById('pm-items');
+  if (!c) return;
+  c.innerHTML = S.lineItems.map((item,i)=>`
+    <div style="display:grid;grid-template-columns:2fr 70px 110px 30px;gap:6px;margin-bottom:6px;align-items:center">
+      <input placeholder="Description e.g. Homepage Design" value="${item.desc}" oninput="S.lineItems[${i}].desc=this.value">
+      <input type="number" placeholder="Qty" value="${item.qty}" oninput="S.lineItems[${i}].qty=Number(this.value)">
+      <input type="number" placeholder="Rate ₹" value="${item.rate}" oninput="S.lineItems[${i}].rate=Number(this.value)">
+      <button type="button" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px" onclick="removeLineItem(${i})">✕</button>
+    </div>`).join('');
+}
+
+function addLineItem() { S.lineItems.push({desc:'',qty:1,rate:0}); renderLineItems(); }
+function removeLineItem(i) { S.lineItems.splice(i,1); renderLineItems(); }
+ 
+function saveProposal() {
+  const leadId = val('pm-lead');
+  if (!leadId) { toast('Please select a lead', 'danger'); return; }
+  const title = val('pm-title').trim();
+  if (!title) { toast('Project title is required','danger'); return; }
+  const items = S.lineItems.filter(i => i.desc && i.rate > 0);
+  if (!items.length) { toast('Add at least one line item with a description and rate','danger'); return; }
+ 
+  const lead = S.leads.find(l=>l.id===leadId);
+  const subtotal = items.reduce((a,i) => a+(i.qty*i.rate), 0);
+  const gstPct = Number(val('pm-gst'))||18;
+  const tax = Math.round(subtotal * gstPct/100);
+  const total = subtotal + tax;
+ 
+  const proposal = {
+    id: uid('PRO'),
+    leadId, leadName:lead.name, company:lead.company, email:lead.email,
+    title, items, subtotal, gstPct, tax, total,
+    deposit: Number(val('pm-deposit'))||30,
+    terms: Number(val('pm-terms'))||30,
+    summary: val('pm-summary'),
+    status: 'Sent',
+    created: today(),
+    validUntil: val('pm-validity'),
+    sentAt: now()
+  };
+  S.proposals.push(proposal);
+ 
+  // Update lead status in log
+  lead._manualStatus = 'Qualified';
+  lead.activities.push({type:'email', text:`Proposal ${proposal.id} sent — ${fmtMoney(total)} (incl. GST)`, time:now()});
+ 
+  closeModal('m-proposal');
+  toast(`📤 Proposal ${proposal.id} sent to ${lead.name} — ${fmtMoney(total)}`, 'success');
+  updateBadges();
+  nav('proposals');
+}
+ 
+function renderProposals(mc) {
+  mc.innerHTML = `
+    ${flowBanner(2)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">03</span><span class="sec-title">Proposals</span></div>
+      <button class="btn btn-primary" onclick="openProposalFor(null)">+ Build Proposal</button>
+    </div>
+    ${!S.proposals.length ? `<div class="card"><div class="empty"><div class="empty-icon">📝</div><div class="empty-text">No proposals yet</div><div class="empty-hint">Build a proposal for a lead to continue the sales flow</div></div></div>` : `
+    <div class="card">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Proposal #</th><th>Lead / Client</th><th>Project</th><th>Subtotal</th><th>GST</th><th>Total</th><th>Status</th><th>Valid Until</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${S.proposals.map(p=>`<tr>
+            <td class="td-main">${p.id}</td>
+            <td><div class="td-main">${p.leadName}</div><div class="td-sub">${p.company}</div></td>
+            <td>${p.title}</td>
+            <td style="font-family:'DM Mono',monospace">${fmtMoney(p.subtotal)}</td>
+            <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${fmtMoney(p.tax)} (${p.gstPct}%)</td>
+            <td style="font-weight:700;color:var(--gold-dk);font-family:'DM Mono',monospace">${fmtMoney(p.total)}</td>
+            <td>${pill(p.status)}</td>
+            <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${fmtDate(p.validUntil)}</td>
+            <td>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                <button class="btn btn-ghost btn-sm" onclick="viewProposal('${p.id}')">👁 View</button>
+                ${p.status==='Sent'?`
+                  <button class="btn btn-success btn-sm" onclick="acceptProposal('${p.id}')">✅ Accept</button>
+                  <button class="btn btn-danger btn-sm" onclick="rejectProposal('${p.id}')">✕ Reject</button>`:''}
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`}`;
+}
+ 
+function viewProposal(id) {
+  const p = S.proposals.find(x=>x.id===id);
+  if (!p) return;
+  const depositAmt = Math.round(p.total * p.deposit/100);
+ 
+  document.getElementById('m-view-proposal-body').innerHTML = `
+    <div class="modal-title">Proposal: ${p.title}</div>
+    <div class="modal-sub">${p.id} · ${p.company} · ${pill(p.status)}</div>
+    <div class="prop-preview">
+      <div class="prop-hd">
+        <div class="prop-title">${p.title}</div>
+        <div style="font-size:12px;color:#8A8480;margin-top:4px">${p.leadName} · ${p.company} · ${p.id} · Sent ${fmtDate(p.created)}</div>
+      </div>
+      <div class="prop-body">
+        ${p.summary?`<div class="prop-section"><div class="prop-sec-title">Executive Summary</div><div style="font-size:13px;color:var(--slate);line-height:1.6">${p.summary}</div></div>`:''}
+        <div class="prop-section">
+          <div class="prop-sec-title">Scope of Work & Pricing</div>
+          ${p.items.map(i=>`<div class="line-item"><span>${i.desc}</span><span>${i.qty} × ${fmtMoney(i.rate)} = <strong>${fmtMoney(i.qty*i.rate)}</strong></span></div>`).join('')}
+        </div>
+        <div class="prop-total">
+          <div>
+            <div style="font-weight:700">Sub-total: ${fmtMoney(p.subtotal)} + GST ${p.gstPct}%: ${fmtMoney(p.tax)}</div>
+            <div style="font-size:12px;color:var(--muted)">Grand Total (incl. tax)</div>
+          </div>
+          <div class="prop-total-val">${fmtMoney(p.total)}</div>
+        </div>
+        <div class="prop-section" style="margin-top:14px">
+          <div class="prop-sec-title">Payment Schedule</div>
+          <div class="line-item"><span>Deposit on signing (${p.deposit}%)</span><span><strong>${fmtMoney(depositAmt)}</strong></span></div>
+          <div class="line-item"><span>Balance on project delivery</span><span><strong>${fmtMoney(p.total-depositAmt)}</strong></span></div>
+        </div>
+        <div class="prop-section">
+          <div class="prop-sec-title">Terms</div>
+          <div style="font-size:12px;color:var(--slate)">Valid until ${fmtDate(p.validUntil)} · Payment due within ${p.terms} days of invoice · Subject to NDA and IP clauses</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      ${p.status==='Sent'?`
+        <button class="btn btn-success" onclick="acceptProposal('${p.id}');closeModal('m-view-proposal')">✅ Accept Proposal</button>
+        <button class="btn btn-danger" onclick="rejectProposal('${p.id}');closeModal('m-view-proposal')">✕ Reject</button>`:''}
+      <button class="btn btn-ghost" onclick="closeModal('m-view-proposal')">Close</button>
+    </div>`;
+  openModal('m-view-proposal');
+}
+ 
+function acceptProposal(id) {
+  const p = S.proposals.find(x=>x.id===id);
+  if (!p) return;
+  p.status = 'Accepted';
+  p.acceptedAt = now();
+ 
+  // Auto-generate contract
+  const contract = {
+    id: uid('CON'),
+    proposalId: p.id, leadId: p.leadId, leadName: p.leadName,
+    company: p.company, email: p.email, title: p.title,
+    subtotal: p.subtotal, gstPct: p.gstPct, tax: p.tax, total: p.total,
+    deposit: p.deposit, terms: p.terms, items: p.items,
+    status: 'Pending Signature',
+    created: today(), signedAt: null, signerName: null
+  };
+  S.contracts.push(contract);
+ 
+  const lead = S.leads.find(l=>l.id===p.leadId);
+  if (lead) lead.activities.push({type:'note', text:`Proposal ${p.id} accepted → Contract ${contract.id} generated`, time:now()});
+ 
+  toast(`✅ Proposal accepted! Contract ${contract.id} ready for signature.`, 'success');
+  updateBadges();
+  nav('contracts');
+}
+ 
+function rejectProposal(id) {
+  const p = S.proposals.find(x=>x.id===id);
+  if (!p) return;
+  if (!confirm(`Reject proposal ${p.id} for ${p.company}?`)) return;
+  p.status = 'Rejected';
+  p.rejectedAt = now();
+  const lead = S.leads.find(l=>l.id===p.leadId);
+  if (lead) {
+    lead._manualStatus = 'Contacted';
+    lead.activities.push({type:'note', text:`Proposal ${p.id} rejected. Lead returned to pipeline.`, time:now()});
+  }
+  toast('Proposal rejected. Lead is back in the pipeline for re-engagement.');
+  updateBadges();
+  nav('proposals');
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// CONTRACTS
+// ═══════════════════════════════════════════════════════════
+function renderContracts(mc) {
+  mc.innerHTML = `
+    ${flowBanner(3)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">04</span><span class="sec-title">Contracts</span></div>
+    </div>
+    ${!S.contracts.length ? `<div class="card"><div class="empty"><div class="empty-icon">📜</div><div class="empty-text">No contracts yet</div><div class="empty-hint">Accept a proposal to auto-generate a contract</div></div></div>` : `
+    <div class="card">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Contract #</th><th>From Proposal</th><th>Client</th><th>Project</th><th>Total Value</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${S.contracts.map(c=>`<tr>
+            <td class="td-main">${c.id}</td>
+            <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${c.proposalId}</td>
+            <td><div class="td-main">${c.leadName}</div><div class="td-sub">${c.company}</div></td>
+            <td>${c.title}</td>
+            <td style="font-weight:700;color:var(--gold-dk);font-family:'DM Mono',monospace">${fmtMoney(c.total)}</td>
+            <td>${pill(c.status)}</td>
+            <td>
+              ${c.status==='Pending Signature'?`<button class="btn btn-purple btn-sm" onclick="openSignContract('${c.id}')">✍️ Sign Now</button>`:''}
+              ${c.status==='Signed'?`<div style="font-size:12px;color:var(--forest)">✅ Signed by ${c.signerName}<br><span style="font-size:10px;color:var(--muted);font-family:'DM Mono',monospace">${c.signedAt}</span></div>`:''}
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`}`;
+}
+ 
+function openSignContract(id) {
+  const c = S.contracts.find(x=>x.id===id);
+  if (!c) return;
+  S._ctx.contractId = id;
+  document.getElementById('cm-sub').textContent = `${c.id} · ${c.company} · ${c.title}`;
+  setVal('cm-sig','');
+ 
+  document.getElementById('cm-content').innerHTML = `
+    <div style="margin-bottom:16px">
+      <div style="font-family:'DM Serif Display',serif;font-size:20px">Service Agreement</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:3px;font-family:'DM Mono',monospace">${c.id} · Generated ${fmtDate(c.created)} · From proposal ${c.proposalId}</div>
+    </div>
+    <div class="clause"><div class="clause-title">1. Parties</div>
+      <div class="clause-body">This agreement is between the service provider (Project X) and ${c.company} (Client).</div></div>
+    <div class="clause"><div class="clause-title">2. Scope of Work</div>
+      <div class="clause-body">${c.items.map(i=>`• ${i.desc} — Qty: ${i.qty} × ${fmtMoney(i.rate)} = ${fmtMoney(i.qty*i.rate)}`).join('<br>')}</div></div>
+    <div class="clause"><div class="clause-title">3. Project Value</div>
+      <div class="clause-body">Sub-total: ${fmtMoney(c.subtotal)} + GST ${c.gstPct}%: ${fmtMoney(c.tax)}<br><strong>Total: ${fmtMoney(c.total)}</strong></div></div>
+    <div class="clause"><div class="clause-title">4. Payment Schedule</div>
+      <div class="clause-body">Deposit ${c.deposit}% (${fmtMoney(Math.round(c.total*c.deposit/100))}) due on contract signing. Balance payable per milestone. Invoices due within ${c.terms} days.</div></div>
+    <div class="clause"><div class="clause-title">5. Intellectual Property</div>
+      <div class="clause-body">All deliverables transfer to the Client upon receipt of full payment.</div></div>
+    <div class="clause"><div class="clause-title">6. Confidentiality (NDA)</div>
+      <div class="clause-body">Both parties maintain strict confidentiality on all shared business information throughout the engagement.</div></div>
+    <div class="clause"><div class="clause-title">7. Change Requests</div>
+      <div class="clause-body">Any scope changes require a written Change Request with revised pricing and written client approval prior to execution.</div></div>
+    <div class="clause"><div class="clause-title">8. Termination</div>
+      <div class="clause-body">Either party may terminate with 14 days written notice. All work completed to date is billable.</div></div>
+    <div class="clause"><div class="clause-title">9. Governing Law</div>
+      <div class="clause-body">This agreement is governed by the laws of India. Disputes resolved by arbitration in Mumbai jurisdiction.</div></div>`;
+ 
+  openModal('m-contract');
+}
+ 
+function signContract() {
+  const sig = val('cm-sig').trim();
+  if (!sig) { toast('Please type the client\'s full name to sign','danger'); return; }
+  const c = S.contracts.find(x=>x.id===S._ctx.contractId);
+  if (!c) return;
+ 
+  c.status = 'Signed';
+  c.signerName = sig;
+  c.signedAt = now();
+ 
+  // ⚡ AUTO-TRIGGERS: Create client, project, deposit invoice
+  autoOnboarding(c);
+ 
+  closeModal('m-contract');
+  toast(`✍️ Signed by "${sig}"! Client, project & deposit invoice auto-created.`, 'success');
+  updateBadges();
+  nav('clients');
+}
+ 
+function autoOnboarding(c) {
+  // 1. Client
+  const existing = S.clients.find(cl=>cl.leadId===c.leadId);
+  if (existing) return;
+ 
+  const lead = S.leads.find(l=>l.id===c.leadId);
+  const client = {
+    id: uid('CLT'),
+    leadId: c.leadId,
+    contractId: c.id,
+    name: c.leadName,
+    company: c.company,
+    email: c.email || lead?.email || '',
+    phone: lead?.phone || '',
+    contractValue: c.total,
+    status: 'Active',
+    since: today(),
+  };
+  S.clients.push(client);
+ 
+  // 2. Lead → Won
+  if (lead) {
+    lead._manualStatus = 'Won';
+    lead.activities.push({type:'contract', text:`Contract ${c.id} signed. Converted to Client ${client.id}.`, time:now()});
+  }
+ 
+  // 3. Project
+  const project = {
+    id: uid('PRJ'),
+    clientId: client.id,
+    contractId: c.id,
+    name: c.title,
+    clientName: c.company,
+    status: 'Active',
+    startDate: today(),
+    budget: c.subtotal, // budget without tax
+    completion: 0,
+    milestones: [
+      {id:uid('MS'), name:'Project Kickoff', due:'', status:'Completed', amount:0, autoInvoice:false},
+      {id:uid('MS'), name:'Phase 1 — Delivery', due:'', status:'Pending', amount:Math.round(c.subtotal*0.4), autoInvoice:true},
+      {id:uid('MS'), name:'Final Delivery', due:'', status:'Pending', amount:Math.round(c.subtotal*0.3), autoInvoice:true},
+    ],
+    tasks: [],
+    created: today(),
+  };
+  project.completion = Math.round((project.milestones.filter(m=>m.status==='Completed').length / project.milestones.length)*100);
+  S.projects.push(project);
+ 
+  // 4. Deposit invoice
+  const depositAmt = Math.round(c.total * c.deposit/100);
+  const depositTax = Math.round(depositAmt * c.gstPct/100);
+  const depositInv = {
+    id: uid('INV'),
+    clientId: client.id, projectId: project.id, contractId: c.id,
+    clientName: c.company,
+    type: 'Deposit',
+    amount: depositAmt,
+    tax: depositTax,
+    total: depositAmt + depositTax,
+    status: 'Sent',
+    created: today(),
+    due: futureDate(c.terms),
+    notes: `Deposit invoice (${c.deposit}%) — Contract ${c.id}`,
+  };
+  S.invoices.push(depositInv);
+  updateBadges();
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// CLIENTS
+// ═══════════════════════════════════════════════════════════
+function renderClients(mc) {
+  mc.innerHTML = `
+    ${flowBanner(4)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">05</span><span class="sec-title">Client Management</span></div>
+    </div>
+    ${!S.clients.length ? `<div class="card"><div class="empty"><div class="empty-icon">🏢</div><div class="empty-text">No clients yet</div><div class="empty-hint">Complete Lead → Proposal → Contract flow to convert a lead into a client</div></div></div>` : `
+    <div class="g2">
+      ${S.clients.map(c => {
+        const projects = S.projects.filter(p=>p.clientId===c.id);
+        const invoices = S.invoices.filter(i=>i.clientId===c.id);
+        const paid = S.payments.filter(p=>p.clientId===c.id).reduce((a,x)=>a+x.amount,0);
+        const outstanding = invoices.filter(i=>['Sent','Overdue'].includes(i.status)).reduce((a,i)=>a+i.total,0);
+        const contract = S.contracts.find(x=>x.id===c.contractId);
+ 
+        return `<div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div>
+              <div style="font-family:'DM Serif Display',serif;font-size:20px">${c.company}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px">${c.name}${c.email?' · '+c.email:''}${c.phone?' · '+c.phone:''}</div>
+              <div style="margin-top:8px;display:flex;gap:6px;align-items:center">${pill(c.status)}<span style="font-size:11px;color:var(--muted);font-family:'DM Mono',monospace">since ${fmtDate(c.since)}</span></div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold-dk)">${fmtMoney(c.contractValue)}</div>
+              <div style="font-size:11px;color:var(--muted)">Contract value</div>
+            </div>
+          </div>
+ 
+          <div class="g3" style="margin-bottom:14px">
+            <div style="text-align:center;padding:10px;background:var(--cream);border-radius:8px">
+              <div style="font-weight:700;font-size:18px">${projects.length}</div>
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px">Projects</div>
+            </div>
+            <div style="text-align:center;padding:10px;background:var(--cream);border-radius:8px">
+              <div style="font-weight:700;font-size:15px;color:var(--forest)">${fmtMoney(paid)}</div>
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px">Paid</div>
+            </div>
+            <div style="text-align:center;padding:10px;background:var(--cream);border-radius:8px">
+              <div style="font-weight:700;font-size:15px;color:${outstanding>0?'var(--rust)':'var(--forest)'}">${fmtMoney(outstanding)}</div>
+              <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px">Outstanding</div>
+            </div>
+          </div>
+ 
+          ${projects.map(p=>`
+            <div style="background:var(--cream);border-radius:8px;padding:10px 14px;margin-bottom:8px">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                <span style="font-weight:700;font-size:13px">${p.name}</span>${pill(p.status)}
+              </div>
+              <div class="prog"><div class="prog-fill" style="width:${p.completion}%"></div></div>
+              <div style="font-size:11px;color:var(--muted);margin-top:4px">${p.completion}% complete</div>
+            </div>`).join('')}
+ 
+          <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="nav('projects')">🚀 View Projects</button>
+            <button class="btn btn-ghost btn-sm" onclick="openRaiseInvoice('${c.id}')">🧾 Raise Invoice</button>
+            <button class="btn btn-ghost btn-sm" onclick="nav('invoices')">💳 Invoices</button>
+          </div>
+        </div>`;}).join('')}
+    </div>`}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PROJECTS
+// ═══════════════════════════════════════════════════════════
+function renderProjects(mc) {
+  mc.innerHTML = `
+    ${flowBanner(5)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">06</span><span class="sec-title">Project Management</span></div>
+    </div>
+    ${!S.projects.length ? `<div class="card"><div class="empty"><div class="empty-icon">🚀</div><div class="empty-text">No projects yet</div><div class="empty-hint">Projects auto-create when a contract is signed</div></div></div>` : `
+    <div style="display:flex;flex-direction:column;gap:18px">
+      ${S.projects.map(p => {
+        const completedMS = p.milestones.filter(m=>m.status==='Completed').length;
+        return `<div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+            <div>
+              <div style="font-family:'DM Serif Display',serif;font-size:20px">${p.name}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:3px">${p.clientName} · Started ${fmtDate(p.startDate)}</div>
+              <div style="margin-top:8px">${pill(p.status)}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'DM Serif Display',serif;font-size:22px;color:var(--gold-dk)">${fmtMoney(p.budget)}</div>
+              <div style="font-size:11px;color:var(--muted)">Budget (ex-tax)</div>
+            </div>
+          </div>
+          <div style="margin-bottom:16px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px">
+              <span>Overall Completion</span><span style="font-weight:700">${p.completion}%</span>
+            </div>
+            <div class="prog" style="height:9px"><div class="prog-fill" style="width:${p.completion}%"></div></div>
+          </div>
+ 
+          <div class="tabs" id="tabs-${p.id}">
+            <div class="tab active" onclick="switchTab('${p.id}','milestones')">Milestones (${p.milestones.length})</div>
+            <div class="tab" onclick="switchTab('${p.id}','tasks')">Tasks (${p.tasks.length})</div>
+          </div>
+ 
+          <div id="tp-milestones-${p.id}">
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Milestone</th><th>Invoice Amount</th><th>Due</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${p.milestones.map(m=>`<tr>
+                  <td><div class="td-main">${m.name}</div>${m.autoInvoice?`<div class="td-sub" style="color:var(--forest)">⚡ Auto-invoice on complete</div>`:''}</td>
+                  <td style="font-family:'DM Mono',monospace">${m.amount>0?fmtMoney(m.amount):'—'}</td>
+                  <td style="font-size:12px;color:var(--muted)">${m.due?fmtDate(m.due):'—'}</td>
+                  <td>${pill(m.status)}</td>
+                  <td>
+                    ${m.status==='Pending'?`<button class="btn btn-success btn-sm" onclick="completeMilestone('${p.id}','${m.id}')">✅ Mark Complete</button>`:''}
+                    ${m.status==='Completed'?`<span style="font-size:12px;color:var(--forest);font-weight:600">✓ Done</span>`:''}
+                  </td>
+                </tr>`).join('')}
+              </tbody>
+            </table></div>
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="openAddMilestone('${p.id}')">+ Add Milestone</button>
+          </div>
+ 
+          <div id="tp-tasks-${p.id}" style="display:none">
+            ${!p.tasks.length ? `<div class="empty" style="padding:20px"><div class="empty-text">No tasks yet</div></div>` : `
+            <div class="tbl-wrap"><table>
+              <thead><tr><th>Task</th><th>Assignee</th><th>Priority</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody>
+                ${p.tasks.map((t,ti)=>`<tr>
+                  <td class="td-main">${t.name}</td>
+                  <td style="font-size:12px">${t.assignee||'—'}</td>
+                  <td><span style="font-weight:700;font-size:12px;color:${t.priority==='High'?'var(--rust)':t.priority==='Medium'?'var(--gold-dk)':'var(--forest)'}">${t.priority}</span></td>
+                  <td>${pill(t.status)}</td>
+                  <td>${t.status!=='Completed'?`<button class="btn btn-success btn-sm" onclick="completeTask('${p.id}',${ti})">✅ Done</button>`:`<span style="color:var(--forest)">✓</span>`}</td>
+                </tr>`).join('')}
+              </tbody>
+            </table></div>`}
+            <button class="btn btn-ghost btn-sm" style="margin-top:8px" onclick="addTask('${p.id}')">+ Add Task</button>
+          </div>
+ 
+          <div style="display:flex;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--border);flex-wrap:wrap">
+            <button class="btn btn-ghost btn-sm" onclick="openRaiseInvoiceProject('${p.clientId}','${p.id}')">🧾 Raise Invoice</button>
+            ${p.status==='Active'?`<button class="btn btn-danger btn-sm" onclick="closeProject('${p.id}')">🏁 Close Project</button>`:''}
+          </div>
+        </div>`;}).join('')}
+    </div>`}`;
+}
+ 
+function switchTab(pid, tab) {
+  ['milestones','tasks'].forEach(t => {
+    const el = document.getElementById(`tp-${t}-${pid}`);
+    if (el) el.style.display = t===tab?'block':'none';
+  });
+  document.getElementById('tabs-'+pid)?.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active',(i===0&&tab==='milestones')||(i===1&&tab==='tasks'));
+  });
+}
+ 
+function openAddMilestone(projectId) {
+  S._ctx.milestoneProjectId = projectId;
+  const p = S.projects.find(x=>x.id===projectId);
+  document.getElementById('msm-sub').textContent = `${p.name} — ${p.clientName}`;
+  setVal('ms-name',''); setVal('ms-amount',''); setVal('ms-due','');
+  openModal('m-milestone');
+}
+ 
+function saveMilestone() {
+  const name = val('ms-name').trim();
+  if (!name) { toast('Milestone name required','danger'); return; }
+  const p = S.projects.find(x=>x.id===S._ctx.milestoneProjectId);
+  p.milestones.push({
+    id: uid('MS'), name,
+    due: val('ms-due'),
+    amount: Number(val('ms-amount'))||0,
+    autoInvoice: val('ms-inv')==='yes',
+    status: 'Pending'
+  });
+  closeModal('m-milestone');
+  toast(`Milestone "${name}" added!`,'success');
+  nav('projects');
+}
+ 
+function completeMilestone(projectId, milestoneId) {
+  const p = S.projects.find(x=>x.id===projectId);
+  const m = p.milestones.find(x=>x.id===milestoneId);
+  if (!m) return;
+  m.status = 'Completed';
+  m.completedAt = now();
+ 
+  // Recompute completion
+  const done = p.milestones.filter(ms=>ms.status==='Completed').length;
+  p.completion = Math.round((done/p.milestones.length)*100);
+ 
+  // Auto-invoice
+  if (m.autoInvoice && m.amount > 0) {
+    const gstPct = 18;
+    const tax = Math.round(m.amount * gstPct/100);
+    const inv = {
+      id: uid('INV'),
+      clientId: p.clientId, projectId: p.id, milestoneId: m.id,
+      clientName: p.clientName,
+      type: 'Milestone',
+      amount: m.amount, tax,
+      total: m.amount + tax,
+      status: 'Sent',
+      created: today(),
+      due: futureDate(30),
+      notes: `Milestone invoice: ${m.name} — ${p.name}`,
+    };
+    S.invoices.push(inv);
+    toast(`⚡ Milestone complete! Invoice ${inv.id} auto-sent: ${fmtMoney(inv.total)}`, 'success');
+  } else {
+    toast(`✅ Milestone "${m.name}" marked complete!`, 'success');
+  }
+  updateBadges();
+  nav('projects');
+}
+ 
+function addTask(projectId) {
+  const p = S.projects.find(x=>x.id===projectId);
+  const name = prompt('Task name:');
+  if (!name) return;
+  const assignee = prompt('Assign to:') || '';
+  const priority = prompt('Priority (Low / Medium / High):') || 'Medium';
+  p.tasks.push({id:uid('TSK'), name, assignee, priority, status:'Pending', created:today()});
+  toast('Task added!','success');
+  nav('projects');
+}
+ 
+function completeTask(projectId, idx) {
+  S.projects.find(x=>x.id===projectId).tasks[idx].status = 'Completed';
+  toast('Task completed!','success');
+  nav('projects');
+}
+ 
+function closeProject(projectId) {
+  const p = S.projects.find(x=>x.id===projectId);
+  if (!confirm(`Close project "${p.name}"? This will mark all milestones complete and generate a final invoice if there's an outstanding balance.`)) return;
+  p.status = 'Completed';
+  p.completion = 100;
+  p.milestones.forEach(m => m.status = 'Completed');
+ 
+  const alreadyInvoiced = S.invoices.filter(i=>i.projectId===p.id).reduce((a,i)=>a+i.amount,0);
+  const remaining = Math.max(0, p.budget - alreadyInvoiced);
+  if (remaining > 0) {
+    const tax = Math.round(remaining * 0.18);
+    const inv = {
+      id: uid('INV'),
+      clientId: p.clientId, projectId: p.id,
+      clientName: p.clientName,
+      type: 'Final', amount: remaining, tax,
+      total: remaining + tax,
+      status: 'Sent',
+      created: today(), due: today(),
+      notes: `Final invoice — Project closure: ${p.name}`,
+    };
+    S.invoices.push(inv);
+    toast(`🏁 Project closed! Final invoice ${inv.id}: ${fmtMoney(inv.total)}`, 'success');
+  } else {
+    toast(`🏁 Project "${p.name}" closed! All amounts previously invoiced.`, 'success');
+  }
+  updateBadges();
+  nav('projects');
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// INVOICES
+// ═══════════════════════════════════════════════════════════
+function renderInvoices(mc) {
+  const totalAmt = S.invoices.reduce((a,i)=>a+i.total,0);
+  const paidAmt = S.invoices.filter(i=>i.status==='Paid').reduce((a,i)=>a+i.total,0);
+  const outstanding = S.invoices.filter(i=>['Sent','Overdue'].includes(i.status)).reduce((a,i)=>a+i.total,0);
+ 
+  mc.innerHTML = `
+    ${flowBanner(6)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">07</span><span class="sec-title">Invoices</span></div>
+      <button class="btn btn-primary" onclick="openRaiseInvoice(null)">+ Raise Invoice</button>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-n">${S.invoices.length}</div><div class="stat-l">Total Invoices</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:var(--gold-dk)">${fmtMoney(totalAmt)}</div><div class="stat-l">Total Invoiced</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:var(--forest)">${fmtMoney(paidAmt)}</div><div class="stat-l">Collected</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:var(--rust)">${fmtMoney(outstanding)}</div><div class="stat-l">Outstanding</div></div>
+    </div>
+    ${!S.invoices.length ? `<div class="card"><div class="empty"><div class="empty-icon">🧾</div><div class="empty-text">No invoices yet</div><div class="empty-hint">Invoices auto-generate when contracts are signed and milestones are completed</div></div></div>` : `
+    <div class="card">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Invoice #</th><th>Client</th><th>Type</th><th>Amount</th><th>Tax</th><th>Total</th><th>Due</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+          ${S.invoices.map(inv=>`<tr>
+            <td class="td-main">${inv.id}</td>
+            <td>${inv.clientName}</td>
+            <td><span style="font-size:11px;font-family:'DM Mono',monospace">${inv.type}</span></td>
+            <td style="font-family:'DM Mono',monospace">${fmtMoney(inv.amount)}</td>
+            <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${fmtMoney(inv.tax||0)}</td>
+            <td style="font-weight:700;color:var(--gold-dk);font-family:'DM Mono',monospace">${fmtMoney(inv.total)}</td>
+            <td style="font-size:12px;color:${isOverdue(inv)?'var(--rust)':'var(--muted)'};font-family:'DM Mono',monospace">${fmtDate(inv.due)}</td>
+            <td>${pill(inv.status)}</td>
+            <td>
+              <div style="display:flex;gap:5px;flex-wrap:wrap">
+                ${['Sent','Overdue'].includes(inv.status)?`
+                  <button class="btn btn-success btn-sm" onclick="openRecordPayment('${inv.id}')">💳 Record Pay</button>
+                  <button class="btn btn-ghost btn-sm" onclick="markOverdue('${inv.id}')">⚠ Overdue</button>`:''}
+                ${inv.status==='Paid'?`<span style="font-size:12px;color:var(--forest);font-weight:600">✅ Paid</span>`:''}
+              </div>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`}`;
+}
+ 
+function isOverdue(inv) {
+  return inv.due && inv.status !== 'Paid' && new Date(inv.due) < new Date();
+}
+ 
+function openRaiseInvoice(clientId) {
+  if (!S.clients.length) { toast('No clients yet. Complete the full lifecycle first.','danger'); return; }
+  S._ctx.invoiceClientId = clientId || S.clients[0]?.id;
+  S._ctx.invoiceProjectId = S.projects.find(p=>p.clientId===S._ctx.invoiceClientId)?.id || '';
+  const client = S.clients.find(c=>c.id===S._ctx.invoiceClientId);
+  document.getElementById('im-sub').textContent = `Client: ${client?.company||'—'}`;
+  setVal('im-amount',''); setVal('im-tax','18'); setVal('im-notes','');
+  setVal('im-due', futureDate(30));
+  openModal('m-invoice');
+}
+ 
+function openRaiseInvoiceProject(clientId, projectId) {
+  if (!S.clients.length) { toast('No clients yet.','danger'); return; }
+  S._ctx.invoiceClientId = clientId;
+  S._ctx.invoiceProjectId = projectId;
+  const client = S.clients.find(c=>c.id===clientId);
+  const project = S.projects.find(p=>p.id===projectId);
+  document.getElementById('im-sub').textContent = `Client: ${client?.company||'—'} · Project: ${project?.name||'—'}`;
+  setVal('im-amount',''); setVal('im-tax','18'); setVal('im-notes','');
+  setVal('im-due', futureDate(30));
+  openModal('m-invoice');
+}
+ 
+function saveInvoice() {
+  const amount = Number(val('im-amount'));
+  if (!amount) { toast('Amount required','danger'); return; }
+  const taxPct = Number(val('im-tax'))||0;
+  const tax = Math.round(amount * taxPct/100);
+  const client = S.clients.find(c=>c.id===S._ctx.invoiceClientId);
+ 
+  const inv = {
+    id: uid('INV'),
+    clientId: S._ctx.invoiceClientId,
+    projectId: S._ctx.invoiceProjectId||'',
+    clientName: client?.company||'—',
+    type: val('im-type'),
+    amount, tax, total: amount+tax,
+    status: 'Sent',
+    created: today(),
+    due: val('im-due'),
+    notes: val('im-notes'),
+  };
+  S.invoices.push(inv);
+  closeModal('m-invoice');
+  toast(`🧾 Invoice ${inv.id} sent to ${inv.clientName} — ${fmtMoney(inv.total)}`, 'success');
+  updateBadges();
+  nav('invoices');
+}
+ 
+function openRecordPayment(invoiceId) {
+  const inv = S.invoices.find(i=>i.id===invoiceId);
+  if (!inv) return;
+  S._ctx.paymentInvoiceId = invoiceId;
+  document.getElementById('paym-sub').textContent = `Invoice ${inv.id} · ${inv.clientName} · ${fmtMoney(inv.total)}`;
+  setVal('pay-amount', inv.total);
+  setVal('pay-date', today());
+  setVal('pay-ref','');
+  openModal('m-payment');
+}
+ 
+function recordPayment() {
+  const amount = Number(val('pay-amount'));
+  if (!amount) { toast('Amount required','danger'); return; }
+  const inv = S.invoices.find(i=>i.id===S._ctx.paymentInvoiceId);
+  if (!inv) return;
+  inv.status = 'Paid';
+  inv.paidAt = now();
+ 
+  S.payments.push({
+    id: uid('PAY'),
+    invoiceId: inv.id,
+    clientId: inv.clientId,
+    clientName: inv.clientName,
+    amount,
+    method: val('pay-method'),
+    ref: val('pay-ref'),
+    date: val('pay-date'),
+    createdAt: now(),
+  });
+ 
+  closeModal('m-payment');
+  toast(`💳 Payment of ${fmtMoney(amount)} recorded for ${inv.clientName}!`, 'success');
+  updateBadges();
+  nav('invoices');
+}
+ 
+function markOverdue(id) {
+  const inv = S.invoices.find(i=>i.id===id);
+  if (inv && inv.status === 'Sent') {
+    inv.status = 'Overdue';
+    toast(`⚠️ Invoice ${id} marked overdue.`);
+    updateBadges();
+    nav('invoices');
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// PAYMENTS
+// ═══════════════════════════════════════════════════════════
+function renderPayments(mc) {
+  const total = S.payments.reduce((a,p)=>a+p.amount,0);
+  mc.innerHTML = `
+    ${flowBanner(7)}
+    <div class="sec-hd">
+      <div class="sec-left"><span class="sec-num">08</span><span class="sec-title">Payments Received</span></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-box"><div class="stat-n">${S.payments.length}</div><div class="stat-l">Transactions</div></div>
+      <div class="stat-box"><div class="stat-n" style="color:var(--forest)">${fmtMoney(total)}</div><div class="stat-l">Total Collected</div></div>
+      <div class="stat-box"><div class="stat-n">${S.invoices.filter(i=>i.status==='Paid').length}</div><div class="stat-l">Invoices Cleared</div></div>
+    </div>
+    ${!S.payments.length ? `<div class="card"><div class="empty"><div class="empty-icon">💳</div><div class="empty-text">No payments recorded yet</div><div class="empty-hint">Go to Invoices and click "Record Pay" when a payment is received</div></div></div>` : `
+    <div class="card">
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Payment #</th><th>Invoice</th><th>Client</th><th>Amount</th><th>Method</th><th>Reference</th><th>Date</th></tr></thead>
+        <tbody>
+          ${S.payments.map(p=>`<tr>
+            <td class="td-main">${p.id}</td>
+            <td style="font-family:'DM Mono',monospace;font-size:12px">${p.invoiceId}</td>
+            <td>${p.clientName}</td>
+            <td style="font-weight:700;color:var(--forest);font-family:'DM Mono',monospace">${fmtMoney(p.amount)}</td>
+            <td style="font-size:12px;color:var(--muted)">${p.method}</td>
+            <td style="font-family:'DM Mono',monospace;font-size:11px">${p.ref||'—'}</td>
+            <td style="font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${fmtDate(p.date)}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>
+    </div>`}`;
+}
+ 
+// ═══════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════
+nav('dashboard');
+updateBadges();
+</script>
 </body>
 </html>
+ 
